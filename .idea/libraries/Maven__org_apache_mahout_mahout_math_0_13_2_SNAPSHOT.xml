@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.apache.mahout:mahout-math:0.13.2-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/mahout/mahout-math/0.13.2-SNAPSHOT/mahout-math-0.13.2-20170725.043236-3.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/mahout/mahout-math/0.13.2-SNAPSHOT/mahout-math-0.13.2-20170725.043236-3-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/mahout/mahout-math/0.13.2-SNAPSHOT/mahout-math-0.13.2-20170725.043236-3-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

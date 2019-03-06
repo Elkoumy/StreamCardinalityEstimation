@@ -16,6 +16,9 @@ This project is part of the work at University of Tartu.
 
 ## Project Plan
 https://docs.google.com/spreadsheets/d/1f6ZCpe5v5OReKNgZvxcz88oD-Wjr0PQzARm6kdSgSt4/edit?usp=sharing
+## Project Presentation
+https://drive.google.com/open?id=1NtyDCdAn6-ROgFNVdtxt6RcK7trKXSJ-
+
 ## References
 [1] Carbone, Paris, et al. "Apache flink: Stream and batch processing in a single engine." Bulletin of the IEEE Computer Society Technical Committee on Data Engineering 36.4 (2015). 
 

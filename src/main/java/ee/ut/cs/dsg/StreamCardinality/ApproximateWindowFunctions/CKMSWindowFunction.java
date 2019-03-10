@@ -2,6 +2,7 @@ package ee.ut.cs.dsg.StreamCardinality.ApproximateWindowFunctions;
 
 import de.tub.dima.scotty.core.windowFunction.AggregateFunction;
 import de.tub.dima.scotty.core.windowFunction.CloneablePartialStateFunction;
+
 import ee.ut.cs.dsg.StreamCardinality.ApproximateQuantiles.CKMSQuantiles;
 import ee.ut.cs.dsg.StreamCardinality.ApproximateQuantiles.QuantilesException;
 import org.apache.flink.api.java.tuple.Tuple3;

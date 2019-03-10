@@ -1,7 +1,8 @@
 package ee.ut.cs.dsg.SWAGwithSCOTTY.ExactAggregateFunction;
 
 
-import ee.ut.cs.dsg.SWAGwithSCOTTY.ExactMedian.MedianSkipListAggregationFunction;
+//import ee.ut.cs.dsg.SWAGwithSCOTTY.ExactMedian.MedianSkipListAggregationFunction;
+import ee.ut.cs.dsg.SWAGwithSCOTTY.ApproximateAggregateFunction.MedianCKMSAggregationFunction;
 import ee.ut.cs.dsg.SWAGwithSCOTTY.YetAnotherSource;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.streaming.api.TimeCharacteristic;
@@ -37,7 +38,7 @@ public class MedianAggregateRunner {
         result2
                 .keyBy(1)
                 .timeWindow( Time.of(2, MILLISECONDS), Time.of(1, MILLISECONDS))
-                .aggregate(new MedianSkipListAggregationFunction())
+                .aggregate(new MedianCKMSAggregationFunction())
 //                .print()
         ;
 

@@ -37,7 +37,7 @@ public class ApproximateMedianAggregateRunner {
         result2
                 .keyBy(1)
                 .timeWindow( Time.of(2, MILLISECONDS), Time.of(1, MILLISECONDS))
-                .aggregate(new MedianSimpleQuantilesAggregationFunction())
+                .aggregate(new MedianCKMSAggregationFunction())
                 .print()
         ;
 

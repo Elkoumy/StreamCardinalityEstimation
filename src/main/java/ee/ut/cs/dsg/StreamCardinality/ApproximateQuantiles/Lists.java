@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package ee.ut.cs.dsg.SWAGwithSCOTTY.ApproximateQuantiles;
+package ee.ut.cs.dsg.StreamCardinality.ApproximateQuantiles;
 
 import java.util.ArrayList;
 import java.util.List;

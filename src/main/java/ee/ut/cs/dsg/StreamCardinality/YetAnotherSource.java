@@ -1,11 +1,10 @@
-package ee.ut.cs.dsg.SWAGwithSCOTTY;
+package ee.ut.cs.dsg.StreamCardinality;
 
 import org.apache.flink.api.java.tuple.Tuple3;
         import org.apache.flink.streaming.api.functions.source.SourceFunction;
         import org.apache.flink.streaming.api.watermark.Watermark;
-        import sun.nio.cs.ArrayEncoder;
 
-        import java.io.BufferedReader;
+import java.io.BufferedReader;
         import java.io.FileReader;
         import java.io.IOException;
         import java.util.Random;

@@ -1,9 +1,8 @@
-package ee.ut.cs.dsg.SWAGwithSCOTTY.ExactAggregateFunction;
+package ee.ut.cs.dsg.StreamCardinality;
 
 
-//import ee.ut.cs.dsg.SWAGwithSCOTTY.ExactMedian.MedianSkipListAggregationFunction;
-import ee.ut.cs.dsg.SWAGwithSCOTTY.ApproximateAggregateFunction.MedianCKMSAggregationFunction;
-import ee.ut.cs.dsg.SWAGwithSCOTTY.YetAnotherSource;
+import ee.ut.cs.dsg.StreamCardinality.ApproximateAggregateFunction.*;
+import ee.ut.cs.dsg.StreamCardinality.ExactAggregateFunction.MedianAggregateRunner;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
@@ -18,7 +17,7 @@ import javax.annotation.Nullable;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static org.apache.flink.streaming.api.windowing.time.Time.seconds;
 
-public class MedianAggregateRunner {
+public class ApproximateMedianAggregateRunner {
     public static void main(String[] args) throws Exception {
 
         final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
@@ -31,7 +30,7 @@ public class MedianAggregateRunner {
 
         final SingleOutputStreamOperator<Tuple3<Long, String, Double>> result2 =
                 stream2
-                        .assignTimestampsAndWatermarks(new TimestampsAndWatermarks());
+                        .assignTimestampsAndWatermarks(new MedianAggregateRunner.TimestampsAndWatermarks());
         long startTime = System.nanoTime();
 
 
@@ -39,7 +38,7 @@ public class MedianAggregateRunner {
                 .keyBy(1)
                 .timeWindow( Time.of(2, MILLISECONDS), Time.of(1, MILLISECONDS))
                 .aggregate(new MedianCKMSAggregationFunction())
-//                .print()
+                .print()
         ;
 
         long endTime = System.nanoTime();

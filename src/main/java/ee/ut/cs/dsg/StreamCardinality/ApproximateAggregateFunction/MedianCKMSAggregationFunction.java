@@ -1,4 +1,4 @@
-package ee.ut.cs.dsg.SWAGwithSCOTTY.ApproximateAggregateFunction;
+package ee.ut.cs.dsg.StreamCardinality.ApproximateAggregateFunction;
 
 import org.apache.flink.api.common.functions.AggregateFunction;
 import org.apache.flink.api.java.tuple.Tuple3;

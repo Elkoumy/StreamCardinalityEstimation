@@ -1,4 +1,4 @@
-package ee.ut.cs.dsg.SWAGwithSCOTTY.ApproximateQuantiles;
+package ee.ut.cs.dsg.StreamCardinality.ApproximateQuantiles;
 
 public interface IQuantiles<T>
 {

@@ -1,10 +1,9 @@
-package ee.ut.cs.dsg.SWAGwithSCOTTY.ApproximateWindowFunctions;
+package ee.ut.cs.dsg.StreamCardinality.ApproximateWindowFunctions;
 
 import de.tub.dima.scotty.core.windowFunction.AggregateFunction;
 import de.tub.dima.scotty.core.windowFunction.CloneablePartialStateFunction;
-import ee.ut.cs.dsg.SWAGwithSCOTTY.ApproximateQuantiles.CKMSQuantiles;
-import ee.ut.cs.dsg.SWAGwithSCOTTY.ApproximateQuantiles.CKMSQuantiles;
-import ee.ut.cs.dsg.SWAGwithSCOTTY.ApproximateQuantiles.QuantilesException;
+import ee.ut.cs.dsg.StreamCardinality.ApproximateQuantiles.CKMSQuantiles;
+import ee.ut.cs.dsg.StreamCardinality.ApproximateQuantiles.QuantilesException;
 import org.apache.flink.api.java.tuple.Tuple3;
 
 public class CKMSWindowFunction implements AggregateFunction<Tuple3<Long, String, Double>,

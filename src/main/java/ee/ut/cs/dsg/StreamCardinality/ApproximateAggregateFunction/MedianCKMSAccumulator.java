@@ -1,6 +1,6 @@
-package ee.ut.cs.dsg.SWAGwithSCOTTY.ApproximateAggregateFunction;
+package ee.ut.cs.dsg.StreamCardinality.ApproximateAggregateFunction;
 
-import ee.ut.cs.dsg.SWAGwithSCOTTY.ApproximateQuantiles.CKMSQuantiles;
+import ee.ut.cs.dsg.StreamCardinality.ApproximateQuantiles.CKMSQuantiles;
 public class MedianCKMSAccumulator <ACC>{
     Long f0;
     String f1;

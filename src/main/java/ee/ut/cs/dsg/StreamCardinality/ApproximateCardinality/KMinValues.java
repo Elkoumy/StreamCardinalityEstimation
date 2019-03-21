@@ -1,6 +1,6 @@
 package ee.ut.cs.dsg.StreamCardinality.ApproximateCardinality;
 
-package org.streaminer.stream.cardinality;
+//ackage org.streaminer.stream.cardinality;
 
 import java.util.TreeSet;
 import org.streaminer.util.hash.Hash;

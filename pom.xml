@@ -97,6 +97,11 @@ under the License.
             <artifactId>mahout-examples</artifactId>
             <version>0.13.2-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>antlr</groupId>
+            <artifactId>antlr</artifactId>
+            <version>2.7.7</version>
+        </dependency>
     </dependencies>
 
 	<build>

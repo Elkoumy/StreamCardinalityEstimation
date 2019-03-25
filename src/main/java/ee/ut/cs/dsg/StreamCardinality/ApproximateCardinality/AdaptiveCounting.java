@@ -20,7 +20,9 @@ package ee.ut.cs.dsg.StreamCardinality.ApproximateCardinality;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.ListIterator;
 
+import ee.ut.cs.dsg.StreamCardinality.ApproximateQuantiles.CKMSQuantiles;
 import org.streaminer.util.hash.Lookup3Hash;
 import org.streaminer.util.IBuilder;
 
@@ -59,6 +61,113 @@ public class AdaptiveCounting extends LogLog {
             }
         }
     }
+    private static class Item{
+        protected final double[] mAlpha = {
+                0,
+                0.44567926005415,
+                1.2480639342271,
+                2.8391255240079,
+                6.0165231584811,
+                12.369319965552,
+                25.073991603109,
+                50.482891762521,
+                101.30047482549,
+                202.93553337953,
+                406.20559693552,
+                812.74569741657,
+                1625.8258887309,
+                3251.9862249084,
+                6504.3071471860,
+                13008.949929672,
+                26018.222470181,
+                52036.684135280,
+                104073.41696276,
+                208139.24771523,
+                416265.57100022,
+                832478.53851627,
+                1669443.2499579,
+                3356902.8702907,
+                6863377.8429508,
+                11978069.823687,
+                31333767.455026,
+                52114301.457757,
+                72080129.928986,
+                68945006.880409,
+                31538957.552704,
+                3299942.4347441
+        };
+
+        protected final int k;
+        protected int m;
+        protected double Ca;
+        protected byte[] M;
+        protected int Rsum = 0;
+
+        public Item(double[] mAlpha, int k, int m, double Ca, byte[]M){
+//            this.mAlpha = mAlpha;
+            this.k = k;
+            this.m = m;
+            this.Ca = Ca;
+            this.M = M;
+            this.Rsum = 0;
+        }
+
+    }
+
+    public AdaptiveCounting merge(AdaptiveCounting other){
+//        ListIterator<CKMSQuantiles.Item> it = other.sample.listIterator();
+//        CKMSQuantiles.Item item = it.next();
+//        Long[] buffer = new Long[other.count];
+//        int cnt=0;
+//        while (it.nextIndex() < other.sample.size() ) {
+//            buffer[cnt]=item.value;
+//            item = it.next();
+//            cnt++;
+//        }
+//        this.insertMultiple(buffer);
+        return this;
+    }
+
+
+    public static void main(String[] args){
+        byte [] arr = new byte[8];
+        double[] mAlpha_first = {
+                0,
+                0.44567926005415,
+                1.2480639342271,
+                2.8391255240079,
+                6.0165231584811,
+                12.369319965552,
+                25.073991603109,
+                50.482891762521,
+                101.30047482549,
+                202.93553337953,
+                406.20559693552,
+                812.74569741657,
+                1625.8258887309,
+                3251.9862249084,
+                6504.3071471860,
+                13008.949929672,
+                26018.222470181,
+                52036.684135280,
+                104073.41696276,
+                208139.24771523,
+                416265.57100022,
+                832478.53851627,
+                1669443.2499579,
+                3356902.8702907,
+                6863377.8429508,
+                11978069.823687,
+                31333767.455026,
+                52114301.457757,
+                72080129.928986,
+                68945006.880409,
+                31538957.552704,
+                3299942.4347441
+        };
+        Item uus = new Item(mAlpha_first,8, 5 , 0.50, arr);
+    }
+
 
     @Override
     public boolean offer(Object o) {

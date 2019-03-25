@@ -312,7 +312,7 @@ public class CKMSQuantiles implements IQuantiles<Long> {
         }
     }
     
-    private class Item {
+    public class Item {
         public final long value;
         public int g;
         public final int delta;

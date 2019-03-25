@@ -80,8 +80,25 @@ public class HyperLogLog implements IRichCardinality {
 
     public static void main(String[] args){
         HyperLogLog h = new HyperLogLog(.6);
+        h.offer(32);
         h.offer(12);
+        h.offer(33);
+        h.offer(44);
+        h.offer(24);
         System.out.println(h.cardinality());
+
+        HyperLogLog h2 = new HyperLogLog(.6);
+//        h2.offer(22);
+//        h2.offer(22);
+//        h2.offer(23);
+//        h2.offer(24);
+//        h2.offer(24);
+        try {
+            h2= (HyperLogLog) h2.merge(h);
+        } catch (CardinalityMergeException e) {
+            e.printStackTrace();
+        }
+        System.out.println(h2.cardinality());
     }
 
 

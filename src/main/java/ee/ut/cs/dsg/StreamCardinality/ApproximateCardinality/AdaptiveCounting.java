@@ -104,7 +104,7 @@ public class AdaptiveCounting extends LogLog {
         protected int Rsum = 0;
 
         public Item(double[] mAlpha, int k, int m, double Ca, byte[]M){
-            this.mAlpha = mAlpha;
+//            this.mAlpha = mAlpha;
             this.k = k;
             this.m = m;
             this.Ca = Ca;
@@ -115,22 +115,22 @@ public class AdaptiveCounting extends LogLog {
     }
 
     public AdaptiveCounting merge(AdaptiveCounting other){
-        ListIterator<CKMSQuantiles.Item> it = other.sample.listIterator();
-        CKMSQuantiles.Item item = it.next();
-        Long[] buffer = new Long[other.count];
-        int cnt=0;
-        while (it.nextIndex() < other.sample.size() ) {
-            buffer[cnt]=item.value;
-            item = it.next();
-            cnt++;
-        }
-        this.insertMultiple(buffer);
+//        ListIterator<CKMSQuantiles.Item> it = other.sample.listIterator();
+//        CKMSQuantiles.Item item = it.next();
+//        Long[] buffer = new Long[other.count];
+//        int cnt=0;
+//        while (it.nextIndex() < other.sample.size() ) {
+//            buffer[cnt]=item.value;
+//            item = it.next();
+//            cnt++;
+//        }
+//        this.insertMultiple(buffer);
         return this;
     }
 
 
     public static void main(String[] args){
-        byte [] arr = new byte[8]
+        byte [] arr = new byte[8];
         double[] mAlpha_first = {
                 0,
                 0.44567926005415,

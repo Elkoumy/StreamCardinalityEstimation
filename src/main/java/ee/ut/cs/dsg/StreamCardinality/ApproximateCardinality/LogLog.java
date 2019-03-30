@@ -244,4 +244,23 @@ public class LogLog implements IRichCardinality
             return 1 << k;
         }
     }
+    public LogLog mergeLogLogObjects(LogLog object2){
+        int k3 = this.k + object2.k;
+        LogLog mergedObject = new LogLog(k3);
+        mergedObject.m = this.m + object2.m;
+        //mergedObject.Ca = mergedObject.mAlpha[mergedObject.k];
+        mergedObject.Rsum = this.Rsum + object2.Rsum;
+        //mergedObject.M = new byte[mergedObject.k];
+        // Mida teeb this.m = 1 << k; et siis saab aru saada, mida m teeb, kui suur see on
+
+        for (int i = 0; i < this.M.length; i++) {
+            mergedObject.M[i] = this.M[i];
+        }
+
+        for (int i = 0; i < object2.M.length; i++) {
+            mergedObject.M[i+this.k] = object2.M[i];
+        }
+
+        return mergedObject;
+    }
 }

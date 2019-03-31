@@ -244,6 +244,7 @@ public class LogLog implements IRichCardinality
             return 1 << k;
         }
     }
+
     public LogLog mergeLogLogObjects(LogLog object2){
         int k3 = this.k + object2.k;
         LogLog mergedObject = new LogLog(k3);

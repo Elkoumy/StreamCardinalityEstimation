@@ -78,6 +78,9 @@ public class HyperLogLog implements IRichCardinality {
     private final int log2m;
     private final double alphaMM;
 
+
+
+
     public static void main(String[] args){
         HyperLogLog h = new HyperLogLog(.6);
         h.offer(32);

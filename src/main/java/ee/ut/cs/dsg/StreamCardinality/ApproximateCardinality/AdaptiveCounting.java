@@ -199,6 +199,7 @@ public class AdaptiveCounting extends LogLog {
         }
     }
 
+
     public AdaptiveCounting mergeAdaptiveCountingObjects(AdaptiveCounting object2){
         int k3 = this.k + object2.k;
         AdaptiveCounting mergedObject = new AdaptiveCounting(k3);

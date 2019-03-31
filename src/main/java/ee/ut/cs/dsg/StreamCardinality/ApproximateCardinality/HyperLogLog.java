@@ -88,11 +88,11 @@ public class HyperLogLog implements IRichCardinality {
         System.out.println(h.cardinality());
 
         HyperLogLog h2 = new HyperLogLog(.6);
-//        h2.offer(22);
-//        h2.offer(22);
-//        h2.offer(23);
-//        h2.offer(24);
-//        h2.offer(24);
+        h2.offer(22);
+        h2.offer(22);
+        h2.offer(23);
+        h2.offer(24);
+        h2.offer(24);
         try {
             h2= (HyperLogLog) h2.merge(h);
         } catch (CardinalityMergeException e) {

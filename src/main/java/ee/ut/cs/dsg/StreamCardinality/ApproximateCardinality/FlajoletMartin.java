@@ -25,16 +25,53 @@ import java.util.Map;
  *
  * @author Ravi Bhide
  */
-public class FlajoletMartin {
+public class FlajoletMartin implements IRichCardinality {
+
+
     private static final double PHI = 0.77351D;
     private int numHashGroups;
     private int numHashFunctionsInHashGroup;
-    private HashFunction[][] hashes;
-
     private int bitmapSize;
+
+    private HashFunction[][] hashes;
     private boolean[][][] bitmaps;
 
     private long numWords;
+
+
+    public static void main(String[] args) throws FMException {
+
+        System.out.println("FM test:");
+        FlajoletMartin fm = new FlajoletMartin(10, 3, 3);
+        fm.offer(15);
+        fm.offer(25);
+        fm.offer(35);
+        fm.offer(45);
+        fm.offer(55);
+        fm.offer(65);
+        fm.offer(75);
+        long cad = fm.cardinality();
+        System.out.print("fm: ");
+        System.out.println(cad);
+        FlajoletMartin fm2 = new FlajoletMartin(10, 3, 3);
+        fm2.offer(115);
+        fm2.offer(125);
+        fm2.offer(135);
+        fm2.offer(145);
+        fm2.offer(155);
+        fm2.offer(165);
+        fm2.offer(175);
+        System.out.print("fm2: ");
+        System.out.println(fm2.cardinality());
+        System.out.print("kmv merged with fm2: ");
+        fm2 = (FlajoletMartin)fm2.merge(fm);
+        System.out.println(fm2.cardinality());
+        FlajoletMartin fm3 = new FlajoletMartin(10, 3, 3);
+        fm3 = (FlajoletMartin)fm2.clone();
+        System.out.print("fm3 cloned with fm2: ");
+        System.out.println(fm3.cardinality());
+    }
+
 
     public FlajoletMartin(int bitmapSize, int numHashGroups, int numHashFunctionsInEachGroup) {
         this.numHashGroups = numHashGroups;
@@ -178,5 +215,80 @@ public class FlajoletMartin {
         public long hash(long hashCode) {
             return m_m + m_n * hashCode;
         }
+    }
+
+    protected static class FMException extends CardinalityMergeException
+    {
+        public FMException(String message)
+        {
+            super(message);
+        }
+    }
+
+    public boolean[][][] getBitmaps()
+    {
+        return bitmaps;
+    }
+
+    private void setAll(boolean[][][] bitmaps) {
+        for (int i=0; i<bitmaps.length; i++)
+        {
+            for (int j=0; j<bitmaps[i].length; j++){
+                for (int k=0; k<bitmaps[i][j].length; k++)
+                {
+                    this.bitmaps[i][j][k] = bitmaps[i][j][k];
+                }
+            }
+        }
+    }
+
+
+    @Override
+    public boolean offerHashed(long hashedLong) {
+        return false;
+    }
+
+    @Override
+    public boolean offerHashed(int hashedInt) {
+        return false;
+    }
+
+    @Override
+    public int sizeof() {
+        return 0;
+    }
+
+    @Override
+    public byte[] getBytes() throws IOException {
+        return new byte[0];
+    }
+
+    @Override
+    public IRichCardinality merge(IRichCardinality... estimators) throws FMException {
+        FlajoletMartin newInstance = new FlajoletMartin(bitmapSize, numHashGroups, numHashFunctionsInHashGroup);
+        newInstance.setAll(this.bitmaps);
+
+        for (IRichCardinality estimator : estimators)
+        {
+            if (!(this.getClass().isInstance(estimator)))
+            {
+                throw new FMException("Cannot merge estimators of different class");
+            }
+            if (estimator.sizeof() != this.sizeof())
+            {
+                throw new FMException("Cannot merge estimators of different sizes");
+            }
+            newInstance.setAll(((FlajoletMartin)estimator).getBitmaps());
+        }
+        return newInstance;
+    }
+
+
+
+    public IRichCardinality clone()
+    {
+        FlajoletMartin newInstance = new FlajoletMartin(bitmapSize, numHashGroups, numHashFunctionsInHashGroup);
+        newInstance.setAll(this.bitmaps);
+        return newInstance;
     }
 }

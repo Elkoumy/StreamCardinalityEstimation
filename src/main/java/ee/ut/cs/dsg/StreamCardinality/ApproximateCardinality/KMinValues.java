@@ -43,9 +43,12 @@ public class KMinValues implements IRichCardinality {
         System.out.println(kmv2.cardinality());
         System.out.print("kmv merged with kmv2: ");
         kmv2 = (KMinValues)kmv2.merge(kmv);
+
         System.out.println(kmv2.cardinality());
         KMinValues kmv3 = new KMinValues(3, MurmurHash.getInstance());
         kmv3 = (KMinValues)kmv2.clone();
+        kmv2 = kmv;
+        System.out.println(kmv2.cardinality());
         System.out.print("kmv3 cloned with kmv2: ");
         System.out.println(kmv3.cardinality());
     }

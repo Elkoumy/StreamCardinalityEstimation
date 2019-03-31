@@ -17,7 +17,7 @@ public class MedianCKMSAggregationFunction implements AggregateFunction<Tuple3<L
     public MedianCKMSAccumulator  add(Tuple3<Long, String, Double> value, MedianCKMSAccumulator  acc) {
         acc.f0 = value.f0;
         acc.f1 = value.f1;
-        long val =Math.round(value.f2);
+        long val = Math.round(value.f2);
         acc.acc.offer(val);
 
         return acc;
@@ -25,10 +25,10 @@ public class MedianCKMSAggregationFunction implements AggregateFunction<Tuple3<L
 
     public Tuple3<Long,String,Double> getResult(MedianCKMSAccumulator  acc) {
         Tuple3<Long,String,Double> res= new Tuple3<>();
-        res.f0=acc.f0;
-        res.f1= acc.f1;
+        res.f0 = acc.f0;
+        res.f1 = acc.f1;
         try {
-            res.f2=(double) acc.acc.getQuantile(0.5);
+            res.f2 = (double) acc.acc.getQuantile(0.5);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -2,7 +2,7 @@ package ee.ut.cs.dsg.StreamCardinality.ApproximateCardinality;
 
 //package org.streaminer.stream.cardinality;
 
-import java.io.Serializable;
+import java.io.IOException;
 import java.util.*;
 import org.streaminer.util.hash.function.HashFunction;
 import org.streaminer.util.hash.function.MurmurHashFunction;
@@ -19,7 +19,7 @@ import org.streaminer.util.hash.function.MurmurHashFunction;
  *
  * @author ananthc
  */
-public class BJKST implements Serializable {
+public class BJKST implements IRichCardinality {
     private static final long serialVersionUID = -2032575802259420762L;
 
     private int numMedians=25;
@@ -37,6 +37,38 @@ public class BJKST implements Serializable {
 
     private int intLength = Integer.toString(Integer.MAX_VALUE).length();
     private String lengthOfIntegerRepresentation = null;
+
+    public static void main(String[] args) throws BJKSTException {
+        System.out.println("BJKST test:");
+        BJKST bjkst = new BJKST(100, 10, 0.3);
+        bjkst.offer(15);
+        bjkst.offer(25);
+        bjkst.offer(35);
+        bjkst.offer(45);
+        bjkst.offer(55);
+        bjkst.offer(65);
+        bjkst.offer(75);
+        long cad = bjkst.cardinality();
+        System.out.print("BJKST: ");
+        System.out.println(cad);
+        BJKST bjkst2 = new BJKST(100, 10, 0.3);
+        bjkst2.offer(115);
+        bjkst2.offer(125);
+        bjkst2.offer(135);
+        bjkst2.offer(145);
+        bjkst2.offer(155);
+        bjkst2.offer(165);
+        bjkst2.offer(175);
+        System.out.print("BJKST2: ");
+        System.out.println(bjkst2.cardinality());
+        System.out.print("BJKST merged with BJKST2: ");
+        bjkst2 = (BJKST) bjkst2.merge(bjkst);
+        System.out.println(bjkst2.cardinality());
+        BJKST bjkst3 = new BJKST(100, 10, 0.3);
+        bjkst3 = (BJKST) bjkst2.clone();
+        System.out.print("BJKST3 cloned with BJKST2: ");
+        System.out.println(bjkst3.cardinality());
+    }
 
     public BJKST(int numberOfMedianAttempts, int sizeOfEachMedianSet) {
         this.numMedians = numberOfMedianAttempts;
@@ -72,7 +104,7 @@ public class BJKST implements Serializable {
         }
     }
 
-    public void offer(Object o) {
+    public boolean offer(Object o) {
         for ( int i =0 ; i < numMedians; i++) {
             String binaryRepr = Long.toBinaryString(hHashers.get(i).hash(o));
 
@@ -97,6 +129,7 @@ public class BJKST implements Serializable {
                 }
             }
         }
+        return true;
     }
 
     public long cardinality() {
@@ -123,5 +156,121 @@ public class BJKST implements Serializable {
         }
 
         return finalEstimate;
+    }
+
+    protected static class BJKSTException extends CardinalityMergeException
+    {
+        public BJKSTException(String message)
+        {
+            super(message);
+        }
+    }
+
+    private void putAll(ArrayList<Integer> limits, ArrayList<HashSet<String>> buffer)
+    {
+        this.limits = (ArrayList<Integer>)limits.clone();
+        this.buffers = (ArrayList<HashSet<String>>)buffer.clone();
+    }
+
+    public ArrayList<Integer> getLimits()
+    {
+        return (ArrayList<Integer>)limits;
+    }
+
+    public ArrayList<HashSet<String>> getBuffer()
+    {
+        return (ArrayList<HashSet<String>>)buffers;
+    }
+
+    @Override
+    public boolean offerHashed(long hashedLong) {
+        return false;
+    }
+
+    @Override
+    public boolean offerHashed(int hashedInt) {
+        return false;
+    }
+
+    @Override
+    public int sizeof() {
+        return 0;
+    }
+
+    @Override
+    public byte[] getBytes() throws IOException {
+        return new byte[0];
+    }
+
+    @Override
+    public IRichCardinality merge(IRichCardinality... estimators) throws BJKSTException {
+
+        BJKST newInstance = new BJKST(numMedians, sizeOfMedianSet, error);
+        newInstance.putAll((ArrayList<Integer>)this.limits, (ArrayList<HashSet<String>>)this.buffers);
+
+        for (IRichCardinality estimator : estimators)
+        {
+            if (!(this.getClass().isInstance(estimator)))
+            {
+                throw new BJKSTException("Cannot merge estimators of different class");
+            }
+            if (estimator.sizeof() != this.sizeof())
+            {
+                throw new BJKSTException("Cannot merge estimators of different sizes");
+            }
+
+            ArrayList<Integer> newLimits = ((BJKST)estimator).getLimits();
+            ArrayList<HashSet<String>> newBuffers = ((BJKST)estimator).getBuffer();
+            ArrayList<Integer> tmpLimits = new ArrayList<Integer>(numMedians);
+            ArrayList<HashSet<String>> tmpBuffers = new ArrayList<HashSet<String>>(numMedians);
+
+            for(int i=0; i<numMedians; i++)
+            {
+                HashSet<String> tmp = newBuffers.get(i);
+                tmp.addAll(buffers.get(i));
+                if ( newLimits.get(i) > (limits.get(i)) ) {
+                    tmpLimits.add(newLimits.get(i));
+
+                    while (tmp.size() > bufferSize) {
+                        for (Iterator<String> itr = tmp.iterator(); itr.hasNext();) {
+                            String element = itr.next();
+                            long zeroesOld = Long.parseLong(element.substring(intLength));
+                            if (zeroesOld < newLimits.get(i)) {
+                                itr.remove();
+                            }
+                        }
+                    }
+
+                    tmpBuffers.add(newBuffers.get(i));
+                } else {
+                    tmpLimits.add(limits.get(i));
+
+                    while (tmp.size() > bufferSize) {
+                        for (Iterator<String> itr = tmp.iterator(); itr.hasNext();) {
+                            String element = itr.next();
+                            long zeroesOld = Long.parseLong(element.substring(intLength));
+                            if (zeroesOld < limits.get(i)) {
+                                itr.remove();
+                            }
+                        }
+                    }
+
+                    tmpBuffers.add(tmp);
+                }
+
+            }
+            newInstance.putAll(tmpLimits, tmpBuffers);
+
+        }
+        return newInstance;
+    }
+
+    public IRichCardinality clone()
+    {
+        BJKST newInstance = new BJKST(numMedians, sizeOfMedianSet, error);
+
+        newInstance.putAll((ArrayList<Integer>)this.limits, (ArrayList<HashSet<String>>)this.buffers);
+
+        return newInstance;
     }
 }

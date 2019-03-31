@@ -16,7 +16,6 @@ package ee.ut.cs.dsg.StreamCardinality.ApproximateCardinality;
  * limitations under the License.
  */
 
-//package org.streaminer.stream.cardinality;
 
 
 import org.streaminer.util.hash.MurmurHash;

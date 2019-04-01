@@ -66,19 +66,31 @@ public class AdaptiveCounting extends LogLog {
         }
     }
 
-
-
-
-    public static void main(String[] args){
-        LOGGER.setLevel(Level.ALL);
-        AdaptiveCounting firstObject = new AdaptiveCounting(1);
-        AdaptiveCounting secondObject = new AdaptiveCounting(1);
-        //LogLog secondObject = new LogLog(1);
-        AdaptiveCounting object3 = firstObject.mergeAdaptiveCountingObjects(secondObject);
-        LOGGER.info("first object = " + object3.toString());
-
+    public int getB_e() {
+        return b_e;
     }
 
+    public void setB_e(int b_e) {
+        this.b_e = b_e;
+    }
+
+    public double getB_s() {
+        return B_s;
+    }
+
+
+    @Override
+    public String toString() {
+        return "AdaptiveCounting{" +
+                "b_e=" + b_e +
+                ", B_s=" + B_s +
+                ", k=" + k +
+                ", m=" + m +
+                ", Ca=" + Ca +
+                ", M=" + Arrays.toString(M) +
+                ", Rsum=" + Rsum +
+                '}';
+    }
 
     @Override
     public boolean offer(Object o) {
@@ -145,8 +157,8 @@ public class AdaptiveCounting extends LogLog {
         }
         return (AdaptiveCounting) estimators[0].merge(Arrays.copyOfRange(estimators, 1, estimators.length));
     }
-
     public static class Builder implements IBuilder<IRichCardinality>, Serializable {
+
         private static final long serialVersionUID = 2205437102378081334L;
         protected final int k;
 
@@ -197,8 +209,8 @@ public class AdaptiveCounting extends LogLog {
 
             return new Builder(16);
         }
-    }
 
+    }
 
     public AdaptiveCounting mergeAdaptiveCountingObjects(AdaptiveCounting object2){
         int k3 = this.k + object2.k;
@@ -206,6 +218,7 @@ public class AdaptiveCounting extends LogLog {
         mergedObject.m = this.m + object2.m;
         //mergedObject.Ca = mergedObject.mAlpha[mergedObject.k];
         mergedObject.Rsum = this.Rsum + object2.Rsum;
+        //mergedObject.B_s = this.getB_s() + object2.getB_s();
         //mergedObject.M = new byte[mergedObject.k];
         // Mida teeb this.m = 1 << k; et siis saab aru saada, mida m teeb, kui suur see on
 
@@ -220,16 +233,36 @@ public class AdaptiveCounting extends LogLog {
         return mergedObject;
     }
 
-    @Override
-    public String toString() {
-        return "AdaptiveCounting{" +
-                "b_e=" + b_e +
-                ", B_s=" + B_s +
-                ", k=" + k +
-                ", m=" + m +
-                ", Ca=" + Ca +
-                ", M=" + Arrays.toString(M) +
-                ", Rsum=" + Rsum +
-                '}';
+    private AdaptiveCounting cloneAdaptiveCountingObject(AdaptiveCounting object){
+        int cloneK = object.getK();
+        AdaptiveCounting clone = new AdaptiveCounting(cloneK);
+        clone.setM(object.getM());
+        clone.setRsum(object.getRsum());
+        clone.setByteM(object.getByteM());
+        clone.setCa(object.getCa());
+        clone.setB_e(object.getB_e());
+        return clone;
+    }
+
+    public static void main(String[] args){
+        LOGGER.setLevel(Level.ALL);
+        AdaptiveCounting firstObject = new AdaptiveCounting(1);
+        AdaptiveCounting secondObject = new AdaptiveCounting(1);
+        AdaptiveCounting object3 = firstObject.mergeAdaptiveCountingObjects(secondObject);
+        LOGGER.info("first object = " + firstObject.toString());
+        LOGGER.info("second object = " + secondObject.toString());
+        LOGGER.info("MERGED object3 = " + object3.toString());
+        // I am a bit confused, if this kind of creating a new object first and then rewriting it is allowed
+        AdaptiveCounting clone = new AdaptiveCounting(firstObject.getK());
+        clone = clone.cloneAdaptiveCountingObject(secondObject);
+        LOGGER.info("cloned object = " + clone.toString());
+        clone.setB_e(1234);
+        clone.setCa(1234);
+        clone.setM(1234);
+        clone.setRsum(1234);
+        LOGGER.info("cloned object AFTER MODS = " + clone.toString());
+        LOGGER.info("first object AFTER MODS= " + firstObject.toString());
+        LOGGER.info("second object AFTER MODS= " + secondObject.toString());
+
     }
 }

@@ -23,6 +23,8 @@ import org.streaminer.util.IBuilder;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static java.lang.Math.*;
 
@@ -30,8 +32,8 @@ import static java.lang.Math.*;
  * See <i>A Linear-Time Probabilistic Counting Algorithm for Database Applications</i>
  * by Whang, Vander-Zanden, Taylor
  */
-public class LinearCounting implements IRichCardinality
-{
+public class LinearCounting implements IRichCardinality {
+    private final static Logger LOGGER = Logger.getLogger(AdaptiveCounting.class.getName());
     /**
      * Bitmap
      * Hashed stream elements are mapped to bits in this array
@@ -43,56 +45,65 @@ public class LinearCounting implements IRichCardinality
      */
     protected final int length;
 
-
     /**
      * Number of bits left unset in the map
      */
     protected int count;
 
+    public byte[] getMap() { return map; }
+
+    public void setMap(byte[] map) { this.map = map; }
+
+    public int getLength() { return length; }
+
+    public void setCount(int count) { this.count = count; }
+
+    @Override
+    public String toString() {
+        return "LinearCounting{" +
+                "map=" + Arrays.toString(map) +
+                ", length=" + length +
+                ", count=" + count +
+                '}';
+    }
+
     /**
      * @param size of bit array in bytes
      */
-    public LinearCounting(int size)
-    {
+    public LinearCounting(int size) {
         this.length = 8 * size;
         this.count = this.length;
         map = new byte[size];
     }
 
-    public LinearCounting(byte[] map)
-    {
+    public LinearCounting(byte[] map) {
         this.map = map;
         this.length = 8 * map.length;
         this.count = computeCount();
     }
 
     @Override
-    public long cardinality()
-    {
+    public long cardinality() {
         return (long) (Math.round(length * Math.log(length / ((double) count))));
     }
 
     @Override
-    public byte[] getBytes()
-    {
+    public byte[] getBytes() {
         return map;
     }
 
     @Override
-    public boolean offerHashed(long hashedLong)
-    {
+    public boolean offerHashed(long hashedLong) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean offerHashed(int hashedInt)
-    {
+    public boolean offerHashed(int hashedInt) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean offer(Object o)
-    {
+    public boolean offer(Object o) {
         boolean modified = false;
 
         long hash = (long) MurmurHash.getInstance().hash(o);
@@ -100,8 +111,7 @@ public class LinearCounting implements IRichCardinality
         int i = bit / 8;
         byte b = map[i];
         byte mask = (byte) (1 << (bit % 8));
-        if ((mask & b) == 0)
-        {
+        if ((mask & b) == 0) {
             map[i] = (byte) (b | mask);
             count--;
             modified = true;
@@ -111,16 +121,13 @@ public class LinearCounting implements IRichCardinality
     }
 
     @Override
-    public int sizeof()
-    {
+    public int sizeof() {
         return map.length;
     }
 
-    public int computeCount()
-    {
+    public int computeCount() {
         int c = 0;
-        for (byte b : map)
-        {
+        for (byte b : map) {
             c += Integer.bitCount(b & 0xFF);
         }
 
@@ -130,18 +137,15 @@ public class LinearCounting implements IRichCardinality
     /**
      * @return (# set bits) / (total # of bits)
      */
-    public double getUtilization()
-    {
+    public double getUtilization() {
         return (length - count) / (double) length;
     }
 
-    public int getCount()
-    {
+    public int getCount() {
         return count;
     }
 
-    public boolean isSaturated()
-    {
+    public boolean isSaturated() {
         return (count == 0);
     }
 
@@ -150,14 +154,11 @@ public class LinearCounting implements IRichCardinality
      *
      * @return
      */
-    protected String mapAsBitString()
-    {
+    protected String mapAsBitString() {
         StringBuilder sb = new StringBuilder();
-        for (byte b : map)
-        {
+        for (byte b : map) {
             String bits = Integer.toBinaryString(b);
-            for (int i = 0; i < 8 - bits.length(); i++)
-            {
+            for (int i = 0; i < 8 - bits.length(); i++) {
                 sb.append('0');
             }
             sb.append(bits);
@@ -170,10 +171,8 @@ public class LinearCounting implements IRichCardinality
      * @throws LinearCountingMergeException if estimators are not mergeable (all estimators must be instances of LinearCounting of the same size)
      */
     @Override
-    public IRichCardinality merge(IRichCardinality... estimators) throws LinearCountingMergeException
-    {
-        if (estimators == null)
-        {
+    public IRichCardinality merge(IRichCardinality... estimators) throws LinearCountingMergeException {
+        if (estimators == null) {
             return new LinearCounting(map);
         }
         LinearCounting[] lcs = Arrays.copyOf(estimators, estimators.length + 1, LinearCounting[].class);
@@ -188,23 +187,18 @@ public class LinearCounting implements IRichCardinality
      * @return merged estimator or null if no estimators were provided
      * @throws LinearCountingMergeException if estimators are not mergeable (all estimators must be the same size)
      */
-    public static LinearCounting mergeEstimators(LinearCounting... estimators) throws LinearCountingMergeException
-    {
+    public static LinearCounting mergeEstimators(LinearCounting... estimators) throws LinearCountingMergeException {
         LinearCounting merged = null;
-        if (estimators != null && estimators.length > 0)
-        {
+        if (estimators != null && estimators.length > 0) {
             int size = estimators[0].map.length;
             byte[] mergedBytes = new byte[size];
 
-            for (LinearCounting estimator : estimators)
-            {
-                if (estimator.map.length != size)
-                {
+            for (LinearCounting estimator : estimators) {
+                if (estimator.map.length != size) {
                     throw new LinearCountingMergeException("Cannot merge estimators of different sizes");
                 }
 
-                for (int b = 0; b < size; b++)
-                {
+                for (int b = 0; b < size; b++) {
                     mergedBytes[b] |= estimator.map[b];
                 }
             }
@@ -215,16 +209,13 @@ public class LinearCounting implements IRichCardinality
     }
 
     @SuppressWarnings("serial")
-    protected static class LinearCountingMergeException extends CardinalityMergeException
-    {
-        public LinearCountingMergeException(String message)
-        {
+    protected static class LinearCountingMergeException extends CardinalityMergeException {
+        public LinearCountingMergeException(String message) {
             super(message);
         }
     }
 
-    public static class Builder implements IBuilder<IRichCardinality>, Serializable
-    {
+    public static class Builder implements IBuilder<IRichCardinality>, Serializable {
         private static final long serialVersionUID = -4245416224034648428L;
 
         /**
@@ -242,25 +233,21 @@ public class LinearCounting implements IRichCardinality
 
         protected final int size;
 
-        public Builder()
-        {
+        public Builder() {
             this(65536);
         }
 
-        public Builder(int size)
-        {
+        public Builder(int size) {
             this.size = size;
         }
 
         @Override
-        public LinearCounting build()
-        {
+        public LinearCounting build() {
             return new LinearCounting(size);
         }
 
         @Override
-        public int sizeof()
-        {
+        public int sizeof() {
             return size;
         }
 
@@ -274,20 +261,15 @@ public class LinearCounting implements IRichCardinality
          * @return
          * @throws IllegalArgumentException if maxCardinality is not a positive integer
          */
-        public static Builder onePercentError(int maxCardinality)
-        {
-            if (maxCardinality <= 0)
-            {
+        public static Builder onePercentError(int maxCardinality) {
+            if (maxCardinality <= 0) {
                 throw new IllegalArgumentException("maxCardinality (" + maxCardinality + ") must be a positive integer");
             }
 
             int length = -1;
-            if (maxCardinality < 100)
-            {
+            if (maxCardinality < 100) {
                 length = onePercentErrorLength[0];
-            }
-            else if (maxCardinality < 10000000)
-            {
+            } else if (maxCardinality < 10000000) {
                 int logscale = (int) Math.log10(maxCardinality);
                 int scaleValue = (int) Math.pow(10, logscale);
                 int scaleIndex = maxCardinality / scaleValue;
@@ -297,21 +279,13 @@ public class LinearCounting implements IRichCardinality
 
                 //System.out.println(String.format("Lower bound: %9d, Max cardinality: %9d, Upper bound: %9d", lowerBound, maxCardinality, lowerBound+scaleValue));
                 //System.out.println(String.format("Lower bound: %9d, Interpolated   : %9d, Upper bound: %9d", onePercentErrorLength[index], length, onePercentErrorLength[index+1]));
-            }
-            else if (maxCardinality < 50000000)
-            {
+            } else if (maxCardinality < 50000000) {
                 length = lerp(10000000, 1096582, 50000000, 4584297, maxCardinality);
-            }
-            else if (maxCardinality < 100000000)
-            {
+            } else if (maxCardinality < 100000000) {
                 length = lerp(50000000, 4584297, 100000000, 8571013, maxCardinality);
-            }
-            else if (maxCardinality <= 120000000)
-            {
+            } else if (maxCardinality <= 120000000) {
                 length = lerp(100000000, 8571013, 120000000, 10112529, maxCardinality);
-            }
-            else
-            {
+            } else {
                 length = maxCardinality / 12;
             }
 
@@ -332,8 +306,7 @@ public class LinearCounting implements IRichCardinality
          * @param eps            standard error as a fraction (e.g. {@code 0.01} for 1%)
          * @param maxCardinality maximum expected cardinality
          */
-        public static Builder withError(double eps, int maxCardinality)
-        {
+        public static Builder withError(double eps, int maxCardinality) {
             int sz = computeRequiredBitMaskLength(maxCardinality, eps);
             return new Builder((int) Math.ceil(sz / 8D));
         }
@@ -345,30 +318,23 @@ public class LinearCounting implements IRichCardinality
          * @param eps desired standard error
          * @return minimal required bit mask length
          */
-        private static int computeRequiredBitMaskLength(double n, double eps)
-        {
-            if (eps >= 1 || eps <= 0)
-            {
+        private static int computeRequiredBitMaskLength(double n, double eps) {
+            if (eps >= 1 || eps <= 0) {
                 throw new IllegalArgumentException("Epsilon should be in (0, 1) range");
             }
-            if (n <= 0)
-            {
+            if (n <= 0) {
                 throw new IllegalArgumentException("Cardinality should be positive");
             }
             int fromM = 1;
             int toM = 100000000;
             int m;
             double eq;
-            do
-            {
+            do {
                 m = (toM + fromM) / 2;
                 eq = precisionInequalityRV(n / m, eps);
-                if (m > eq)
-                {
+                if (m > eq) {
                     toM = m;
-                }
-                else
-                {
+                } else {
                     fromM = m + 1;
                 }
             } while (toM > fromM);
@@ -379,8 +345,7 @@ public class LinearCounting implements IRichCardinality
          * @param t   load factor for linear counter
          * @param eps desired standard error
          */
-        private static double precisionInequalityRV(double t, double eps)
-        {
+        private static double precisionInequalityRV(double t, double eps) {
             return max(1.0 / pow(eps * t, 2), 5) * (exp(t) - t - 1);
         }
 
@@ -392,9 +357,48 @@ public class LinearCounting implements IRichCardinality
          * @param x
          * @return linear interpolation
          */
-        protected static int lerp(int x0, int y0, int x1, int y1, int x)
-        {
+        protected static int lerp(int x0, int y0, int x1, int y1, int x) {
             return (int) Math.ceil(y0 + (x - x0) * (double) (y1 - y0) / (x1 - x0));
         }
+    }
+
+    public LinearCounting mergeLinearCountingObjects(LinearCounting object) {
+        //PAY ATTENTION HERE!!! The first new creation is QUESTIONABLE
+        LinearCounting mergedObject = new LinearCounting(this.getLength()+ object.getLength());
+        mergedObject.setCount(this.getCount() + object.getCount());
+        //mergedObject.setMap(this.getMap().length+object.getMap().length);
+        mergedObject.map = new byte[this.getMap().length + object.getMap().length];
+        for (int i = 0; i < this.getMap().length; i++) {
+            mergedObject.map[i] = this.map[i];
+        }
+        for (int i = 0; i < object.getMap().length; i++) {
+            mergedObject.map[i] = object.map[i];
+        }
+        return mergedObject;
+    }
+
+    public LinearCounting cloneLinearCountingObjects(LinearCounting object){
+        LinearCounting clone = new LinearCounting(object.getMap());
+        clone.setMap(object.getMap());
+        clone.setCount(object.getCount());
+        return clone;
+    }
+
+    public static void main(String[] args) {
+        LOGGER.setLevel(Level.ALL);
+        LinearCounting firstObject = new LinearCounting(2);
+        LinearCounting secondObject = new LinearCounting(1);
+        LOGGER.info("firstObject" + firstObject.toString());
+        LOGGER.info("secondObject" + secondObject.toString());
+        LinearCounting mergedObject = firstObject.mergeLinearCountingObjects(secondObject);
+        LOGGER.info("mergedObject" + mergedObject.toString());
+
+        LinearCounting clonedObject = new LinearCounting(firstObject.getMap());
+        clonedObject.cloneLinearCountingObjects(firstObject);
+        LOGGER.info("clonedObject" + clonedObject.toString());
+        clonedObject.setMap(new byte[10]);
+        clonedObject.setCount(10);
+        LOGGER.info("clonedObject AFTER MODS" + clonedObject.toString());
+        LOGGER.info("firstObject AFTER MODS" + firstObject.toString());
     }
 }

@@ -28,6 +28,8 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Java implementation of HyperLogLog (HLL) algorithm from this paper:
@@ -74,33 +76,29 @@ import java.io.Serializable;
  * </p>
  */
 public class HyperLogLog implements IRichCardinality {
+
+    private final static Logger LOGGER = Logger.getLogger(AdaptiveCounting.class.getName());
+
     private final RegisterSet registerSet;
+
     private final int log2m;
+
     private final double alphaMM;
 
-    public static void main(String[] args){
-        HyperLogLog h = new HyperLogLog(.6);
-        h.offer(32);
-        h.offer(12);
-        h.offer(33);
-        h.offer(44);
-        h.offer(24);
-        System.out.println(h.cardinality());
-
-        HyperLogLog h2 = new HyperLogLog(.6);
-//        h2.offer(22);
-//        h2.offer(22);
-//        h2.offer(23);
-//        h2.offer(24);
-//        h2.offer(24);
-        try {
-            h2= (HyperLogLog) h2.merge(h);
-        } catch (CardinalityMergeException e) {
-            e.printStackTrace();
-        }
-        System.out.println(h2.cardinality());
+    @Override
+    public String toString() {
+        return "HyperLogLog{" +
+                "registerSet=" + registerSet +
+                ", log2m=" + log2m +
+                ", alphaMM=" + alphaMM +
+                '}';
     }
 
+    public RegisterSet getRegisterSet() { return registerSet; }
+
+    public int getLog2m() { return log2m; }
+
+    public double getAlphaMM() { return alphaMM; }
 
     /**
      * Create a new HyperLogLog instance using the specified standard deviation.
@@ -108,6 +106,7 @@ public class HyperLogLog implements IRichCardinality {
      * @param rsd The relative standard deviation for the counter.
      *            smaller values create counters that require more space.
      */
+
     public HyperLogLog(double rsd) {
         this(log2m(rsd));
     }
@@ -265,8 +264,8 @@ public class HyperLogLog implements IRichCardinality {
     }
 
     public static class Builder implements IBuilder<IRichCardinality>, Serializable {
-        private double rsd;
 
+        private double rsd;
         public Builder(double rsd) {
             this.rsd = rsd;
         }
@@ -292,12 +291,69 @@ public class HyperLogLog implements IRichCardinality {
             oi.readFully(longArrayBytes);
             return new HyperLogLog(log2m, new RegisterSet(1 << log2m, Bits.getBits(longArrayBytes)));
         }
-    }
 
+    }
     @SuppressWarnings("serial")
     protected static class HyperLogLogMergeException extends CardinalityMergeException {
+
         public HyperLogLogMergeException(String message) {
             super(message);
         }
     }
+
+    public HyperLogLog cloneHyperLogLogObject(HyperLogLog object){
+//        double rsd = object;
+        HyperLogLog clone =new HyperLogLog(object.getLog2m());
+
+//        HyperLogLog clone = new HyperLogLog(0.6);
+        try {
+            clone.addAll(object);
+
+        } catch (CardinalityMergeException e) {
+            e.printStackTrace();
+        }
+        return clone;
+    }
+
+    public static void main(String[] args){
+        LOGGER.setLevel(Level.ALL);
+        HyperLogLog h = new HyperLogLog(.6);
+        h.offer(32);
+        h.offer(12);
+        h.offer(33);
+        h.offer(44);
+        h.offer(24);
+        System.out.println(h.cardinality());
+
+        HyperLogLog h2 = new HyperLogLog(.6);
+            h2.offer(22);
+            h2.offer(22);
+            h2.offer(23);
+            h2.offer(24);
+            h2.offer(24);
+            try {
+                h2= (HyperLogLog) h2.merge(h);
+            } catch (CardinalityMergeException e) {
+                e.printStackTrace();
+        }
+        System.out.println(h2.cardinality());
+        HyperLogLog h1 = new HyperLogLog(h.getLog2m());
+        h1.cloneHyperLogLogObject(h);
+        LOGGER.info("h1 cloning" + h1.toString());
+        HyperLogLog h1ToMerge = new HyperLogLog(h.getLog2m());
+        HyperLogLog hyperLogLogObject1 = new HyperLogLog(.6);
+        HyperLogLog hyperLogLogObject2 = new HyperLogLog(.6);
+        LOGGER.info("hyperLogLogObject1 cloning" + hyperLogLogObject1.toString());
+        LOGGER.info("hyperLogLogObject2 cloning" + hyperLogLogObject2.toString());
+        try {
+            hyperLogLogObject2 = (HyperLogLog)  hyperLogLogObject1.merge(hyperLogLogObject2);
+        } catch (CardinalityMergeException e) {
+            e.printStackTrace();
+        }
+        LOGGER.info("hyperLogLogObject2 cloning" + hyperLogLogObject2.toString());
+
+
+
+    }
+
 }

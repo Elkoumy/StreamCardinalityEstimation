@@ -2,18 +2,56 @@ package ee.ut.cs.dsg.StreamCardinality.ApproximateCardinality;
 
 //ackage org.streaminer.stream.cardinality;
 
+import java.io.IOException;
 import java.util.TreeSet;
 import org.streaminer.util.hash.Hash;
+import org.streaminer.util.hash.MurmurHash;
 
 /**
  * K-Minimum Values.
  * Python Source Code: https://github.com/mynameisfiber/countmemaybe
  * @author Maycon Viana Bordin <mayconbordin@gmail.com>
  */
-public class KMinValues implements IBaseCardinality {
+public class KMinValues implements IRichCardinality {
     private TreeSet<Integer> kMin;
     private int k;
     private Hash hasher;
+
+    public static void main(String[] args) throws KMinValuesException {
+
+        System.out.println("KMV test:");
+        KMinValues kmv = new KMinValues(3, MurmurHash.getInstance());
+        kmv.offer(15);
+        kmv.offer(25);
+        kmv.offer(35);
+        kmv.offer(45);
+        kmv.offer(55);
+        kmv.offer(65);
+        kmv.offer(75);
+        long cad = kmv.cardinality();
+        System.out.print("kmv: ");
+        System.out.println(cad);
+        KMinValues kmv2 = new KMinValues(3, MurmurHash.getInstance());
+        kmv2.offer(115);
+        kmv2.offer(125);
+        kmv2.offer(135);
+        kmv2.offer(145);
+        kmv2.offer(155);
+        kmv2.offer(165);
+        kmv2.offer(175);
+        System.out.print("kmv2: ");
+        System.out.println(kmv2.cardinality());
+        System.out.print("kmv merged with kmv2: ");
+        kmv2 = (KMinValues)kmv2.merge(kmv);
+
+        System.out.println(kmv2.cardinality());
+        KMinValues kmv3 = new KMinValues(3, MurmurHash.getInstance());
+        kmv3 = (KMinValues)kmv2.clone();
+        kmv2 = kmv;
+        System.out.println(kmv2.cardinality());
+        System.out.print("kmv3 cloned with kmv2: ");
+        System.out.println(kmv3.cardinality());
+    }
 
     public KMinValues(int k) {
         this(k, Hash.getInstance(Hash.MURMUR_HASH3));
@@ -42,6 +80,24 @@ public class KMinValues implements IBaseCardinality {
                 }
         }
 
+        return false;
+    }
+
+    private boolean addOffer(int idx)
+    {
+        if (kMin.size() < k) {
+            if (!kMin.contains(idx)) {
+                kMin.add(idx);
+                return true;
+            }
+        } else {
+            if (idx < kMin.last())
+                if (!kMin.contains(idx)) {
+                    kMin.pollLast();
+                    kMin.add(idx);
+                    return true;
+                }
+        }
         return false;
     }
 
@@ -115,4 +171,100 @@ public class KMinValues implements IBaseCardinality {
         public int n = 0;
         public TreeSet<Integer> x;
     }
+
+    private IRichCardinality mergeTreeSet( IRichCardinality estimator,TreeSet<Integer> newTreeSet)
+    {
+
+        Object[] ob = newTreeSet.toArray();
+        for ( int i=0; i<ob.length; i++)
+        {
+            estimator.offer(ob[i]);
+        }
+        return estimator;
+    }
+
+    public TreeSet<Integer> getTreeSet()
+    {
+        return kMin;
+    }
+
+
+    @Override
+    public boolean offerHashed(long hashedLong) {
+        return false;
+    }
+
+    @Override
+    public boolean offerHashed(int hashedInt) {
+        return false;
+    }
+
+    @Override
+    public int sizeof() {
+        return 0;
+    }
+
+    @Override
+    public byte[] getBytes() throws IOException {
+        return new byte[0];
+    }
+
+    @Override
+    public IRichCardinality merge(IRichCardinality... estimators) throws KMinValuesException {
+        if (estimators == null)
+        {
+            return new KMinValues(k, hasher);
+        }
+
+
+        KMinValues newKMV = new KMinValues(k, hasher);
+
+        Object[] ob = kMin.toArray();
+        for ( int i=0; i<ob.length; i++)
+        {
+            int tmp = (int)ob[i];
+            newKMV.addOffer(tmp);
+        }
+
+        for (IRichCardinality estimator : estimators)
+        {
+            if (!(this.getClass().isInstance(estimator)))
+            {
+                throw new KMinValuesException("Cannot merge estimators of different class");
+            }
+            if (estimator.sizeof() != this.sizeof())
+            {
+                throw new KMinValuesException("Cannot merge estimators of different sizes");
+            }
+            Object[] ob2 = ((KMinValues)estimator).getTreeSet().toArray();
+            for ( int i=0; i<ob2.length; i++)
+            {
+
+                int tmp = (int)ob2[i];
+                newKMV.addOffer(tmp);
+            }
+        }
+        return newKMV;
+    }
+
+    protected static class KMinValuesException extends CardinalityMergeException
+    {
+        public KMinValuesException(String message)
+        {
+            super(message);
+        }
+    }
+
+    public IRichCardinality clone()
+    {
+        KMinValues newInstance = new KMinValues(k, hasher);
+        Object[] ob = kMin.toArray();
+        for ( int i=0; i<ob.length; i++)
+        {
+            int tmp = (int)ob[i];
+            newInstance.addOffer(tmp);
+        }
+        return newInstance;
+    }
+
 }

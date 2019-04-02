@@ -20,11 +20,15 @@ package ee.ut.cs.dsg.StreamCardinality.ApproximateCardinality;
 
 import org.streaminer.util.hash.MurmurHash;
 import org.streaminer.util.IBuilder;
+import sun.rmi.runtime.Log;
 
 import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class LogLog implements IRichCardinality
 {
+    private final static Logger LOGGER = Logger.getLogger(AdaptiveCounting.class.getName());
     /**
      * Gamma function computed using SciLab
      * ((gamma(-(m.^(-1))).* ( (1-2.^(m.^(-1)))./log(2) )).^(-m)).*m
@@ -69,6 +73,37 @@ public class LogLog implements IRichCardinality
     protected double Ca;
     protected byte[] M;
     protected int Rsum = 0;
+
+    @Override
+    public String toString() {
+        return "LogLog{" +
+                "k=" + k +
+                ", m=" + m +
+                ", Ca=" + Ca +
+                ", M=" + Arrays.toString(M) +
+                ", Rsum=" + Rsum +
+                '}';
+    }
+
+    public static double[] getmAlpha() { return mAlpha; }
+
+    public int getK() { return k; }
+
+    public void setByteM(byte[] m) { M = m; }
+
+    public byte[] getByteM() { return M; };
+
+    public int getRsum() { return Rsum; }
+
+    public void setRsum(int rsum) { Rsum = rsum; }
+
+    public void setM(int m) { this.m = m; }
+
+    public int getM() { return m; }
+
+    public double getCa() { return Ca; }
+
+    public void setCa(double ca) { Ca = ca; }
 
     public LogLog(int k)
     {
@@ -244,6 +279,7 @@ public class LogLog implements IRichCardinality
             return 1 << k;
         }
     }
+
     public LogLog mergeLogLogObjects(LogLog object2){
         int k3 = this.k + object2.k;
         LogLog mergedObject = new LogLog(k3);
@@ -260,7 +296,35 @@ public class LogLog implements IRichCardinality
         for (int i = 0; i < object2.M.length; i++) {
             mergedObject.M[i+this.k] = object2.M[i];
         }
-
         return mergedObject;
     }
+
+    public static LogLog cloneLogLogObjects(LogLog objectToClone){
+        int cloneK = objectToClone.getK();
+        LogLog clone = new LogLog(cloneK);
+        clone.setM(objectToClone.getM());
+        clone.setRsum(objectToClone.getRsum());
+        clone.setByteM(objectToClone.getByteM());
+        clone.setCa(objectToClone.getCa());
+        return clone;
+    }
+
+    public static void main(String[] args){
+        LOGGER.setLevel(Level.ALL);
+        LogLog firstObject = new LogLog(1);
+        LogLog secondObject = new LogLog(3);
+        LOGGER.info("firstObject" + firstObject.toString());
+        LOGGER.info("secondObject" + secondObject.toString());
+
+        LogLog mergedObject = firstObject.mergeLogLogObjects(secondObject);
+        LOGGER.info("mergedObject" + mergedObject.toString());
+        LogLog clonedObject = null;
+        clonedObject = cloneLogLogObjects(firstObject);
+        LOGGER.info("clonedObject" + clonedObject.toString());
+        clonedObject.setCa(123);
+        clonedObject.setM(123);
+        LOGGER.info("clonedObject AFTER MODS" + clonedObject.toString());
+        LOGGER.info("firstObject AFTER MODS" + firstObject.toString());
+    }
+
 }

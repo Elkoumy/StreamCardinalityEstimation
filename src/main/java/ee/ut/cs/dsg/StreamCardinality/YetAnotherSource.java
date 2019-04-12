@@ -9,7 +9,7 @@ import java.io.BufferedReader;
         import java.io.IOException;
         import java.util.Random;
 
-public class YetAnotherSource implements SourceFunction<Tuple3<Long,String,Double>> {
+public class YetAnotherSource implements SourceFunction<Tuple3<Long,String,Integer>> {
 
     private boolean running=true;
     private String filePath;
@@ -21,7 +21,7 @@ public class YetAnotherSource implements SourceFunction<Tuple3<Long,String,Doubl
     }
 
     @Override
-    public void run(SourceContext<Tuple3<Long, String, Double>> sourceContext) throws Exception {
+    public void run(SourceContext<Tuple3<Long, String, Integer>> sourceContext) throws Exception {
 
         try
         {
@@ -58,7 +58,7 @@ public class YetAnotherSource implements SourceFunction<Tuple3<Long,String,Doubl
                 }
                 else
                 {
-                    sourceContext.collectWithTimestamp( new Tuple3<>(ts,key,temperature), ts);
+                    sourceContext.collectWithTimestamp( new Tuple3<>(ts,key,(int)temperature), ts);
                 }
 
 

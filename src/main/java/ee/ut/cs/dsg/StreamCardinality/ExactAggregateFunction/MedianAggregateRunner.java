@@ -2,6 +2,7 @@ package ee.ut.cs.dsg.StreamCardinality.ExactAggregateFunction;
 
 
 //import ee.ut.cs.dsg.SWAGwithSCOTTY.ExactMedian.MedianSkipListAggregationFunction;
+import ee.ut.cs.dsg.StreamCardinality.ApproximateAggregateFunction.AdaptiveCountingAggregationFunction;
 import ee.ut.cs.dsg.StreamCardinality.ApproximateAggregateFunction.MedianCKMSAggregationFunction;
 import ee.ut.cs.dsg.StreamCardinality.YetAnotherSource;
 import org.apache.flink.api.java.tuple.Tuple3;
@@ -27,9 +28,9 @@ public class MedianAggregateRunner {
 
         final String dir = System.getProperty("user.dir");
 
-        DataStream<Tuple3<Long, String, Double>> stream2 = env.addSource(new YetAnotherSource(dir+"\\data\\data.csv"));
+        DataStream<Tuple3<Long, String, Integer>> stream2 = env.addSource(new YetAnotherSource(dir+"\\data\\data.csv"));
 
-        final SingleOutputStreamOperator<Tuple3<Long, String, Double>> result2 =
+        final SingleOutputStreamOperator<Tuple3<Long, String, Integer>> result2 =
                 stream2
                         .assignTimestampsAndWatermarks(new TimestampsAndWatermarks());
         long startTime = System.nanoTime();
@@ -38,7 +39,7 @@ public class MedianAggregateRunner {
         result2
                 .keyBy(1)
                 .timeWindow( Time.of(2, MILLISECONDS), Time.of(1, MILLISECONDS))
-                .aggregate(new MedianCKMSAggregationFunction())
+                .aggregate(new AdaptiveCountingAggregationFunction())
 //                .print()
         ;
 
@@ -51,13 +52,13 @@ public class MedianAggregateRunner {
     }
 
 
-    public static class TimestampsAndWatermarks implements AssignerWithPeriodicWatermarks<Tuple3<Long, String, Double>> {
+    public static class TimestampsAndWatermarks implements AssignerWithPeriodicWatermarks<Tuple3<Long, String, Integer>> {
         private final long maxOutOfOrderness = seconds(20).toMilliseconds(); // 5 seconds
         private long currentMaxTimestamp;
         private long startTime = System.currentTimeMillis();
 
         @Override
-        public long extractTimestamp(final Tuple3<Long, String, Double> element, final long previousElementTimestamp) {
+        public long extractTimestamp(final Tuple3<Long, String, Integer> element, final long previousElementTimestamp) {
             long timestamp = element.f0;
             currentMaxTimestamp = Math.max(timestamp, currentMaxTimestamp);
             return timestamp;

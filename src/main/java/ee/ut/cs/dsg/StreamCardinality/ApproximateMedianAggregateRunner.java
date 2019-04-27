@@ -62,6 +62,9 @@ public class ApproximateMedianAggregateRunner {
             case "BJKSTAggregationFunction":
                 agg = new BJKSTAggregationFunction();
                 break;
+            case "CountThenEstimateAggregationFunction":
+                agg = new CountThenEstimateAggregationFunction();
+                break;
             default:
                 throw new IllegalStateException("Unexpected value: " + args[1]);
         }

@@ -4,6 +4,7 @@ import ee.ut.cs.dsg.StreamCardinality.ApproximateCardinality.BJKST;
 import org.apache.flink.api.common.functions.AggregateFunction;
 import org.apache.flink.api.java.tuple.Tuple3;
 
+
 public class BJKSTAggregationFunction implements AggregateFunction<Tuple3<Long, String, Integer>, BJKSTAccumulator, Tuple3<Long,String,Integer>> {
     @Override
     public BJKSTAccumulator createAccumulator() { return new BJKSTAccumulator(); }

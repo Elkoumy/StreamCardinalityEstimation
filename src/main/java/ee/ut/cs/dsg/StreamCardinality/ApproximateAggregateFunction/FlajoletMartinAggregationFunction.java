@@ -4,6 +4,7 @@ import ee.ut.cs.dsg.StreamCardinality.ApproximateCardinality.FlajoletMartin;
 import org.apache.flink.api.common.functions.AggregateFunction;
 import org.apache.flink.api.java.tuple.Tuple3;
 
+
 public class FlajoletMartinAggregationFunction implements AggregateFunction<Tuple3<Long, String, Integer>, FlajoletMartinAccumulator, Tuple3<Long,String,Integer>> {
 
     public FlajoletMartinAccumulator createAccumulator() { return new FlajoletMartinAccumulator(); }

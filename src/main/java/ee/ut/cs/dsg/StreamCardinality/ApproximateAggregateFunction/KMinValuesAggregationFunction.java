@@ -4,6 +4,7 @@ import ee.ut.cs.dsg.StreamCardinality.ApproximateCardinality.KMinValues;
 import org.apache.flink.api.common.functions.AggregateFunction;
 import org.apache.flink.api.java.tuple.Tuple3;
 
+
 public class KMinValuesAggregationFunction implements AggregateFunction<Tuple3<Long, String, Integer>, KMinValuesAccumulator, Tuple3<Long,String,Integer>>{
     @Override
     public KMinValuesAccumulator createAccumulator() { return new KMinValuesAccumulator(); }

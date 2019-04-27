@@ -59,6 +59,9 @@ public class ApproximateMedianAggregateRunner {
             case "KMinValuesAggregationFunction":
                 agg = new KMinValuesAggregationFunction();
                 break;
+            case "BJKSTAggregationFunction":
+                agg = new BJKSTAggregationFunction();
+                break;
             default:
                 throw new IllegalStateException("Unexpected value: " + args[1]);
         }

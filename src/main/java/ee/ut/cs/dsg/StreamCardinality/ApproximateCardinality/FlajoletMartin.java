@@ -217,7 +217,7 @@ public class FlajoletMartin implements IRichCardinality {
         }
     }
 
-    protected static class FMException extends CardinalityMergeException
+    public static class FMException extends CardinalityMergeException
     {
         public FMException(String message)
         {

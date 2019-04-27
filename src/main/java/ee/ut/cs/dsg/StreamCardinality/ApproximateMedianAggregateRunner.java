@@ -53,6 +53,9 @@ public class ApproximateMedianAggregateRunner {
             case "LinearCountingAggregationFunction":
                 agg = new LinearCountingAggregationFunction();
                 break;
+            case "FlajoletMartinAggregationFunction":
+                agg = new FlajoletMartinAggregationFunction();
+                break;
             default:
                 throw new IllegalStateException("Unexpected value: " + args[1]);
         }

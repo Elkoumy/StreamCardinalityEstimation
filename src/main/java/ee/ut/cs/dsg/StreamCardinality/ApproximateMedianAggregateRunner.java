@@ -3,6 +3,7 @@ package ee.ut.cs.dsg.StreamCardinality;
 
 import ee.ut.cs.dsg.StreamCardinality.ApproximateAggregateFunction.*;
 import ee.ut.cs.dsg.StreamCardinality.ExactAggregateFunction.MedianAggregateRunner;
+import org.apache.flink.api.common.functions.AggregateFunction;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
@@ -11,6 +12,8 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.AssignerWithPeriodicWatermarks;
 import org.apache.flink.streaming.api.watermark.Watermark;
 import org.apache.flink.streaming.api.windowing.time.Time;
+import ee.ut.cs.dsg.StreamCardinality.ApproximateAggregateFunction.LogLogAggregationFunction;
+
 
 import javax.annotation.Nullable;
 
@@ -26,18 +29,49 @@ public class ApproximateMedianAggregateRunner {
 
         final String dir = System.getProperty("user.dir");
 
-        DataStream<Tuple3<Long, String, Double>> stream2 = env.addSource(new YetAnotherSource(dir+"\\data\\data.csv"));
+        DataStream<Tuple3<Long, String, Integer>> stream2 = env.addSource(new YetAnotherSource(dir+"\\data\\data.csv"));
 
-        final SingleOutputStreamOperator<Tuple3<Long, String, Double>> result2 =
+        final SingleOutputStreamOperator<Tuple3<Long, String, Integer>> result2 =
                 stream2
                         .assignTimestampsAndWatermarks(new MedianAggregateRunner.TimestampsAndWatermarks());
         long startTime = System.nanoTime();
 
-
+        AggregateFunction agg;
+        switch (args[1]){
+            case "MedianCKMSAggregationFunction":
+                agg = new MedianCKMSAggregationFunction();
+                break;
+            case "LogLogAggregationFunction":
+                agg = new LogLogAggregationFunction();
+                break;
+            case "AdaptiveCountingAggregationFunction":
+                agg = new AdaptiveCountingAggregationFunction();
+                break;
+            case "HyperLogLogAggregationFunction":
+                agg = new HyperLogLogAggregationFunction();
+                break;
+            case "LinearCountingAggregationFunction":
+                agg = new LinearCountingAggregationFunction();
+                break;
+            case "FlajoletMartinAggregationFunction":
+                agg = new FlajoletMartinAggregationFunction();
+                break;
+            case "KMinValuesAggregationFunction":
+                agg = new KMinValuesAggregationFunction();
+                break;
+            case "BJKSTAggregationFunction":
+                agg = new BJKSTAggregationFunction();
+                break;
+            case "CountThenEstimateAggregationFunction":
+                agg = new CountThenEstimateAggregationFunction();
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + args[1]);
+        }
         result2
                 .keyBy(1)
                 .timeWindow( Time.of(2, MILLISECONDS), Time.of(1, MILLISECONDS))
-                .aggregate(new MedianCKMSAggregationFunction())
+                .aggregate(agg)
                 .print()
         ;
 

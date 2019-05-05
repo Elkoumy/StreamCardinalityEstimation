@@ -247,7 +247,7 @@ public class KMinValues implements IRichCardinality {
         return newKMV;
     }
 
-    protected static class KMinValuesException extends CardinalityMergeException
+    public static class KMinValuesException extends CardinalityMergeException
     {
         public KMinValuesException(String message)
         {

@@ -158,7 +158,7 @@ public class BJKST implements IRichCardinality {
         return finalEstimate;
     }
 
-    protected static class BJKSTException extends CardinalityMergeException
+    public static class BJKSTException extends CardinalityMergeException
     {
         public BJKSTException(String message)
         {

@@ -249,14 +249,22 @@ under the License.
 				<dependency>
 					<groupId>de.tub.dima.scotty</groupId>
 					<artifactId>flink-connector</artifactId>
-					<version>0.2</version>
+					<version>0.3</version>
 				</dependency>
 
 				<dependency>
 					<groupId>de.tub.dima.scotty</groupId>
 					<artifactId>core</artifactId>
-					<version>0.2</version>
+					<version>0.3</version>
 				</dependency>
+				<!--<dependency>-->
+					<!--<groupId>de.metanome.algorithms</groupId>-->
+					<!--<artifactId>algorithms</artifactId>-->
+					<!--<version>RELEASE</version>-->
+					<!--&lt;!&ndash;<packaging>jar</packaging>&ndash;&gt;-->
+					<!--&lt;!&ndash;<name>[algorithm-name]</name>&ndash;&gt;-->
+				<!--</dependency>-->
+
 				<dependency>
 					<groupId>com.github.mayconbordin</groupId>
 					<artifactId>streaminer</artifactId>

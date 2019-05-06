@@ -309,6 +309,14 @@ public class LogLog implements IRichCardinality
         return clone;
     }
 
+    public static int PowerOf2(final int intnum) {
+        int b = 1;
+        while (b < intnum) {
+            b = b << 1;
+        }
+        return b/2;
+    }
+
     public static void main(String[] args) throws Exception {
 //        LOGGER.setLevel(Level.ALL);
 //        LogLog firstObject = new LogLog(1);
@@ -325,13 +333,20 @@ public class LogLog implements IRichCardinality
 //        clonedObject.setM(123);
 //        LOGGER.info("clonedObject AFTER MODS" + clonedObject.toString());
 //        LOGGER.info("firstObject AFTER MODS" + firstObject.toString());
-        LogLog card = new LogLog(1);
+
+        float error=0.1f;
+
+        error = 1/error;
+
+        int numofbucket= PowerOf2((int) Math.pow(1.30/error, 2));
+        int k=(int) (Math.log(numofbucket)/Math.log(2));
+        LogLog card = new LogLog(k);
         card.offer(12);
         card.offer(12);
         card.offer(13);
         card.offer(14);
 
-        LogLog card2 = new LogLog(1);
+        LogLog card2 = new LogLog(k);
         card2.offer(34);
         card2.offer(45);
         card2.offer(100);
@@ -340,7 +355,12 @@ public class LogLog implements IRichCardinality
 
         card.mergeEstimators(card2);
 
+        LogLog card_cloned = LogLog.cloneLogLogObjects(card);
+
         System.out.println(card.cardinality());
+        card.offer(3333);
+        card_cloned.offer(3444);
+        System.out.println(card_cloned.cardinality());
 
     }
 

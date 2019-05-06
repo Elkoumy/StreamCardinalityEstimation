@@ -107,6 +107,8 @@ public class HyperLogLog implements IRichCardinality {
      *            smaller values create counters that require more space.
      */
 
+
+
     public HyperLogLog(double rsd) {
         this(log2m(rsd));
     }
@@ -316,42 +318,6 @@ public class HyperLogLog implements IRichCardinality {
     }
 
     public static void main(String[] args) throws CardinalityMergeException {
-//        LOGGER.setLevel(Level.ALL);
-//        HyperLogLog h = new HyperLogLog(.6);
-//        h.offer(32);
-//        h.offer(12);
-//        h.offer(33);
-//        h.offer(44);
-//        h.offer(24);
-//        System.out.println(h.cardinality());
-//
-//        HyperLogLog h2 = new HyperLogLog(.6);
-//            h2.offer(22);
-//            h2.offer(22);
-//            h2.offer(23);
-//            h2.offer(24);
-//            h2.offer(24);
-//            try {
-//                h2= (HyperLogLog) h2.merge(h);
-//            } catch (CardinalityMergeException e) {
-//                e.printStackTrace();
-//        }
-//        System.out.println(h2.cardinality());
-//        HyperLogLog h1 = new HyperLogLog(h.getLog2m());
-//        h1.cloneHyperLogLogObject(h);
-//        LOGGER.info("h1 cloning" + h1.toString());
-//        HyperLogLog h1ToMerge = new HyperLogLog(h.getLog2m());
-//        HyperLogLog hyperLogLogObject1 = new HyperLogLog(.6);
-//        HyperLogLog hyperLogLogObject2 = new HyperLogLog(.6);
-//        LOGGER.info("hyperLogLogObject1 cloning" + hyperLogLogObject1.toString());
-//        LOGGER.info("hyperLogLogObject2 cloning" + hyperLogLogObject2.toString());
-//        try {
-//            hyperLogLogObject2 = (HyperLogLog)  hyperLogLogObject1.merge(hyperLogLogObject2);
-//        } catch (CardinalityMergeException e) {
-//            e.printStackTrace();
-//        }
-//        LOGGER.info("hyperLogLogObject2 cloning" + hyperLogLogObject2.toString());
-//
 
 
         HyperLogLog card = new HyperLogLog(20);

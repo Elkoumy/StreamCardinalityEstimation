@@ -105,6 +105,31 @@ public class LogLog implements IRichCardinality
 
     public void setCa(double ca) { Ca = ca; }
 
+
+    public static int PowerOf2(final int intnum) {
+        int b = 1;
+        while (b < intnum) {
+            b = b << 1;
+        }
+        return b/2;
+    }
+
+    public LogLog(double error)
+    {
+        int m = PowerOf2((int) Math.pow(1.30/error, 2));
+        int k = (int)(Math.log(m)/Math.log(2)); //k
+
+        this.k = k;
+        if (k >= (mAlpha.length - 1))
+        {
+            throw new IllegalArgumentException(String.format("Max k (%d) exceeded: k=%d", mAlpha.length - 1, this.k));
+        }
+
+        this.m = 1 << this.k;
+        this.Ca = mAlpha[k];
+        this.M = new byte[m];
+    }
+
     public LogLog(int k)
     {
         if (k >= (mAlpha.length - 1))
@@ -325,13 +350,19 @@ public class LogLog implements IRichCardinality
 //        clonedObject.setM(123);
 //        LOGGER.info("clonedObject AFTER MODS" + clonedObject.toString());
 //        LOGGER.info("firstObject AFTER MODS" + firstObject.toString());
-        LogLog card = new LogLog(1);
+        float error = 0.1f;
+        error = 1/error;
+
+        int m = PowerOf2((int) Math.pow(1.30/error, 2));
+        int k = (int)(Math.log(m)/Math.log(2)); //k
+
+        LogLog card = new LogLog(k);
         card.offer(12);
         card.offer(12);
         card.offer(13);
         card.offer(14);
 
-        LogLog card2 = new LogLog(1);
+        LogLog card2 = new LogLog(k);
         card2.offer(34);
         card2.offer(45);
         card2.offer(100);

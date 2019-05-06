@@ -42,7 +42,7 @@ public class FlajoletMartin implements IRichCardinality {
     public static void main(String[] args) throws FMException {
 
         System.out.println("FM test:");
-        FlajoletMartin fm = new FlajoletMartin(8, 3, 3);
+        FlajoletMartin fm = new FlajoletMartin(8,3,3);
         fm.offer(15);
         fm.offer(25);
         fm.offer(35);
@@ -54,7 +54,6 @@ public class FlajoletMartin implements IRichCardinality {
 
         System.out.print("fm: ");
         System.out.println(cad);
-
 
 
         FlajoletMartin fm2 = new FlajoletMartin(8, 3, 3);
@@ -85,6 +84,28 @@ public class FlajoletMartin implements IRichCardinality {
         System.out.print("fm3 cloned with fm2: ");
         System.out.println(fm3.cardinality());
     }
+
+
+    /*
+    public FlajoletMartin(int numHashGroups, double error)
+    {
+        int b = 1;
+        int intnum = (int)Math.pow(1/error, 2);
+        while (b < intnum) {
+            b = b << 1;
+        }
+        b = b/2;
+
+        this.numHashGroups = b;
+        this.numHashFunctionsInHashGroup = b;
+        this.bitmapSize = 64;
+
+        bitmaps = new boolean[numHashGroups][numHashFunctionsInHashGroup][bitmapSize];
+        hashes = new HashFunction[numHashGroups][numHashFunctionsInHashGroup];
+
+        generateHashFunctions();
+    }
+    */
 
 
     public FlajoletMartin(int bitmapSize, int numHashGroups, int numHashFunctionsInEachGroup) {

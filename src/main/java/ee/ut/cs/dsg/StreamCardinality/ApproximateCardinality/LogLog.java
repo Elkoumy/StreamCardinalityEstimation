@@ -309,22 +309,59 @@ public class LogLog implements IRichCardinality
         return clone;
     }
 
-    public static void main(String[] args){
-        LOGGER.setLevel(Level.ALL);
-        LogLog firstObject = new LogLog(1);
-        LogLog secondObject = new LogLog(3);
-        LOGGER.info("firstObject" + firstObject.toString());
-        LOGGER.info("secondObject" + secondObject.toString());
+    public static int PowerOf2(final int intnum) {
+        int b = 1;
+        while (b < intnum) {
+            b = b << 1;
+        }
+        return b/2;
+    }
 
-        LogLog mergedObject = firstObject.mergeLogLogObjects(secondObject);
-        LOGGER.info("mergedObject" + mergedObject.toString());
-        LogLog clonedObject = null;
-        clonedObject = cloneLogLogObjects(firstObject);
-        LOGGER.info("clonedObject" + clonedObject.toString());
-        clonedObject.setCa(123);
-        clonedObject.setM(123);
-        LOGGER.info("clonedObject AFTER MODS" + clonedObject.toString());
-        LOGGER.info("firstObject AFTER MODS" + firstObject.toString());
+    public static void main(String[] args) throws Exception {
+//        LOGGER.setLevel(Level.ALL);
+//        LogLog firstObject = new LogLog(1);
+//        LogLog secondObject = new LogLog(3);
+//        LOGGER.info("firstObject" + firstObject.toString());
+//        LOGGER.info("secondObject" + secondObject.toString());
+//
+//        LogLog mergedObject = firstObject.mergeLogLogObjects(secondObject);
+//        LOGGER.info("mergedObject" + mergedObject.toString());
+//        LogLog clonedObject = null;
+//        clonedObject = cloneLogLogObjects(firstObject);
+//        LOGGER.info("clonedObject" + clonedObject.toString());
+//        clonedObject.setCa(123);
+//        clonedObject.setM(123);
+//        LOGGER.info("clonedObject AFTER MODS" + clonedObject.toString());
+//        LOGGER.info("firstObject AFTER MODS" + firstObject.toString());
+
+        float error=0.1f;
+
+        error = 1/error;
+
+        int numofbucket= PowerOf2((int) Math.pow(1.30/error, 2));
+        int k=(int) (Math.log(numofbucket)/Math.log(2));
+        LogLog card = new LogLog(k);
+        card.offer(12);
+        card.offer(12);
+        card.offer(13);
+        card.offer(14);
+
+        LogLog card2 = new LogLog(k);
+        card2.offer(34);
+        card2.offer(45);
+        card2.offer(100);
+        card2.offer(105);
+        card2.offer(106);
+
+        card.mergeEstimators(card2);
+
+        LogLog card_cloned = LogLog.cloneLogLogObjects(card);
+
+        System.out.println(card.cardinality());
+        card.offer(3333);
+        card_cloned.offer(3444);
+        System.out.println(card_cloned.cardinality());
+
     }
 
 }

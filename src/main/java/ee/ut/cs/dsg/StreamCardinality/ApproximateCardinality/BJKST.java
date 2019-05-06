@@ -208,7 +208,6 @@ public class BJKST implements IRichCardinality {
     private void putAll(ArrayList<Integer> limits, ArrayList<HashSet<String>> buffer)
     {
         this.limits = (ArrayList<Integer>)limits.clone();
-
         this.buffers = (ArrayList<HashSet<String>>)buffer.clone();
         /*
         for (Integer nr : limits)
@@ -292,8 +291,20 @@ public class BJKST implements IRichCardinality {
     public IRichCardinality clone()
     {
         BJKST newInstance = new BJKST(numMedians, sizeOfMedianSet, error);
+        ArrayList<Integer> tmpLimits = new ArrayList<Integer>(numMedians);
+        ArrayList<HashSet<String>> tmpBuffers = new ArrayList<HashSet<String>>(numMedians);
 
-        newInstance.putAll((ArrayList<Integer>)this.limits, (ArrayList<HashSet<String>>)this.buffers);
+        ArrayList<Integer> newLimits = (this).getLimits();
+        ArrayList<HashSet<String>> newBuffers = (this).getBuffer();
+
+        tmpLimits = (ArrayList<Integer>) newLimits.clone();
+        for (HashSet<String> varhs : newBuffers)
+        {
+            tmpBuffers.add((HashSet<String>) varhs.clone());
+
+        }
+
+        newInstance.putAll(tmpLimits, tmpBuffers);
 
         return newInstance;
     }

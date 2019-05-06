@@ -42,7 +42,7 @@ public class FlajoletMartin implements IRichCardinality {
     public static void main(String[] args) throws FMException {
 
         System.out.println("FM test:");
-        FlajoletMartin fm = new FlajoletMartin(7, 3, 3);
+        FlajoletMartin fm = new FlajoletMartin(8, 3, 3);
         fm.offer(15);
         fm.offer(25);
         fm.offer(35);
@@ -51,9 +51,13 @@ public class FlajoletMartin implements IRichCardinality {
         fm.offer(65);
         fm.offer(75);
         long cad = fm.cardinality();
+
         System.out.print("fm: ");
         System.out.println(cad);
-        FlajoletMartin fm2 = new FlajoletMartin(7, 3, 3);
+
+
+
+        FlajoletMartin fm2 = new FlajoletMartin(8, 3, 3);
         fm2.offer(115);
         fm2.offer(125);
         fm2.offer(135);
@@ -64,6 +68,7 @@ public class FlajoletMartin implements IRichCardinality {
         System.out.print("fm2: ");
         System.out.println(fm2.cardinality());
         System.out.print("kmv merged with fm2: ");
+
         fm2 = (FlajoletMartin)fm2.merge(fm);
         System.out.println(fm2.cardinality());
         FlajoletMartin fm3 = new FlajoletMartin(7, 3, 3);

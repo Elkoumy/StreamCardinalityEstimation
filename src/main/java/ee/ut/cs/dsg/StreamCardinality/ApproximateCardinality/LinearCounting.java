@@ -384,21 +384,46 @@ public class LinearCounting implements IRichCardinality {
         return clone;
     }
 
-    public static void main(String[] args) {
-        LOGGER.setLevel(Level.ALL);
-        LinearCounting firstObject = new LinearCounting(2);
-        LinearCounting secondObject = new LinearCounting(1);
-        LOGGER.info("firstObject" + firstObject.toString());
-        LOGGER.info("secondObject" + secondObject.toString());
-        LinearCounting mergedObject = firstObject.mergeLinearCountingObjects(secondObject);
-        LOGGER.info("mergedObject" + mergedObject.toString());
+    public static void main(String[] args) throws LinearCountingMergeException {
+//        LOGGER.setLevel(Level.ALL);
+//        LinearCounting firstObject = new LinearCounting(2);
+//        LinearCounting secondObject = new LinearCounting(1);
+//        LOGGER.info("firstObject" + firstObject.toString());
+//        LOGGER.info("secondObject" + secondObject.toString());
+//        LinearCounting mergedObject = firstObject.mergeLinearCountingObjects(secondObject);
+//        LOGGER.info("mergedObject" + mergedObject.toString());
+//
+//        LinearCounting clonedObject = new LinearCounting(firstObject.getMap());
+//        clonedObject.cloneLinearCountingObjects(firstObject);
+//        LOGGER.info("clonedObject" + clonedObject.toString());
+//        clonedObject.setMap(new byte[10]);
+//        clonedObject.setCount(10);
+//        LOGGER.info("clonedObject AFTER MODS" + clonedObject.toString());
+//        LOGGER.info("firstObject AFTER MODS" + firstObject.toString());
 
-        LinearCounting clonedObject = new LinearCounting(firstObject.getMap());
-        clonedObject.cloneLinearCountingObjects(firstObject);
-        LOGGER.info("clonedObject" + clonedObject.toString());
-        clonedObject.setMap(new byte[10]);
-        clonedObject.setCount(10);
-        LOGGER.info("clonedObject AFTER MODS" + clonedObject.toString());
-        LOGGER.info("firstObject AFTER MODS" + firstObject.toString());
+        LinearCounting card = new LinearCounting(20);
+        card.offer(12);
+        card.offer(12);
+        card.offer(13);
+        card.offer(14);
+
+        LinearCounting card2 = new LinearCounting(20);
+        card2.offer(34);
+        card2.offer(45);
+        card2.offer(100);
+        card2.offer(105);
+        card2.offer(106);
+
+        card=card.mergeLinearCountingObjects(card2);
+
+        System.out.println(card.cardinality());
+
+        LinearCounting card_cloned=card.cloneLinearCountingObjects(card);
+
+        card.offer(100);
+
+        System.out.println("card "+card.cardinality());
+        System.out.println("card_cloned "+card_cloned.cardinality());
+
     }
 }

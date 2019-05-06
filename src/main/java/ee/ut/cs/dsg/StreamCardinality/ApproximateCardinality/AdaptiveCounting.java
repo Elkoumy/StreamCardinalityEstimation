@@ -244,25 +244,46 @@ public class AdaptiveCounting extends LogLog {
         return clone;
     }
 
-    public static void main(String[] args){
-        LOGGER.setLevel(Level.ALL);
-        AdaptiveCounting firstObject = new AdaptiveCounting(1);
-        AdaptiveCounting secondObject = new AdaptiveCounting(1);
-        AdaptiveCounting object3 = firstObject.mergeAdaptiveCountingObjects(secondObject);
-        LOGGER.info("first object = " + firstObject.toString());
-        LOGGER.info("second object = " + secondObject.toString());
-        LOGGER.info("MERGED object3 = " + object3.toString());
-        // I am a bit confused, if this kind of creating a new object first and then rewriting it is allowed
-        AdaptiveCounting clone = new AdaptiveCounting(firstObject.getK());
-        clone = clone.cloneAdaptiveCountingObject(secondObject);
-        LOGGER.info("cloned object = " + clone.toString());
-        clone.setB_e(1234);
-        clone.setCa(1234);
-        clone.setM(1234);
-        clone.setRsum(1234);
-        LOGGER.info("cloned object AFTER MODS = " + clone.toString());
-        LOGGER.info("first object AFTER MODS= " + firstObject.toString());
-        LOGGER.info("second object AFTER MODS= " + secondObject.toString());
+    public static void main(String[] args) throws Exception {
+//        LOGGER.setLevel(Level.ALL);
+//        AdaptiveCounting firstObject = new AdaptiveCounting(1);
+//        AdaptiveCounting secondObject = new AdaptiveCounting(1);
+//        AdaptiveCounting object3 = firstObject.mergeAdaptiveCountingObjects(secondObject);
+//        LOGGER.info("first object = " + firstObject.toString());
+//        LOGGER.info("second object = " + secondObject.toString());
+//        LOGGER.info("MERGED object3 = " + object3.toString());
+//        // I am a bit confused, if this kind of creating a new object first and then rewriting it is allowed
+//        AdaptiveCounting clone = new AdaptiveCounting(firstObject.getK());
+//        clone = clone.cloneAdaptiveCountingObject(secondObject);
+//        LOGGER.info("cloned object = " + clone.toString());
+//        clone.setB_e(1234);
+//        clone.setCa(1234);
+//        clone.setM(1234);
+//        clone.setRsum(1234);
+//        LOGGER.info("cloned object AFTER MODS = " + clone.toString());
+//        LOGGER.info("first object AFTER MODS= " + firstObject.toString());
+//        LOGGER.info("second object AFTER MODS= " + secondObject.toString());
+        AdaptiveCounting card = new AdaptiveCounting(30);
+        card.offer(12);
+        card.offer(12);
+        card.offer(13);
+        card.offer(14);
+
+        AdaptiveCounting card2 =new AdaptiveCounting( 30);
+        card2.offer(34);
+        card2.offer(45);
+        card2.offer(100);
+        card2.offer(105);
+        card2.offer(106);
+
+//        AdaptiveCounting card_cloned= (AdaptiveCounting) card.clone();
+        card.merge(card2);
+
+        System.out.println(card.cardinality());
+
+//        System.out.println(card_cloned.cardinality());
+
+
 
     }
 }

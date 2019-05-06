@@ -70,6 +70,13 @@ public class FlajoletMartin implements IRichCardinality {
         fm3 = (FlajoletMartin)fm2.clone();
         System.out.print("fm3 cloned with fm2: ");
         System.out.println(fm3.cardinality());
+
+        fm2.offer(1215);
+        fm2.offer(1225);
+        fm2.offer(1235);
+        fm2.offer(1245);
+        System.out.print("fm3 cloned with fm2: ");
+        System.out.println(fm3.cardinality());
     }
 
 

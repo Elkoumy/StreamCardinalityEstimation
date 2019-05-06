@@ -39,6 +39,7 @@ public class BJKST implements IRichCardinality {
     private String lengthOfIntegerRepresentation = null;
 
     public static void main(String[] args) throws BJKSTException {
+
         System.out.println("BJKST test:");
         BJKST bjkst = new BJKST(100, 10, 0.3);
         bjkst.offer(15);
@@ -66,6 +67,12 @@ public class BJKST implements IRichCardinality {
         System.out.println(bjkst2.cardinality());
         BJKST bjkst3 = new BJKST(100, 10, 0.3);
         bjkst3 = (BJKST) bjkst2.clone();
+        System.out.print("BJKST3 cloned with BJKST2: ");
+        System.out.println(bjkst3.cardinality());
+        bjkst2.offer(1215);
+        bjkst2.offer(1225);
+        bjkst2.offer(1235);
+        bjkst2.offer(1245);
         System.out.print("BJKST3 cloned with BJKST2: ");
         System.out.println(bjkst3.cardinality());
     }
@@ -166,11 +173,6 @@ public class BJKST implements IRichCardinality {
         }
     }
 
-    private void putAll(ArrayList<Integer> limits, ArrayList<HashSet<String>> buffer)
-    {
-        this.limits = (ArrayList<Integer>)limits.clone();
-        this.buffers = (ArrayList<HashSet<String>>)buffer.clone();
-    }
 
     public ArrayList<Integer> getLimits()
     {
@@ -200,6 +202,25 @@ public class BJKST implements IRichCardinality {
     @Override
     public byte[] getBytes() throws IOException {
         return new byte[0];
+    }
+
+    private void putAll(ArrayList<Integer> limits, ArrayList<HashSet<String>> buffer)
+    {
+        this.limits = (ArrayList<Integer>)limits.clone();
+
+        this.buffers = (ArrayList<HashSet<String>>)buffer.clone();
+        /*
+        for (Integer nr : limits)
+        {
+            this.limits.add(nr);
+        }
+
+        for (HashSet<String> hs : buffer)
+        {
+            HashSet<String> newSet = new HashSet<>(hs);
+            this.buffers.add(newSet);
+        }
+        */
     }
 
     @Override
@@ -264,6 +285,8 @@ public class BJKST implements IRichCardinality {
         }
         return newInstance;
     }
+
+
 
     public IRichCardinality clone()
     {

@@ -41,6 +41,45 @@ public class CountThenEstimate implements IRichCardinality, Externalizable {
     protected final static byte LLC = 4;
     protected final static byte HLPC = 5;
 
+    public static void main(String[] args) throws CardinalityMergeException
+    {
+        System.out.println("CountThenEstimate test:");
+        CountThenEstimate bjkst = new CountThenEstimate();
+        bjkst.offer(15);
+        bjkst.offer(25);
+        bjkst.offer(35);
+        bjkst.offer(45);
+        bjkst.offer(55);
+        bjkst.offer(65);
+        bjkst.offer(75);
+        long cad = bjkst.cardinality();
+        System.out.print("CountThenEstimate: ");
+        System.out.println(cad);
+        CountThenEstimate bjkst2 = new CountThenEstimate();
+        bjkst2.offer(115);
+        bjkst2.offer(125);
+        bjkst2.offer(135);
+        bjkst2.offer(145);
+        bjkst2.offer(155);
+        bjkst2.offer(165);
+        bjkst2.offer(175);
+        System.out.print("CountThenEstimate2: ");
+        System.out.println(bjkst2.cardinality());
+        System.out.print("CountThenEstimate merged with CountThenEstimate2: ");
+        bjkst2 = (CountThenEstimate) bjkst2.merge(bjkst);
+        System.out.println(bjkst2.cardinality());
+        CountThenEstimate bjkst3 = new CountThenEstimate();
+        bjkst3 = (CountThenEstimate) bjkst2.clone();
+        System.out.print("CountThenEstimate3 cloned with CountThenEstimate2: ");
+        System.out.println(bjkst3.cardinality());
+        bjkst2.offer(1215);
+        bjkst2.offer(1225);
+        bjkst2.offer(1235);
+        bjkst2.offer(1245);
+        System.out.print("CountThenEstimate3 cloned with CountThenEstimate2: ");
+        System.out.println(bjkst3.cardinality());
+    }
+
     /**
      * Cardinality after which exact counting gives way to estimation
      */
@@ -299,6 +338,19 @@ public class CountThenEstimate implements IRichCardinality, Externalizable {
 
         }
         return merged;
+    }
+
+    public IRichCardinality clone()
+    {
+        CountThenEstimate newInstance = new CountThenEstimate(this.tippingPoint, AdaptiveCounting.Builder.obyCount(1000000000));
+
+        try {
+            newInstance = (CountThenEstimate) newInstance.merge(this);
+        } catch (CardinalityMergeException e) {
+            e.printStackTrace();
+        }
+
+        return newInstance;
     }
 
     @SuppressWarnings("serial")

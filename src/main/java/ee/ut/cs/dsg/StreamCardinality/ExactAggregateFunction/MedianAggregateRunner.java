@@ -15,7 +15,7 @@ import org.apache.flink.streaming.api.watermark.Watermark;
 import org.apache.flink.streaming.api.windowing.time.Time;
 
 import javax.annotation.Nullable;
-
+import java.io.File;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static org.apache.flink.streaming.api.windowing.time.Time.seconds;
 
@@ -28,7 +28,7 @@ public class MedianAggregateRunner {
 
         final String dir = System.getProperty("user.dir");
 
-        DataStream<Tuple3<Long, String, Integer>> stream2 = env.addSource(new YetAnotherSource(dir+"\\data\\data.csv"));
+        DataStream<Tuple3<Long, String, Integer>> stream2 = env.addSource(new YetAnotherSource(dir+File.separator+"data"+File.separator+"data.csv"));
 
         final SingleOutputStreamOperator<Tuple3<Long, String, Integer>> result2 =
                 stream2

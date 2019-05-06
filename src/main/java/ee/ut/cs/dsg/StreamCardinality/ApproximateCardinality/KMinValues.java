@@ -51,6 +51,13 @@ public class KMinValues implements IRichCardinality {
         System.out.println(kmv2.cardinality());
         System.out.print("kmv3 cloned with kmv2: ");
         System.out.println(kmv3.cardinality());
+
+        kmv2.offer(1215);
+        kmv2.offer(1225);
+        kmv2.offer(1235);
+        kmv2.offer(1245);
+        System.out.print("kmv3 cloned with kmv2: ");
+        System.out.println(kmv3.cardinality());
     }
 
     public KMinValues(int k) {

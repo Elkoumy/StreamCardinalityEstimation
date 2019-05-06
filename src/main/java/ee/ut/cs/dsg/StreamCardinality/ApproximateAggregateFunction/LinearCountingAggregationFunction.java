@@ -5,6 +5,8 @@ import org.apache.flink.api.java.tuple.Tuple3;
 
 public class LinearCountingAggregationFunction implements AggregateFunction<Tuple3<Long, String, Integer>, LinearCountingAccumulator, Tuple3<Long, String, Integer>> {
 
+    private Integer counter=0;
+
     public LinearCountingAccumulator createAccumulator() { return new LinearCountingAccumulator(); }
 
     public LinearCountingAccumulator merge(LinearCountingAccumulator a, LinearCountingAccumulator b) {
@@ -14,6 +16,8 @@ public class LinearCountingAggregationFunction implements AggregateFunction<Tupl
     }
 
     public LinearCountingAccumulator add(Tuple3<Long, String, Integer> value, LinearCountingAccumulator acc) {
+        this.counter++;
+
         acc.f0 = value.f0;
         acc.f1 = value.f1;
         long val = Math.round(value.f2);

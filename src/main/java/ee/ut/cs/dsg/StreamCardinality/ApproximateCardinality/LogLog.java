@@ -309,22 +309,39 @@ public class LogLog implements IRichCardinality
         return clone;
     }
 
-    public static void main(String[] args){
-        LOGGER.setLevel(Level.ALL);
-        LogLog firstObject = new LogLog(1);
-        LogLog secondObject = new LogLog(3);
-        LOGGER.info("firstObject" + firstObject.toString());
-        LOGGER.info("secondObject" + secondObject.toString());
+    public static void main(String[] args) throws Exception {
+//        LOGGER.setLevel(Level.ALL);
+//        LogLog firstObject = new LogLog(1);
+//        LogLog secondObject = new LogLog(3);
+//        LOGGER.info("firstObject" + firstObject.toString());
+//        LOGGER.info("secondObject" + secondObject.toString());
+//
+//        LogLog mergedObject = firstObject.mergeLogLogObjects(secondObject);
+//        LOGGER.info("mergedObject" + mergedObject.toString());
+//        LogLog clonedObject = null;
+//        clonedObject = cloneLogLogObjects(firstObject);
+//        LOGGER.info("clonedObject" + clonedObject.toString());
+//        clonedObject.setCa(123);
+//        clonedObject.setM(123);
+//        LOGGER.info("clonedObject AFTER MODS" + clonedObject.toString());
+//        LOGGER.info("firstObject AFTER MODS" + firstObject.toString());
+        LogLog card = new LogLog(1);
+        card.offer(12);
+        card.offer(12);
+        card.offer(13);
+        card.offer(14);
 
-        LogLog mergedObject = firstObject.mergeLogLogObjects(secondObject);
-        LOGGER.info("mergedObject" + mergedObject.toString());
-        LogLog clonedObject = null;
-        clonedObject = cloneLogLogObjects(firstObject);
-        LOGGER.info("clonedObject" + clonedObject.toString());
-        clonedObject.setCa(123);
-        clonedObject.setM(123);
-        LOGGER.info("clonedObject AFTER MODS" + clonedObject.toString());
-        LOGGER.info("firstObject AFTER MODS" + firstObject.toString());
+        LogLog card2 = new LogLog(1);
+        card2.offer(34);
+        card2.offer(45);
+        card2.offer(100);
+        card2.offer(105);
+        card2.offer(106);
+
+        card.mergeEstimators(card2);
+
+        System.out.println(card.cardinality());
+
     }
 
 }

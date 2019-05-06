@@ -66,6 +66,7 @@ public class BJKST implements IRichCardinality {
         System.out.println(bjkst2.cardinality());
         BJKST bjkst3 = new BJKST(100, 10, 0.3);
         bjkst3 = (BJKST) bjkst2.clone();
+        bjkst2.offer(1555);
         System.out.print("BJKST3 cloned with BJKST2: ");
         System.out.println(bjkst3.cardinality());
     }

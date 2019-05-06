@@ -40,7 +40,7 @@ public class BJKST implements IRichCardinality {
 
     public static void main(String[] args) throws BJKSTException {
         System.out.println("BJKST test:");
-        BJKST bjkst = new BJKST(100, 10, 0.3);
+        BJKST bjkst = new BJKST(100, 10, 0.1);
         bjkst.offer(15);
         bjkst.offer(25);
         bjkst.offer(35);
@@ -48,10 +48,12 @@ public class BJKST implements IRichCardinality {
         bjkst.offer(55);
         bjkst.offer(65);
         bjkst.offer(75);
+        bjkst.offer(85);
+        bjkst.offer(74);
         long cad = bjkst.cardinality();
         System.out.print("BJKST: ");
         System.out.println(cad);
-        BJKST bjkst2 = new BJKST(100, 10, 0.3);
+        BJKST bjkst2 = new BJKST(100, 10, 0.1);
         bjkst2.offer(115);
         bjkst2.offer(125);
         bjkst2.offer(135);
@@ -64,7 +66,7 @@ public class BJKST implements IRichCardinality {
         System.out.print("BJKST merged with BJKST2: ");
         bjkst2 = (BJKST) bjkst2.merge(bjkst);
         System.out.println(bjkst2.cardinality());
-        BJKST bjkst3 = new BJKST(100, 10, 0.3);
+        BJKST bjkst3 = new BJKST(100, 10, 0.1);
         bjkst3 = (BJKST) bjkst2.clone();
         bjkst2.offer(1555);
         System.out.print("BJKST3 cloned with BJKST2: ");

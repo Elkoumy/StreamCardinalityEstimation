@@ -17,10 +17,19 @@ public class KMinValues implements IRichCardinality {
     private int k;
     private Hash hasher;
 
+    static int PowerOf2(final int intnum) {
+        int b = 1;
+        while (b < intnum) {
+            b = b << 1;
+        }
+        return b/2;
+    }
     public static void main(String[] args) throws KMinValuesException {
 
         System.out.println("KMV test:");
-        KMinValues kmv = new KMinValues(3, MurmurHash.getInstance());
+        float eps=0.1f;
+        int k =  PowerOf2( (int) (2+(2/(Math.PI*eps*eps))));
+        KMinValues kmv = new KMinValues(30, MurmurHash.getInstance());
         kmv.offer(15);
         kmv.offer(25);
         kmv.offer(35);
@@ -28,10 +37,11 @@ public class KMinValues implements IRichCardinality {
         kmv.offer(55);
         kmv.offer(65);
         kmv.offer(75);
+        kmv.offer(995);
         long cad = kmv.cardinality();
         System.out.print("kmv: ");
         System.out.println(cad);
-        KMinValues kmv2 = new KMinValues(3, MurmurHash.getInstance());
+        KMinValues kmv2 = new KMinValues(30, MurmurHash.getInstance());
         kmv2.offer(115);
         kmv2.offer(125);
         kmv2.offer(135);
@@ -46,7 +56,7 @@ public class KMinValues implements IRichCardinality {
         kmv2 = (KMinValues)kmv2.merge(kmv);
 
         System.out.println(kmv2.cardinality());
-        KMinValues kmv3 = new KMinValues(3, MurmurHash.getInstance());
+        KMinValues kmv3 = new KMinValues(30, MurmurHash.getInstance());
         kmv3 = (KMinValues)kmv2.clone();
 
 //        kmv2 = kmv;

@@ -25,6 +25,7 @@ public class CountThenEstimateWindowFunction implements AggregateFunction<Tuple3
 
     @Override
     public Tuple3<Long, String, Long> lower(Tuple3<Long, String, CountThenEstimate> aggregate) {
+        long res = aggregate.f2.cardinality();
             return new Tuple3<>(aggregate.f0, aggregate.f1, aggregate.f2.cardinality());
     }
 

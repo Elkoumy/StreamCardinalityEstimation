@@ -26,11 +26,11 @@ public class MedianAggregateRunner {
 
         env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
 
-        final String dir = System.getProperty("user.dir");
+        String dir = System.getProperty("user.dir");
+        dir="C:\\Gamal Elkoumy\\PhD\\OneDrive - Tartu Ülikool\\Stream Processing\\SWAG & Scotty\\DataGeneration\\normal_distribution_long.csv";
+        DataStream<Tuple3<Long, String, Long>> stream2 = env.addSource(new YetAnotherSource(dir,10*1000*2,10,1000));
 
-        DataStream<Tuple3<Long, String, Integer>> stream2 = env.addSource(new YetAnotherSource(dir+"\\data\\data.csv"));
-
-        final SingleOutputStreamOperator<Tuple3<Long, String, Integer>> result2 =
+        final SingleOutputStreamOperator<Tuple3<Long, String, Long>> result2 =
                 stream2
                         .assignTimestampsAndWatermarks(new TimestampsAndWatermarks());
         long startTime = System.nanoTime();
@@ -52,13 +52,13 @@ public class MedianAggregateRunner {
     }
 
 
-    public static class TimestampsAndWatermarks implements AssignerWithPeriodicWatermarks<Tuple3<Long, String, Integer>> {
+    public static class TimestampsAndWatermarks implements AssignerWithPeriodicWatermarks<Tuple3<Long, String, Long>> {
         private final long maxOutOfOrderness = seconds(20).toMilliseconds(); // 5 seconds
         private long currentMaxTimestamp;
         private long startTime = System.currentTimeMillis();
 
         @Override
-        public long extractTimestamp(final Tuple3<Long, String, Integer> element, final long previousElementTimestamp) {
+        public long extractTimestamp(final Tuple3<Long, String, Long> element, final long previousElementTimestamp) {
             long timestamp = element.f0;
             currentMaxTimestamp = Math.max(timestamp, currentMaxTimestamp);
             return timestamp;

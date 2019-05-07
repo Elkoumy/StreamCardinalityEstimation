@@ -27,11 +27,11 @@ public class ApproximateMedianAggregateRunner {
 
         env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
 
-        final String dir = System.getProperty("user.dir");
+        String dir = System.getProperty("user.dir");
+        dir="C:\\Gamal Elkoumy\\PhD\\OneDrive - Tartu Ülikool\\Stream Processing\\SWAG & Scotty\\DataGeneration\\normal_distribution_long.csv";
+        DataStream<Tuple3<Long, String, Long>> stream2 = env.addSource(new YetAnotherSource(dir,10*1000*2,10,1000));
 
-        DataStream<Tuple3<Long, String, Integer>> stream2 = env.addSource(new YetAnotherSource(dir+"\\data\\data.csv"));
-
-        final SingleOutputStreamOperator<Tuple3<Long, String, Integer>> result2 =
+        final SingleOutputStreamOperator<Tuple3<Long, String, Long>> result2 =
                 stream2
                         .assignTimestampsAndWatermarks(new MedianAggregateRunner.TimestampsAndWatermarks());
         long startTime = System.nanoTime();

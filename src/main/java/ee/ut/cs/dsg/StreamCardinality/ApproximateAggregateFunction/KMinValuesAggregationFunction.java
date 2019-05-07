@@ -5,7 +5,7 @@ import org.apache.flink.api.common.functions.AggregateFunction;
 import org.apache.flink.api.java.tuple.Tuple3;
 
 
-public class KMinValuesAggregationFunction implements AggregateFunction<Tuple3<Long, String, Integer>, KMinValuesAccumulator, Tuple3<Long,String,Integer>>{
+public class KMinValuesAggregationFunction implements AggregateFunction<Tuple3<Long, String, Long>, KMinValuesAccumulator, Tuple3<Long,String,Long>>{
     @Override
     public KMinValuesAccumulator createAccumulator() { return new KMinValuesAccumulator(); }
 
@@ -20,7 +20,7 @@ public class KMinValuesAggregationFunction implements AggregateFunction<Tuple3<L
     }
 
     @Override
-    public KMinValuesAccumulator add(Tuple3<Long, String, Integer> value, KMinValuesAccumulator acc) {
+    public KMinValuesAccumulator add(Tuple3<Long, String, Long> value, KMinValuesAccumulator acc) {
         acc.f0 = value.f0;
         acc.f1 = value.f1;
         long val = Math.round(value.f2);
@@ -30,11 +30,11 @@ public class KMinValuesAggregationFunction implements AggregateFunction<Tuple3<L
     }
 
     @Override
-    public Tuple3<Long, String, Integer> getResult(KMinValuesAccumulator acc) {
-        Tuple3<Long,String,Integer> res = new Tuple3<>();
+    public Tuple3<Long, String, Long> getResult(KMinValuesAccumulator acc) {
+        Tuple3<Long,String,Long> res = new Tuple3<>();
         res.f0 = acc.f0;
         res.f1 = acc.f1;
-        res.f2 = (int) acc.acc.cardinality();
+        res.f2 = acc.acc.cardinality();
         return res;
     }
 

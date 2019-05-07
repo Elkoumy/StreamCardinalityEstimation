@@ -5,7 +5,7 @@ import org.apache.flink.api.common.functions.AggregateFunction;
 import org.apache.flink.api.java.tuple.Tuple3;
 
 
-public class FlajoletMartinAggregationFunction implements AggregateFunction<Tuple3<Long, String, Integer>, FlajoletMartinAccumulator, Tuple3<Long,String,Integer>> {
+public class FlajoletMartinAggregationFunction implements AggregateFunction<Tuple3<Long, String, Long>, FlajoletMartinAccumulator, Tuple3<Long,String,Long>> {
 
     public FlajoletMartinAccumulator createAccumulator() { return new FlajoletMartinAccumulator(); }
 
@@ -19,7 +19,7 @@ public class FlajoletMartinAggregationFunction implements AggregateFunction<Tupl
     }
 
     @Override
-    public FlajoletMartinAccumulator add(Tuple3<Long, String, Integer> value, FlajoletMartinAccumulator acc) {
+    public FlajoletMartinAccumulator add(Tuple3<Long, String, Long> value, FlajoletMartinAccumulator acc) {
         acc.f0 = value.f0;
         acc.f1 = value.f1;
         long val = Math.round(value.f2);
@@ -29,12 +29,12 @@ public class FlajoletMartinAggregationFunction implements AggregateFunction<Tupl
     }
 
     @Override
-    public Tuple3<Long, String, Integer> getResult(FlajoletMartinAccumulator acc) {
-        Tuple3<Long,String,Integer> res = new Tuple3<>();
+    public Tuple3<Long, String, Long> getResult(FlajoletMartinAccumulator acc) {
+        Tuple3<Long,String,Long> res = new Tuple3<>();
         res.f0 = acc.f0;
         res.f1 = acc.f1;
 
-        res.f2 = (int) acc.acc.cardinality();
+        res.f2 = acc.acc.cardinality();
 
         return res;
     }

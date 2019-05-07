@@ -28,7 +28,6 @@ public class LinearCountingAggregationFunction implements AggregateFunction<Tupl
         res.f0 = acc.f0;
         res.f1 = acc.f1;
         try{
-            // Should it be  byte[] getMap?
             res.f2 =acc.acc.cardinality();
 
         } catch (Exception e) {

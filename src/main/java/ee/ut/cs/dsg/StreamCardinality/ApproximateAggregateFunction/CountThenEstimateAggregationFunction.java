@@ -5,7 +5,7 @@ import ee.ut.cs.dsg.StreamCardinality.ApproximateCardinality.CountThenEstimate;
 import org.apache.flink.api.common.functions.AggregateFunction;
 import org.apache.flink.api.java.tuple.Tuple3;
 
-public class CountThenEstimateAggregationFunction implements AggregateFunction<Tuple3<Long, String, Integer>, CountThenEstimateAccumulator, Tuple3<Long,String,Integer>> {
+public class CountThenEstimateAggregationFunction implements AggregateFunction<Tuple3<Long, String, Long>, CountThenEstimateAccumulator, Tuple3<Long,String,Long>> {
     @Override
     public CountThenEstimateAccumulator createAccumulator() { return new CountThenEstimateAccumulator(); }
 
@@ -20,7 +20,7 @@ public class CountThenEstimateAggregationFunction implements AggregateFunction<T
     }
 
     @Override
-    public CountThenEstimateAccumulator add(Tuple3<Long, String, Integer> value, CountThenEstimateAccumulator acc) {
+    public CountThenEstimateAccumulator add(Tuple3<Long, String, Long> value, CountThenEstimateAccumulator acc) {
         acc.f0 = value.f0;
         acc.f1 = value.f1;
         long val = Math.round(value.f2);
@@ -29,11 +29,11 @@ public class CountThenEstimateAggregationFunction implements AggregateFunction<T
     }
 
     @Override
-    public Tuple3<Long, String, Integer> getResult(CountThenEstimateAccumulator acc) {
-        Tuple3<Long,String,Integer> res = new Tuple3<>();
+    public Tuple3<Long, String, Long> getResult(CountThenEstimateAccumulator acc) {
+        Tuple3<Long,String,Long> res = new Tuple3<>();
         res.f0 = acc.f0;
         res.f1 = acc.f1;
-        res.f2 = (int) acc.acc.cardinality();
+        res.f2 = acc.acc.cardinality();
         return res;
     }
 }

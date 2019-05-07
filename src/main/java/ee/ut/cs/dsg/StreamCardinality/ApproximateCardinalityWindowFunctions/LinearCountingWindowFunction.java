@@ -1,4 +1,4 @@
-package ee.ut.cs.dsg.StreamCardinality.ApproximateWindowFunctions;
+package ee.ut.cs.dsg.StreamCardinality.ApproximateCardinalityWindowFunctions;
 
 import de.tub.dima.scotty.core.windowFunction.AggregateFunction;
 import de.tub.dima.scotty.core.windowFunction.CloneablePartialStateFunction;

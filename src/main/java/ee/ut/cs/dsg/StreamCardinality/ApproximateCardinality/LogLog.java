@@ -245,7 +245,7 @@ public class LogLog implements IRichCardinality
 
 
     @SuppressWarnings("serial")
-    protected static class LogLogMergeException extends CardinalityMergeException
+    public static class LogLogMergeException extends CardinalityMergeException
     {
         public LogLogMergeException(String message)
         {
@@ -334,9 +334,9 @@ public class LogLog implements IRichCardinality
 //        LOGGER.info("clonedObject AFTER MODS" + clonedObject.toString());
 //        LOGGER.info("firstObject AFTER MODS" + firstObject.toString());
 
-        float error=0.1f;
+        float error=0.5f;
 
-        error = 1/error;
+//        error = 1/error;
 
         int numofbucket= PowerOf2((int) Math.pow(1.30/error, 2));
         int k=(int) (Math.log(numofbucket)/Math.log(2));

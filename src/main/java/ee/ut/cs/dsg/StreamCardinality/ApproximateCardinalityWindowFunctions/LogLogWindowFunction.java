@@ -1,4 +1,4 @@
-package ee.ut.cs.dsg.StreamCardinality.ApproximateWindowFunctions;
+package ee.ut.cs.dsg.StreamCardinality.ApproximateCardinalityWindowFunctions;
 
 import de.tub.dima.scotty.core.windowFunction.AggregateFunction;
 import de.tub.dima.scotty.core.windowFunction.CloneablePartialStateFunction;
@@ -25,7 +25,7 @@ public class LogLogWindowFunction implements AggregateFunction<Tuple3<Long, Stri
     @Override
     public Tuple3<Long, String, Long> lower(Tuple3<Long, String, LogLog> aggregate) {
         try {
-            return new Tuple3<>(aggregate.f0, aggregate.f1, (long) aggregate.f2.getK()); // In the last part, aggregate.f2.getK() <- THE getK() is probably WRONG!
+            return new Tuple3<>(aggregate.f0, aggregate.f1, (long) aggregate.f2.cardinality()); // In the last part, aggregate.f2.getK() <- THE getK() is probably WRONG!
         } catch (Exception e) {
             e.printStackTrace();
         }

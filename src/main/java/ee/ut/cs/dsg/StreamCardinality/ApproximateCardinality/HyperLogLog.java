@@ -333,9 +333,9 @@ public class HyperLogLog implements IRichCardinality {
         card2.offer(105);
         card2.offer(106);
 
-        HyperLogLog card_merged = (HyperLogLog) card.merge(card2);
+        card.merge(card2);
 
-        System.out.println(card_merged.cardinality());
+        System.out.println(card.cardinality());
 
         HyperLogLog card_cloned=card.cloneHyperLogLogObject(card);
 

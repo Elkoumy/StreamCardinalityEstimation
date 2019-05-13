@@ -41,8 +41,7 @@ public class CountThenEstimate implements IRichCardinality, Externalizable {
     protected final static byte LLC = 4;
     protected final static byte HLPC = 5;
 
-    public static void main(String[] args) throws CardinalityMergeException
-    {
+    public static void main(String[] args) throws CardinalityMergeException, IOException {
         System.out.println("CountThenEstimate test:");
         CountThenEstimate bjkst = new CountThenEstimate();
         bjkst.offer(15);
@@ -282,7 +281,7 @@ public class CountThenEstimate implements IRichCardinality, Externalizable {
     }
 
     @Override
-    public IRichCardinality merge(IRichCardinality... estimators) throws CardinalityMergeException {
+    public IRichCardinality merge(IRichCardinality... estimators) throws CardinalityMergeException, IOException {
         if (estimators == null) {
             return mergeEstimators(this);
         }
@@ -300,7 +299,7 @@ public class CountThenEstimate implements IRichCardinality, Externalizable {
      * @throws CountThenEstimateMergeException
      *          if estimators are not mergeable (all must be CountThenEstimate made with the same builder)
      */
-    public static CountThenEstimate mergeEstimators(CountThenEstimate... estimators) throws CardinalityMergeException {
+    public static CountThenEstimate mergeEstimators(CountThenEstimate... estimators) throws CardinalityMergeException, IOException {
         CountThenEstimate merged = null;
         int numEstimators = (estimators == null) ? 0 : estimators.length;
         if (numEstimators > 0) {
@@ -347,6 +346,8 @@ public class CountThenEstimate implements IRichCardinality, Externalizable {
         try {
             newInstance = (CountThenEstimate) newInstance.merge(this);
         } catch (CardinalityMergeException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
 

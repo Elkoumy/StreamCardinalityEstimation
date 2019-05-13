@@ -7,6 +7,7 @@ import org.apache.flink.api.common.functions.AggregateFunction;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.tuple.Tuple3;
 
+import java.io.IOException;
 import java.util.UUID;
 
 public class CountThenEstimateAggregationFunction implements AggregateFunction<Tuple3<Long, String, Integer>, CountThenEstimateAccumulator, Tuple3<Long,String,Integer>> {
@@ -21,6 +22,8 @@ public class CountThenEstimateAggregationFunction implements AggregateFunction<T
         try {
             a.acc = (CountThenEstimate) a.acc.merge(b.acc);
         } catch (CardinalityMergeException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return a;

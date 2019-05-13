@@ -1,9 +1,15 @@
 package ee.ut.cs.dsg.StreamCardinality.ApproximateAggregateFunction;
 
+import ee.ut.cs.dsg.StreamCardinality.ApproximateThroughput.ApproximateThroughputCounter;
 import org.apache.flink.api.common.functions.AggregateFunction;
+import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.tuple.Tuple3;
 
+import java.util.UUID;
+
 public class MedianCKMSAggregationFunction implements AggregateFunction<Tuple3<Long, String, Double>, MedianCKMSAccumulator, Tuple3<Long,String,Double>> {
+
+    private Integer counter=0;
 
     public MedianCKMSAccumulator createAccumulator() {
         return new MedianCKMSAccumulator ();
@@ -15,6 +21,8 @@ public class MedianCKMSAggregationFunction implements AggregateFunction<Tuple3<L
     }
 
     public MedianCKMSAccumulator  add(Tuple3<Long, String, Double> value, MedianCKMSAccumulator  acc) {
+        this.counter++;
+
         acc.f0 = value.f0;
         acc.f1 = value.f1;
         long val = Math.round(value.f2);
@@ -24,6 +32,10 @@ public class MedianCKMSAggregationFunction implements AggregateFunction<Tuple3<L
     }
 
     public Tuple3<Long,String,Double> getResult(MedianCKMSAccumulator  acc) {
+        ApproximateThroughputCounter myAT = ApproximateThroughputCounter.getInstance();
+        Tuple2<String, Integer> tmp = new Tuple2<>("windowAt"+ UUID.randomUUID(), this.counter);
+        myAT.push(tmp);
+
         Tuple3<Long,String,Double> res= new Tuple3<>();
         res.f0 = acc.f0;
         res.f1 = acc.f1;

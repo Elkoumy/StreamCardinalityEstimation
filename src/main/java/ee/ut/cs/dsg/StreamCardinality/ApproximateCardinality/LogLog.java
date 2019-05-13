@@ -105,31 +105,6 @@ public class LogLog implements IRichCardinality
 
     public void setCa(double ca) { Ca = ca; }
 
-
-    public static int PowerOf2(final int intnum) {
-        int b = 1;
-        while (b < intnum) {
-            b = b << 1;
-        }
-        return b/2;
-    }
-
-    public LogLog(double error)
-    {
-        int m = PowerOf2((int) Math.pow(1.30/error, 2));
-        int k = (int)(Math.log(m)/Math.log(2)); //k
-
-        this.k = k;
-        if (k >= (mAlpha.length - 1))
-        {
-            throw new IllegalArgumentException(String.format("Max k (%d) exceeded: k=%d", mAlpha.length - 1, this.k));
-        }
-
-        this.m = 1 << this.k;
-        this.Ca = mAlpha[k];
-        this.M = new byte[m];
-    }
-
     public LogLog(int k)
     {
         if (k >= (mAlpha.length - 1))
@@ -270,7 +245,7 @@ public class LogLog implements IRichCardinality
 
 
     @SuppressWarnings("serial")
-    protected static class LogLogMergeException extends CardinalityMergeException
+    public static class LogLogMergeException extends CardinalityMergeException
     {
         public LogLogMergeException(String message)
         {
@@ -334,6 +309,14 @@ public class LogLog implements IRichCardinality
         return clone;
     }
 
+    public static int PowerOf2(final int intnum) {
+        int b = 1;
+        while (b < intnum) {
+            b = b << 1;
+        }
+        return b/2;
+    }
+
     public static void main(String[] args) throws Exception {
 //        LOGGER.setLevel(Level.ALL);
 //        LogLog firstObject = new LogLog(1);
@@ -350,12 +333,13 @@ public class LogLog implements IRichCardinality
 //        clonedObject.setM(123);
 //        LOGGER.info("clonedObject AFTER MODS" + clonedObject.toString());
 //        LOGGER.info("firstObject AFTER MODS" + firstObject.toString());
-        float error = 0.1f;
-        error = 1/error;
 
-        int m = PowerOf2((int) Math.pow(1.30/error, 2));
-        int k = (int)(Math.log(m)/Math.log(2)); //k
+        float error=0.5f;
 
+//        error = 1/error;
+
+        int numofbucket= PowerOf2((int) Math.pow(1.30/error, 2));
+        int k=(int) (Math.log(numofbucket)/Math.log(2));
         LogLog card = new LogLog(k);
         card.offer(12);
         card.offer(12);
@@ -371,7 +355,12 @@ public class LogLog implements IRichCardinality
 
         card.mergeEstimators(card2);
 
+        LogLog card_cloned = LogLog.cloneLogLogObjects(card);
+
         System.out.println(card.cardinality());
+        card.offer(3333);
+        card_cloned.offer(3444);
+        System.out.println(card_cloned.cardinality());
 
     }
 

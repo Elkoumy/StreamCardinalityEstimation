@@ -35,16 +35,12 @@ public class BJKST implements IRichCardinality {
     private List<HashFunction<Object>> hHashers;
     private List<HashFunction<Object>> gHashers;
 
-    private int C = 576;// the parameter C based on the desired guarantees on the algorithms estimate
-    // for determinant factor <=1/3
-
     private int intLength = Integer.toString(Integer.MAX_VALUE).length();
     private String lengthOfIntegerRepresentation = null;
 
     public static void main(String[] args) throws BJKSTException {
-
         System.out.println("BJKST test:");
-        BJKST bjkst = new BJKST(100, 10, 0.3);
+        BJKST bjkst = new BJKST(100, 10, 0.1);
         bjkst.offer(15);
         bjkst.offer(25);
         bjkst.offer(35);
@@ -52,12 +48,12 @@ public class BJKST implements IRichCardinality {
         bjkst.offer(55);
         bjkst.offer(65);
         bjkst.offer(75);
-
+        bjkst.offer(85);
+        bjkst.offer(74);
         long cad = bjkst.cardinality();
         System.out.print("BJKST: ");
         System.out.println(cad);
-        BJKST bjkst2 = new BJKST(100, 10, 0.3);
-
+        BJKST bjkst2 = new BJKST(100, 10, 0.1);
         bjkst2.offer(115);
         bjkst2.offer(125);
         bjkst2.offer(135);
@@ -68,20 +64,11 @@ public class BJKST implements IRichCardinality {
         System.out.print("BJKST2: ");
         System.out.println(bjkst2.cardinality());
         System.out.print("BJKST merged with BJKST2: ");
-
         bjkst2 = (BJKST) bjkst2.merge(bjkst);
         System.out.println(bjkst2.cardinality());
-        BJKST bjkst3 = new BJKST(100, 10, 0.3);
+        BJKST bjkst3 = new BJKST(100, 10, 0.1);
         bjkst3 = (BJKST) bjkst2.clone();
-
         bjkst2.offer(1555);
-        System.out.print("BJKST3 cloned with BJKST2: ");
-        System.out.println(bjkst3.cardinality());
-
-        bjkst2.offer(1215);
-        bjkst2.offer(1225);
-        bjkst2.offer(1235);
-        bjkst2.offer(1245);
         System.out.print("BJKST3 cloned with BJKST2: ");
         System.out.println(bjkst3.cardinality());
     }
@@ -182,6 +169,11 @@ public class BJKST implements IRichCardinality {
         }
     }
 
+    private void putAll(ArrayList<Integer> limits, ArrayList<HashSet<String>> buffer)
+    {
+        this.limits = (ArrayList<Integer>)limits.clone();
+        this.buffers = (ArrayList<HashSet<String>>)buffer.clone();
+    }
 
     public ArrayList<Integer> getLimits()
     {
@@ -211,24 +203,6 @@ public class BJKST implements IRichCardinality {
     @Override
     public byte[] getBytes() throws IOException {
         return new byte[0];
-    }
-
-    private void putAll(ArrayList<Integer> limits, ArrayList<HashSet<String>> buffer)
-    {
-        this.limits = (ArrayList<Integer>)limits.clone();
-        this.buffers = (ArrayList<HashSet<String>>)buffer.clone();
-        /*
-        for (Integer nr : limits)
-        {
-            this.limits.add(nr);
-        }
-
-        for (HashSet<String> hs : buffer)
-        {
-            HashSet<String> newSet = new HashSet<>(hs);
-            this.buffers.add(newSet);
-        }
-        */
     }
 
     @Override
@@ -294,25 +268,11 @@ public class BJKST implements IRichCardinality {
         return newInstance;
     }
 
-
-
     public IRichCardinality clone()
     {
         BJKST newInstance = new BJKST(numMedians, sizeOfMedianSet, error);
-        ArrayList<Integer> tmpLimits = new ArrayList<Integer>(numMedians);
-        ArrayList<HashSet<String>> tmpBuffers = new ArrayList<HashSet<String>>(numMedians);
 
-        ArrayList<Integer> newLimits = (this).getLimits();
-        ArrayList<HashSet<String>> newBuffers = (this).getBuffer();
-
-        tmpLimits = (ArrayList<Integer>) newLimits.clone();
-        for (HashSet<String> varhs : newBuffers)
-        {
-            tmpBuffers.add((HashSet<String>) varhs.clone());
-
-        }
-
-        newInstance.putAll(tmpLimits, tmpBuffers);
+        newInstance.putAll((ArrayList<Integer>)this.limits, (ArrayList<HashSet<String>>)this.buffers);
 
         return newInstance;
     }

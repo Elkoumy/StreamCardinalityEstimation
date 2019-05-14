@@ -1,4 +1,4 @@
-package ee.ut.cs.dsg.GetExperimentResults;
+package ee.ut.cs.dsg.ExperimentResults.parsers;
 import au.com.bytecode.opencsv.CSVWriter;
 import org.apache.flink.api.java.tuple.Tuple4;
 import org.apache.flink.api.java.tuple.Tuple5;
@@ -26,10 +26,10 @@ public class GetResults {
         String tps=args[3];
         String dist=args[4];
 
-System.out.println("**************************************************************");
-System.out.println("Starting collecting the data from redis to output files");
-     Jedis j=new Jedis("redis");
-     j.connect();
+        System.out.println("**************************************************************");
+        System.out.println("Starting collecting the data from redis to output files");
+        Jedis j=new Jedis("redis");
+        j.connect();
 
         Set<String> keys = j.keys("*");
 //        ArrayList<Tuple4<String,String,String,String>> query_time = new ArrayList<Tuple4<String,String,String,String>>();
@@ -40,10 +40,10 @@ System.out.println("Starting collecting the data from redis to output files");
             Map<String, String> row = j.hgetAll(key);
 
             if(row.keySet().contains("insertion_start") && row.keySet().contains("insertion_end")){
-              insertion_time.add( new Tuple4<String,String,String,String>(key.substring(0,key.indexOf("|"))  ,key.substring(key.indexOf("|")+1,key.lastIndexOf("|"))  ,row.get("insertion_start").toString(),row.get("insertion_end").toString())  );
+                insertion_time.add( new Tuple4<String,String,String,String>(key.substring(0,key.indexOf("|"))  ,key.substring(key.indexOf("|")+1,key.lastIndexOf("|"))  ,row.get("insertion_start").toString(),row.get("insertion_end").toString())  );
 
             }else if(row.keySet().contains("query_start")){
-               window.add(new Tuple5<String,String,String,String,String>(key.substring(1,key.indexOf("|")),row.get("window_end_time").toString(), /*key */ key.substring(key.indexOf("|")+1),row.get("query_start").toString(),row.get("query_end").toString()));
+                window.add(new Tuple5<String,String,String,String,String>(key.substring(1,key.indexOf("|")),row.get("window_end_time").toString(), /*key */ key.substring(key.indexOf("|")+1),row.get("query_start").toString(),row.get("query_end").toString()));
             }
 
         }
@@ -70,7 +70,7 @@ System.out.println("Starting collecting the data from redis to output files");
             e.printStackTrace();
         }
 
-            insertion_time.clear();
+        insertion_time.clear();
         System.out.println("Writing insertion time finished");
         System.out.println("**** Writing query time ****");
         writer = null;

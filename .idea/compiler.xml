@@ -7,12 +7,14 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="CardinalityBenchmarking" />
-        <module name="GetResult" />
+        <module name="GetResults" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="CardinalityBenchmarking" target="1.8" />
+      <module name="GetExperimentResults" target="1.8" />
       <module name="GetResult" target="1.8" />
+      <module name="GetResults" target="1.8" />
       <module name="StreamCardinality" target="1.8" />
       <module name="SWAGwithSCOTTY" target="1.8" />
     </bytecodeTargetLevel>

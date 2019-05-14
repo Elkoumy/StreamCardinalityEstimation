@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/CardinalityBenchmarking/CardinalityBenchmarking.iml" filepath="$PROJECT_DIR$/CardinalityBenchmarking/CardinalityBenchmarking.iml" />
       <module fileurl="file://$PROJECT_DIR$/CardinalityBenchmarking/CardinalityBenchmarking.iml" filepath="$PROJECT_DIR$/CardinalityBenchmarking/CardinalityBenchmarking.iml" />
+      <module fileurl="file://$PROJECT_DIR$/GetResult/GetResult.iml" filepath="$PROJECT_DIR$/GetResult/GetResult.iml" />
       <module fileurl="file://$PROJECT_DIR$/StreamCardinality.iml" filepath="$PROJECT_DIR$/StreamCardinality.iml" />
     </modules>
   </component>

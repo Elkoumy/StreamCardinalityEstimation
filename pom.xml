@@ -25,6 +25,7 @@ under the License.
 	<version>0.1-SNAPSHOT</version>
 	<modules>
 		<module>CardinalityBenchmarking</module>
+		<module>GetResult</module>
 	</modules>
 	<packaging>pom</packaging>
 

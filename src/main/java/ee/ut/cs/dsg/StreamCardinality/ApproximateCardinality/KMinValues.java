@@ -17,19 +17,10 @@ public class KMinValues implements IRichCardinality {
     private int k;
     private Hash hasher;
 
-    static int PowerOf2(final int intnum) {
-        int b = 1;
-        while (b < intnum) {
-            b = b << 1;
-        }
-        return b/2;
-    }
     public static void main(String[] args) throws KMinValuesException {
 
         System.out.println("KMV test:");
-        float eps=0.1f;
-        int k =  PowerOf2( (int) (2+(2/(Math.PI*eps*eps))));
-        KMinValues kmv = new KMinValues(30, MurmurHash.getInstance());
+        KMinValues kmv = new KMinValues(0.1);
         kmv.offer(15);
         kmv.offer(25);
         kmv.offer(35);
@@ -37,11 +28,10 @@ public class KMinValues implements IRichCardinality {
         kmv.offer(55);
         kmv.offer(65);
         kmv.offer(75);
-        kmv.offer(995);
         long cad = kmv.cardinality();
         System.out.print("kmv: ");
         System.out.println(cad);
-        KMinValues kmv2 = new KMinValues(30, MurmurHash.getInstance());
+        KMinValues kmv2 = new KMinValues(0.1);
         kmv2.offer(115);
         kmv2.offer(125);
         kmv2.offer(135);
@@ -56,19 +46,60 @@ public class KMinValues implements IRichCardinality {
         kmv2 = (KMinValues)kmv2.merge(kmv);
 
         System.out.println(kmv2.cardinality());
-        KMinValues kmv3 = new KMinValues(30, MurmurHash.getInstance());
+        KMinValues kmv3 = new KMinValues(0.1);
         kmv3 = (KMinValues)kmv2.clone();
-
-//        kmv2 = kmv;
 
         System.out.print("kmv2 : ");
         System.out.println(kmv2.cardinality());
         System.out.print("kmv3 cloned with kmv2: ");
         System.out.println(kmv3.cardinality());
+
+
+
+        kmv2.offer(11215);
+        kmv2.offer(11225);
+        kmv2.offer(11235);
+        kmv2.offer(11245);
+
+        System.out.print("kmv2* : ");
+        System.out.println(kmv2.cardinality());
+
+
+
+        kmv2.offer(510);
+        kmv2.offer(550);
+        kmv2.offer(550);
+        kmv2.offer(524);
+
+        System.out.print("kmv2 : ");
+        System.out.println(kmv2.cardinality());
+
+
+        System.out.print("kmv3 cloned with kmv2: ");
+        System.out.println(kmv3.cardinality());
+
+        System.out.print("kmv2 : ");
+        System.out.println(kmv2.cardinality());
+    }
+
+    int PowerOf2(final int intnum) {
+        int b = 1;
+        while (b < intnum) {
+            b = b << 1;
+        }
+        return b/2;
     }
 
     public KMinValues(int k) {
         this(k, Hash.getInstance(Hash.MURMUR_HASH3));
+    }
+
+    public KMinValues(double epsilon)
+    {
+        int k = PowerOf2( (int) (2+(2/(Math.PI*epsilon*epsilon))));
+        this.k = k;
+        this.kMin = new TreeSet<Integer>();
+        this.hasher = Hash.getInstance(Hash.MURMUR_HASH3);
     }
 
     public KMinValues(int k, Hash hasher) {

@@ -3,7 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/CardinalityBenchmarking/CardinalityBenchmarking.iml" filepath="$PROJECT_DIR$/CardinalityBenchmarking/CardinalityBenchmarking.iml" />
-      <module fileurl="file://$PROJECT_DIR$/SWAGwithSCOTTY.iml" filepath="$PROJECT_DIR$/SWAGwithSCOTTY.iml" />
+      <module fileurl="file://$PROJECT_DIR$/CardinalityBenchmarking/CardinalityBenchmarking.iml" filepath="$PROJECT_DIR$/CardinalityBenchmarking/CardinalityBenchmarking.iml" />
+      <module fileurl="file://$PROJECT_DIR$/StreamCardinality.iml" filepath="$PROJECT_DIR$/StreamCardinality.iml" />
     </modules>
   </component>
 </project>

@@ -20,12 +20,15 @@ under the License.
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>ee.ut.cs.dsg.SWAGwithSCOTTY</groupId>
-	<artifactId>SWAGwithSCOTTY</artifactId>
+	<groupId>ee.ut.cs.dsg.StreamCardinality</groupId>
+	<artifactId>StreamCardinality</artifactId>
 	<version>0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<modules>
+		<module>CardinalityBenchmarking</module>
+	</modules>
+	<packaging>pom</packaging>
 
-	<name>Flink Quickstart Job</name>
+	<name>Stream Cardinality</name>
 	<url>http://www.myorganization.org</url>
 
 	<properties>

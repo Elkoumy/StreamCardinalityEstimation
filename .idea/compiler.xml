@@ -6,11 +6,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="StreamCardinality" />
-        <module name="SWAGwithSCOTTY" />
+        <module name="CardinalityBenchmarking" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="CardinalityBenchmarking" target="1.8" />
       <module name="StreamCardinality" target="1.8" />
       <module name="SWAGwithSCOTTY" target="1.8" />
     </bytecodeTargetLevel>

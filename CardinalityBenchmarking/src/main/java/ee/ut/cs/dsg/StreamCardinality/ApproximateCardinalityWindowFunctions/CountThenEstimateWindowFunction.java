@@ -4,14 +4,16 @@ import de.tub.dima.scotty.core.windowFunction.CloneablePartialStateFunction;
 import ee.ut.cs.dsg.StreamCardinality.ApproximateCardinality.AdaptiveCounting;
 import ee.ut.cs.dsg.StreamCardinality.ApproximateCardinality.CardinalityMergeException;
 import ee.ut.cs.dsg.StreamCardinality.ApproximateCardinality.CountThenEstimate;
+import ee.ut.cs.dsg.StreamCardinality.ExperimentConfiguration;
 import org.apache.flink.api.java.tuple.Tuple3;
+import org.apache.flink.api.java.tuple.Tuple4;
 
 import java.io.IOException;
 
 
 public class CountThenEstimateWindowFunction implements AggregateFunction<Tuple3<Long, String, Long>,
         Tuple3<Long, String, CountThenEstimate>,
-        Tuple3<Long, String, Long>>,
+        Tuple4<Long, String, Long,Long>>,
         CloneablePartialStateFunction<Tuple3<Long, String, CountThenEstimate>>
 {
     public CountThenEstimateWindowFunction() {}
@@ -24,9 +26,12 @@ public class CountThenEstimateWindowFunction implements AggregateFunction<Tuple3
     }
 
     @Override
-    public Tuple3<Long, String, Long> lower(Tuple3<Long, String, CountThenEstimate> aggregate) {
-        long res = aggregate.f2.cardinality();
-            return new Tuple3<>(aggregate.f0, aggregate.f1, aggregate.f2.cardinality());
+    public Tuple4<Long, String, Long,Long> lower(Tuple3<Long, String, CountThenEstimate> aggregate) {
+        if(ExperimentConfiguration.experimentType== ExperimentConfiguration.ExperimentType.Latency) {
+            return new Tuple4<>(aggregate.f0, aggregate.f1,  aggregate.f2.cardinality(), System.nanoTime()); // In the last part, aggregate.f2.getK() <- THE getK() is probably WRONG!
+        }else{
+            return new Tuple4<>(aggregate.f0, aggregate.f1, aggregate.f2.cardinality(), null);
+        }
     }
 
     @Override
@@ -41,7 +46,14 @@ public class CountThenEstimateWindowFunction implements AggregateFunction<Tuple3
 
     @Override
     public Tuple3<Long, String, CountThenEstimate> liftAndCombine(Tuple3<Long, String, CountThenEstimate> partialAggregate, Tuple3<Long, String, Long> inputTuple) {
-        partialAggregate.f2.offer(Math.round(inputTuple.f2));
+        if (ExperimentConfiguration.experimentType== ExperimentConfiguration.ExperimentType.Latency) {
+            String curr = Long.toString(System.nanoTime());
+            ExperimentConfiguration.async.hset(inputTuple.f0 + "|" + inputTuple.f1 + "|" + curr, "insertion_start", Long.toString(System.nanoTime()));
+            partialAggregate.f2.offer(Math.round(inputTuple.f2));
+            ExperimentConfiguration.async.hset(inputTuple.f0 + "|" + inputTuple.f1 + "|" + curr, "insertion_end", Long.toString(System.nanoTime()));
+        }else{
+            partialAggregate.f2.offer(Math.round(inputTuple.f2));
+        }
         return partialAggregate;
     }
 

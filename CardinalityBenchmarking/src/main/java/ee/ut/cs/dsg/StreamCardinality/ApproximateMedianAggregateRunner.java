@@ -38,28 +38,28 @@ public class ApproximateMedianAggregateRunner {
 
         AggregateFunction agg;
         switch (args[1]){
-            case "LogLogAggregationFunction":
+            case "LL": //LogLogAggregationFunction
                 agg = new LogLogAggregationFunction();
                 break;
-            case "AdaptiveCountingAggregationFunction":
+            case "AC": //AdaptiveCountingAggregationFunction
                 agg = new AdaptiveCountingAggregationFunction();
                 break;
-            case "HyperLogLogAggregationFunction":
+            case "HLL"://HyperLogLogAggregationFunction
                 agg = new HyperLogLogAggregationFunction();
                 break;
-            case "LinearCountingAggregationFunction":
+            case "LC": //LinearCountingAggregationFunction
                 agg = new LinearCountingAggregationFunction();
                 break;
-            case "FlajoletMartinAggregationFunction":
+            case "FM": //FlajoletMartinAggregationFunction
                 agg = new FlajoletMartinAggregationFunction();
                 break;
-            case "KMinValuesAggregationFunction":
+            case "KMV": //KMinValuesAggregationFunction
                 agg = new KMinValuesAggregationFunction();
                 break;
-            case "BJKSTAggregationFunction":
+            case "BJKST": //BJKSTAggregationFunction
                 agg = new BJKSTAggregationFunction();
                 break;
-            case "CountThenEstimateAggregationFunction":
+            case "CTE": //CountThenEstimateAggregationFunction
                 agg = new CountThenEstimateAggregationFunction();
                 break;
             default:

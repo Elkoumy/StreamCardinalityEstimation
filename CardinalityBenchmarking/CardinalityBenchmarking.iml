@@ -60,11 +60,18 @@
     <orderEntry type="library" name="Maven: de.tub.dima.scotty:state:0.3" level="project" />
     <orderEntry type="library" name="Maven: de.tub.dima.scotty:core:0.3" level="project" />
     <orderEntry type="library" name="Maven: com.univocity:univocity-parsers:2.7.6" level="project" />
+    <orderEntry type="library" name="Maven: biz.paluch.redis:lettuce:4.2.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.reactivex:rxjava:1.1.9" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-common:4.0.40.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-transport:4.0.40.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-buffer:4.0.40.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-handler:4.0.40.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-codec:4.0.40.Final" level="project" />
+    <orderEntry type="library" name="Maven: com.google.guava:guava:18.0" level="project" />
     <orderEntry type="library" name="Maven: com.github.mayconbordin:streaminer:1.1.1" level="project" />
     <orderEntry type="library" name="Maven: colt:colt:1.2.0" level="project" />
     <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.9" level="project" />
     <orderEntry type="library" name="Maven: it.unimi.dsi:fastutil:6.5.12" level="project" />
-    <orderEntry type="library" name="Maven: com.google.guava:guava:15.0" level="project" />
     <orderEntry type="library" name="Maven: com.googlecode.json-simple:json-simple:1.1.1" level="project" />
     <orderEntry type="library" name="Maven: junit:junit:4.10" level="project" />
     <orderEntry type="library" name="Maven: org.hamcrest:hamcrest-core:1.1" level="project" />

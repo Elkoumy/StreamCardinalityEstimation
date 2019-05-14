@@ -56,7 +56,7 @@ public class testWindowing {
         public void processElement(AggregateWindow<Tuple3<Long, String,  Long>> tuple4AggregateWindow, Context context, Collector<Tuple3<Long, String, Long>> collector) throws Exception {
 
 
-//            MicroBenchmarkExact.async.hset("w"+tuple4AggregateWindow.getStart()+"|"+tuple4AggregateWindow.getAggValues().get(0).f1, "window_end",tuple4AggregateWindow.getEnd()+"");
+//            ExperimentConfiguration.async.hset("w"+tuple4AggregateWindow.getStart()+"|"+tuple4AggregateWindow.getAggValues().get(0).f1, "window_end",tuple4AggregateWindow.getEnd()+"");
             collector.collect(new Tuple3<>(tuple4AggregateWindow.getAggValues().get(0).f0,tuple4AggregateWindow.getAggValues().get(0).f1,tuple4AggregateWindow.getAggValues().get(0).f2));
         }
     }

@@ -1,11 +1,13 @@
 package ee.ut.cs.dsg.StreamCardinality.ApproximateCardinalityAggregateFunction;
 
 import ee.ut.cs.dsg.StreamCardinality.ApproximateCardinality.KMinValues;
+import ee.ut.cs.dsg.StreamCardinality.ExperimentConfiguration;
 import org.apache.flink.api.common.functions.AggregateFunction;
 import org.apache.flink.api.java.tuple.Tuple3;
+import org.apache.flink.api.java.tuple.Tuple4;
 
 
-public class KMinValuesAggregationFunction implements AggregateFunction<Tuple3<Long, String, Integer>, KMinValuesAccumulator, Tuple3<Long,String,Integer>>{
+public class KMinValuesAggregationFunction implements AggregateFunction<Tuple3<Long, String, Long>, KMinValuesAccumulator, Tuple4<Long,String,Long,Long>>{
     @Override
     public KMinValuesAccumulator createAccumulator() { return new KMinValuesAccumulator(); }
 
@@ -20,21 +22,37 @@ public class KMinValuesAggregationFunction implements AggregateFunction<Tuple3<L
     }
 
     @Override
-    public KMinValuesAccumulator add(Tuple3<Long, String, Integer> value, KMinValuesAccumulator acc) {
-        acc.f0 = value.f0;
-        acc.f1 = value.f1;
-        long val = Math.round(value.f2);
-        acc.acc.offer(val);
-
+    public KMinValuesAccumulator add(Tuple3<Long, String, Long> value, KMinValuesAccumulator acc) {
+        if(ExperimentConfiguration.experimentType== ExperimentConfiguration.ExperimentType.Latency) {
+            String curr = Long.toString(System.nanoTime());
+            ExperimentConfiguration.async.hset(value.f0+"|"+value.f1+"|"+curr, "insertion_start", Long.toString(System.nanoTime()));
+            acc.f0 = value.f0;
+            acc.f1 = value.f1;
+            acc.acc.offer(value.f2);
+            ExperimentConfiguration.async.hset(value.f0+"|"+value.f1+"|"+curr, "insertion_end", Long.toString(System.nanoTime()));
+        }else{
+            acc.f0 = value.f0;
+            acc.f1 = value.f1;
+            acc.acc.offer(value.f2);
+        }
         return acc;
     }
 
     @Override
-    public Tuple3<Long, String, Integer> getResult(KMinValuesAccumulator acc) {
-        Tuple3<Long,String,Integer> res = new Tuple3<>();
+    public Tuple4<Long, String, Long,Long> getResult(KMinValuesAccumulator acc) {
+        Tuple4<Long,String,Long,Long> res= new Tuple4<>();
         res.f0 = acc.f0;
         res.f1 = acc.f1;
-        res.f2 = (int) acc.acc.cardinality();
+        try{
+            res.f2 =  acc.acc.cardinality();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if(ExperimentConfiguration.experimentType== ExperimentConfiguration.ExperimentType.Latency) {
+            res.f3=System.nanoTime();
+        }else{
+            res.f3=null;
+        }
         return res;
     }
 

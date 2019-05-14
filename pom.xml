@@ -117,7 +117,12 @@ under the License.
 			<artifactId>flink-connector</artifactId>
 			<version>0.3</version>
 		</dependency>
-	</dependencies>
+<!--        <dependency>-->
+<!--            <groupId>de.tub.dima.scotty</groupId>-->
+<!--            <artifactId>core</artifactId>-->
+<!--            <version>0.2</version>-->
+<!--        </dependency>-->
+    </dependencies>
 
 	<build>
 		<plugins>

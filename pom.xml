@@ -20,12 +20,17 @@ under the License.
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>ee.ut.cs.dsg.SWAGwithSCOTTY</groupId>
-	<artifactId>SWAGwithSCOTTY</artifactId>
+	<groupId>ee.ut.cs.dsg.StreamCardinality</groupId>
+	<artifactId>StreamCardinality</artifactId>
 	<version>0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<modules>
+		<module>CardinalityBenchmarking</module>
+		<module>GetResults</module>
 
-	<name>Flink Quickstart Job</name>
+	</modules>
+	<packaging>pom</packaging>
+
+	<name>Stream Cardinality</name>
 	<url>http://www.myorganization.org</url>
 
 	<properties>
@@ -105,12 +110,12 @@ under the License.
 		<dependency>
 			<groupId>de.tub.dima.scotty</groupId>
 			<artifactId>core</artifactId>
-			<version>0.2</version>
+			<version>0.3</version>
 		</dependency>
 		<dependency>
 			<groupId>de.tub.dima.scotty</groupId>
 			<artifactId>flink-connector</artifactId>
-			<version>0.2</version>
+			<version>0.3</version>
 		</dependency>
 	</dependencies>
 
@@ -256,6 +261,11 @@ under the License.
 					<groupId>de.tub.dima.scotty</groupId>
 					<artifactId>core</artifactId>
 					<version>0.3</version>
+				</dependency>
+				<dependency>
+					<groupId>com.univocity</groupId>
+					<artifactId>univocity-parsers</artifactId>
+					<version>2.7.6</version>
 				</dependency>
 				<!--<dependency>-->
 					<!--<groupId>de.metanome.algorithms</groupId>-->

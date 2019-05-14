@@ -42,7 +42,7 @@ public class FlajoletMartin implements IRichCardinality {
     public static void main(String[] args) throws FMException {
 
         System.out.println("FM test:");
-        FlajoletMartin fm = new FlajoletMartin(8,3,3);
+        FlajoletMartin fm = new FlajoletMartin(7, 3, 3);
         fm.offer(15);
         fm.offer(25);
         fm.offer(35);
@@ -51,12 +51,9 @@ public class FlajoletMartin implements IRichCardinality {
         fm.offer(65);
         fm.offer(75);
         long cad = fm.cardinality();
-
         System.out.print("fm: ");
         System.out.println(cad);
-
-
-        FlajoletMartin fm2 = new FlajoletMartin(8, 3, 3);
+        FlajoletMartin fm2 = new FlajoletMartin(7, 3, 3);
         fm2.offer(115);
         fm2.offer(125);
         fm2.offer(135);
@@ -67,7 +64,6 @@ public class FlajoletMartin implements IRichCardinality {
         System.out.print("fm2: ");
         System.out.println(fm2.cardinality());
         System.out.print("kmv merged with fm2: ");
-
         fm2 = (FlajoletMartin)fm2.merge(fm);
         System.out.println(fm2.cardinality());
         FlajoletMartin fm3 = new FlajoletMartin(7, 3, 3);
@@ -76,36 +72,7 @@ public class FlajoletMartin implements IRichCardinality {
 
         System.out.print("fm3 cloned with fm2: ");
         System.out.println(fm3.cardinality());
-
-        fm2.offer(1215);
-        fm2.offer(1225);
-        fm2.offer(1235);
-        fm2.offer(1245);
-        System.out.print("fm3 cloned with fm2: ");
-        System.out.println(fm3.cardinality());
     }
-
-
-    /*
-    public FlajoletMartin(int numHashGroups, double error)
-    {
-        int b = 1;
-        int intnum = (int)Math.pow(1/error, 2);
-        while (b < intnum) {
-            b = b << 1;
-        }
-        b = b/2;
-
-        this.numHashGroups = b;
-        this.numHashFunctionsInHashGroup = b;
-        this.bitmapSize = 64;
-
-        bitmaps = new boolean[numHashGroups][numHashFunctionsInHashGroup][bitmapSize];
-        hashes = new HashFunction[numHashGroups][numHashFunctionsInHashGroup];
-
-        generateHashFunctions();
-    }
-    */
 
 
     public FlajoletMartin(int bitmapSize, int numHashGroups, int numHashFunctionsInEachGroup) {

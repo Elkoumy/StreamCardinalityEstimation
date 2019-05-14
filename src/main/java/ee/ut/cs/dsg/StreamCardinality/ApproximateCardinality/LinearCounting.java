@@ -68,57 +68,6 @@ public class LinearCounting implements IRichCardinality {
     }
 
     /**
-     * Runs binary search to find minimum bit mask length that holds precision inequality.
-     *
-     * @param n   expected cardinality
-     * @param eps desired standard error
-     * @return minimal required bit mask length
-     */
-    private static int computeRequiredBitMaskLength(double n, double eps) {
-        if (eps >= 1 || eps <= 0) {
-            throw new IllegalArgumentException("Epsilon should be in (0, 1) range");
-        }
-        if (n <= 0) {
-            throw new IllegalArgumentException("Cardinality should be positive");
-        }
-        int fromM = 1;
-        int toM = 100000000;
-        int m;
-        double eq;
-        do {
-            m = (toM + fromM) / 2;
-            eq = precisionInequalityRV(n / m, eps);
-            if (m > eq) {
-                toM = m;
-            } else {
-                fromM = m + 1;
-            }
-        } while (toM > fromM);
-        return m > eq ? m : m + 1;
-    }
-
-    /**
-     * @param t   load factor for linear counter
-     * @param eps desired standard error
-     */
-    private static double precisionInequalityRV(double t, double eps) {
-        return max(1.0 / pow(eps * t, 2), 5) * (exp(t) - t - 1);
-    }
-
-
-    public LinearCounting(double eps, int maxCardinality) {
-
-
-        int sz =  computeRequiredBitMaskLength(maxCardinality, eps);
-        int size=(int) Math.ceil(sz / 8D);
-
-        this.length = 8 * size;
-        this.count = this.length;
-        map = new byte[size];
-    }
-
-
-    /**
      * @param size of bit array in bytes
      */
     public LinearCounting(int size) {
@@ -452,23 +401,13 @@ public class LinearCounting implements IRichCardinality {
 //        LOGGER.info("clonedObject AFTER MODS" + clonedObject.toString());
 //        LOGGER.info("firstObject AFTER MODS" + firstObject.toString());
 
-        //LinearCounting card = new LinearCounting(0.1, 20);
-        double eps = 0.1;
-        int maxCardinality = 20;
-        int sz = computeRequiredBitMaskLength(maxCardinality, eps);
-        int sizer=(int) Math.ceil(sz / 8D);
-
-        System.out.println(sizer);
-
-
-        LinearCounting card = new LinearCounting(sizer);
+        LinearCounting card = new LinearCounting(20);
         card.offer(12);
         card.offer(12);
         card.offer(13);
         card.offer(14);
 
-        //LinearCounting card2 = new LinearCounting(0.1, 20);
-        LinearCounting card2 = new LinearCounting(sizer);
+        LinearCounting card2 = new LinearCounting(20);
         card2.offer(34);
         card2.offer(45);
         card2.offer(100);

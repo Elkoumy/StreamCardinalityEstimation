@@ -1,10 +1,9 @@
-package ee.ut.cs.dsg.StreamCardinality.ApproximateAggregateFunction;
+package ee.ut.cs.dsg.StreamCardinality.ApproximateCardinalityAggregateFunction;
 
 import ee.ut.cs.dsg.StreamCardinality.ApproximateCardinality.CardinalityMergeException;
 import ee.ut.cs.dsg.StreamCardinality.ApproximateCardinality.HyperLogLog;
 import org.apache.flink.api.common.functions.AggregateFunction;
 import org.apache.flink.api.java.tuple.Tuple3;
-import scala.collection.generic.BitOperations;
 
 public class HyperLogLogAggregationFunction implements AggregateFunction<Tuple3<Long, String, Integer>, HyperLogLogAccumulator, Tuple3<Long,String,Integer>> {
     public HyperLogLogAccumulator createAccumulator() { return new HyperLogLogAccumulator(); }

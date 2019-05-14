@@ -3,26 +3,15 @@ package ee.ut.cs.dsg.StreamCardinality;
 import de.tub.dima.scotty.core.AggregateWindow;
 import de.tub.dima.scotty.core.windowType.WindowMeasure;
 import de.tub.dima.scotty.flinkconnector.KeyedScottyWindowOperator;
-import de.tub.dima.scotty.flinkconnector.demo.windowFunctions.QuantileWindowFunction;
-import ee.ut.cs.dsg.StreamCardinality.ApproximateAggregateFunction.BJKSTAggregationFunction;
-import ee.ut.cs.dsg.StreamCardinality.ApproximateAggregateFunction.LinearCountingAggregationFunction;
-import ee.ut.cs.dsg.StreamCardinality.ApproximateCardinalityWindowFunctions.CountThenEstimateWindowFunction;
 import ee.ut.cs.dsg.StreamCardinality.ApproximateCardinalityWindowFunctions.HyperLogLogWindowFunction;
-import ee.ut.cs.dsg.StreamCardinality.ApproximateCardinalityWindowFunctions.LinearCountingWindowFunction;
 import org.apache.flink.api.java.tuple.Tuple;
-import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.tuple.Tuple3;
-import org.apache.flink.api.java.tuple.Tuple4;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import de.tub.dima.scotty.core.windowType.*;
-import de.tub.dima.scotty.flinkconnector.*;
 import org.apache.flink.streaming.api.functions.ProcessFunction;
-import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.util.Collector;
-
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 public class testWindowing {
 

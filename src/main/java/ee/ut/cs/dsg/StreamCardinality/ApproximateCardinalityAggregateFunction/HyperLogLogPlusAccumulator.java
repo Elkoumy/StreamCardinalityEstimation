@@ -1,6 +1,5 @@
-package ee.ut.cs.dsg.StreamCardinality.ApproximateAggregateFunction;
+package ee.ut.cs.dsg.StreamCardinality.ApproximateCardinalityAggregateFunction;
 
-import ee.ut.cs.dsg.StreamCardinality.ApproximateCardinality.HyperLogLog;
 import ee.ut.cs.dsg.StreamCardinality.ApproximateCardinality.HyperLogLogPlus;
 
 public class HyperLogLogPlusAccumulator <ACC>{

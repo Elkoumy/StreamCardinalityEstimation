@@ -294,7 +294,11 @@ public class CountThenEstimate implements IRichCardinality, Externalizable {
                 if (!merged.tipped) {
                     merged.tip();
                 }
-                merged.estimator = merged.estimator.merge(tipped.toArray(new IRichCardinality[tipped.size()]));
+                try {
+                    merged.estimator = merged.estimator.merge(tipped.toArray(new IRichCardinality[tipped.size()]));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
 
         }

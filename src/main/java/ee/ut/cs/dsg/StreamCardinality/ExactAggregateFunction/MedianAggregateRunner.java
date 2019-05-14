@@ -2,8 +2,7 @@ package ee.ut.cs.dsg.StreamCardinality.ExactAggregateFunction;
 
 
 //import ee.ut.cs.dsg.SWAGwithSCOTTY.ExactMedian.MedianSkipListAggregationFunction;
-import ee.ut.cs.dsg.StreamCardinality.ApproximateAggregateFunction.AdaptiveCountingAggregationFunction;
-import ee.ut.cs.dsg.StreamCardinality.ApproximateAggregateFunction.MedianCKMSAggregationFunction;
+import ee.ut.cs.dsg.StreamCardinality.ApproximateCardinalityAggregateFunction.AdaptiveCountingAggregationFunction;
 import ee.ut.cs.dsg.StreamCardinality.YetAnotherSource;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.streaming.api.TimeCharacteristic;

@@ -1,4 +1,4 @@
-package ee.ut.cs.dsg.StreamCardinality.ApproximateAggregateFunction;
+package ee.ut.cs.dsg.StreamCardinality.ApproximateCardinalityAggregateFunction;
 
 import ee.ut.cs.dsg.StreamCardinality.ApproximateCardinality.FlajoletMartin;
 import org.apache.flink.api.common.functions.AggregateFunction;

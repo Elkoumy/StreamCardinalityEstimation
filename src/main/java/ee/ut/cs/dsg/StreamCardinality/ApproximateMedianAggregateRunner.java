@@ -1,7 +1,7 @@
 package ee.ut.cs.dsg.StreamCardinality;
 
 
-import ee.ut.cs.dsg.StreamCardinality.ApproximateAggregateFunction.*;
+import ee.ut.cs.dsg.StreamCardinality.ApproximateCardinalityAggregateFunction.*;
 import ee.ut.cs.dsg.StreamCardinality.ExactAggregateFunction.MedianAggregateRunner;
 import org.apache.flink.api.common.functions.AggregateFunction;
 import org.apache.flink.api.java.tuple.Tuple3;
@@ -12,7 +12,7 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.AssignerWithPeriodicWatermarks;
 import org.apache.flink.streaming.api.watermark.Watermark;
 import org.apache.flink.streaming.api.windowing.time.Time;
-import ee.ut.cs.dsg.StreamCardinality.ApproximateAggregateFunction.LogLogAggregationFunction;
+import ee.ut.cs.dsg.StreamCardinality.ApproximateCardinalityAggregateFunction.LogLogAggregationFunction;
 
 
 import javax.annotation.Nullable;
@@ -38,9 +38,6 @@ public class ApproximateMedianAggregateRunner {
 
         AggregateFunction agg;
         switch (args[1]){
-            case "MedianCKMSAggregationFunction":
-                agg = new MedianCKMSAggregationFunction();
-                break;
             case "LogLogAggregationFunction":
                 agg = new LogLogAggregationFunction();
                 break;

@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/StreamCardinality.iml" filepath="$PROJECT_DIR$/.idea/StreamCardinality.iml" />
+      <module fileurl="file://$PROJECT_DIR$/CardinalityBenchmarking/CardinalityBenchmarking.iml" filepath="$PROJECT_DIR$/CardinalityBenchmarking/CardinalityBenchmarking.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SWAGwithSCOTTY.iml" filepath="$PROJECT_DIR$/SWAGwithSCOTTY.iml" />
     </modules>
   </component>
 </project>

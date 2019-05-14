@@ -21,8 +21,6 @@ package ee.ut.cs.dsg.StreamCardinality.ApproximateCardinality;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.ListIterator;
-
-import ee.ut.cs.dsg.StreamCardinality.ApproximateQuantiles.CKMSQuantiles;
 import org.streaminer.util.hash.Lookup3Hash;
 import org.streaminer.util.IBuilder;
 

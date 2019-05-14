@@ -7,10 +7,12 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="StreamCardinality" />
+        <module name="SWAGwithSCOTTY" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="StreamCardinality" target="1.8" />
+      <module name="SWAGwithSCOTTY" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

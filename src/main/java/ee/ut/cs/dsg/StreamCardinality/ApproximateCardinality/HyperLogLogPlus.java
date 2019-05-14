@@ -61,47 +61,6 @@ public class HyperLogLogPlus implements IRichCardinality {
         SPARSE, NORMAL
     }
 
-
-
-    public static void main(String[] args) throws CardinalityMergeException
-    {
-        System.out.println("HyperLogLogPlus test:");
-        HyperLogLogPlus bjkst = new HyperLogLogPlus(14, 30);
-        bjkst.offer(15);
-        bjkst.offer(25);
-        bjkst.offer(35);
-        bjkst.offer(45);
-        bjkst.offer(55);
-        bjkst.offer(65);
-        bjkst.offer(75);
-        long cad = bjkst.cardinality();
-        System.out.print("HyperLogLogPlus: ");
-        System.out.println(cad);
-        HyperLogLogPlus bjkst2 = new HyperLogLogPlus(14, 30);
-        bjkst2.offer(115);
-        bjkst2.offer(125);
-        bjkst2.offer(135);
-        bjkst2.offer(145);
-        bjkst2.offer(155);
-        bjkst2.offer(165);
-        bjkst2.offer(175);
-        System.out.print("HyperLogLogPlus2: ");
-        System.out.println(bjkst2.cardinality());
-        System.out.print("HyperLogLogPlus merged with HyperLogLogPlus2: ");
-        bjkst2 = (HyperLogLogPlus) bjkst2.merge(bjkst);
-        System.out.println(bjkst2.cardinality());
-        HyperLogLogPlus bjkst3 = new HyperLogLogPlus(14, 30);
-        bjkst3 = (HyperLogLogPlus) bjkst2.clone();
-        System.out.print("HyperLogLogPlus3 cloned with HyperLogLogPlus2: ");
-        System.out.println(bjkst3.cardinality());
-        bjkst2.offer(1215);
-        bjkst2.offer(1225);
-        bjkst2.offer(1235);
-        bjkst2.offer(1245);
-        System.out.print("HyperLogLogPlus3 cloned with HyperLogLogPlus2: ");
-        System.out.println(bjkst3.cardinality());
-    }
-
     /**
      * Used to mark codec version for serialization.
      */
@@ -1043,19 +1002,6 @@ public class HyperLogLogPlus implements IRichCardinality {
                 return hyperLogLogPlus;
             }
         }
-    }
-
-    public IRichCardinality clone()
-    {
-        HyperLogLogPlus newInstance = new HyperLogLogPlus(this.p, this.sp);
-
-        try {
-            newInstance.addAll(this);
-        } catch (HyperLogLogPlusMergeException e) {
-            e.printStackTrace();
-        }
-
-        return newInstance;
     }
 
     @SuppressWarnings("serial")

@@ -61,5 +61,5 @@ public interface IRichCardinality extends IBaseCardinality {
      * @return The merged data structure
      * @throws CardinalityMergeException If at least one of the estimators is not compatible with this one
      */
-    IRichCardinality merge(IRichCardinality... estimators) throws CardinalityMergeException, IOException;
+    IRichCardinality merge(IRichCardinality... estimators) throws CardinalityMergeException;
 }

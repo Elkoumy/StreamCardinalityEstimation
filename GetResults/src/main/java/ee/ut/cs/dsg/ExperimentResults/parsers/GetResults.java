@@ -20,6 +20,7 @@ public class GetResults {
 //        String outDir= System.getProperty("outDir");
 //        String tps=System.getProperty("tps");
 //        String dist=System.getProperty("dist");
+        //LL scotty "C:\Gamal Elkoumy\PhD\OneDrive - Tartu Ülikool\Stream Processing\SWAG & Scotty\cardinality_out" 100000 normal
         String algorithm=args[0];
         String approach=args[1];
         String outDir= args[2];

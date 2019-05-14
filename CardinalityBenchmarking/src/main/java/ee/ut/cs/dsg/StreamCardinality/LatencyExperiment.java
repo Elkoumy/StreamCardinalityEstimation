@@ -31,6 +31,7 @@ public class LatencyExperiment {
 
 
     public static void main(String[] args) throws Exception {
+        //LL scotty "C:\Gamal Elkoumy\PhD\OneDrive - Tartu Ülikool\Stream Processing\SWAG & Scotty\DataGeneration\data" 100000 normal
         /**
          * Setting the experiment type
          */

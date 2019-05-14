@@ -135,6 +135,12 @@
           <scope>compile</scope>
         </dependency>
         <dependency>
+          <groupId>biz.paluch.redis</groupId>
+          <artifactId>lettuce</artifactId>
+          <version>4.2.2.Final</version>
+          <scope>compile</scope>
+        </dependency>
+        <dependency>
           <groupId>com.github.mayconbordin</groupId>
           <artifactId>streaminer</artifactId>
           <version>1.1.1</version>

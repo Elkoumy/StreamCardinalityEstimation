@@ -62,6 +62,9 @@ public class ApproximateMedianAggregateRunner {
             case "CTE": //CountThenEstimateAggregationFunction
                 agg = new CountThenEstimateAggregationFunction();
                 break;
+            case "BF": //BloomFilterAggregationFunction
+                agg = new BloomFilterAggregationFunction();
+                break;
             default:
                 throw new IllegalStateException("Unexpected value: " + args[1]);
         }

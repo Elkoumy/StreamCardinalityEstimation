@@ -25,12 +25,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.*;
 
 import org.streaminer.util.hash.MurmurHash;
 import org.streaminer.util.Bits;
@@ -162,6 +157,117 @@ public class HyperLogLogPlus implements IRichCardinality {
     private int[] tmpSet;
     private int tmpIndex = 0;
     private int[] sparseSet;
+
+
+    public static int getVERSION() {
+        return VERSION;
+    }
+
+    public static double[] getThresholdData() {
+        return thresholdData;
+    }
+
+    public static double[][] getRawEstimateData() {
+        return rawEstimateData;
+    }
+
+    public static double[][] getBiasData() {
+        return biasData;
+    }
+
+    public Format getFormat() {
+        return format;
+    }
+
+    public void setFormat(Format format) {
+        this.format = format;
+    }
+
+    public void setRegisterSet(RegisterSet registerSet) {
+        this.registerSet = registerSet;
+    }
+
+    public int getM() {
+        return m;
+    }
+
+    public int getP() {
+        return p;
+    }
+
+    public int getSm() {
+        return sm;
+    }
+
+    public void setSm(int sm) {
+        this.sm = sm;
+    }
+
+    public int getSp() {
+        return sp;
+    }
+
+    public void setSp(int sp) {
+        this.sp = sp;
+    }
+
+    public double getAlphaMM() {
+        return alphaMM;
+    }
+
+    public int getSparseSetThreshold() {
+        return sparseSetThreshold;
+    }
+
+    public void setSparseSetThreshold(int sparseSetThreshold) {
+        this.sparseSetThreshold = sparseSetThreshold;
+    }
+
+    public int getSortThreshold() {
+        return sortThreshold;
+    }
+
+    public void setSortThreshold(int sortThreshold) {
+        this.sortThreshold = sortThreshold;
+    }
+
+    public int[] getTmpSet() {
+        return tmpSet;
+    }
+
+    public void setTmpSet(int[] tmpSet) {
+        this.tmpSet = tmpSet;
+    }
+
+    public int getTmpIndex() {
+        return tmpIndex;
+    }
+
+    public void setTmpIndex(int tmpIndex) {
+        this.tmpIndex = tmpIndex;
+    }
+
+    public void setSparseSet(int[] sparseSet) {
+        this.sparseSet = sparseSet;
+    }
+
+    @Override
+    public String toString() {
+        return "HyperLogLogPlus{" +
+                "format=" + format +
+                ", registerSet=" + registerSet +
+                ", m=" + m +
+                ", p=" + p +
+                ", sm=" + sm +
+                ", sp=" + sp +
+                ", alphaMM=" + alphaMM +
+                ", sparseSetThreshold=" + sparseSetThreshold +
+                ", sortThreshold=" + sortThreshold +
+                ", tmpSet=" + Arrays.toString(tmpSet) +
+                ", tmpIndex=" + tmpIndex +
+                ", sparseSet=" + Arrays.toString(sparseSet) +
+                '}';
+    }
 
     /**
      * This constructor disables the sparse set.  If the counter is likely to exceed
@@ -1009,6 +1115,47 @@ public class HyperLogLogPlus implements IRichCardinality {
         public HyperLogLogPlusMergeException(String message) {
             super(message);
         }
+    }
+
+    private HyperLogLogPlus cloneHyperLogLogPlusObject(){
+        HyperLogLogPlus newInstance = new HyperLogLogPlus(this.getP(), this.getSp(), this.getSparseSet(), this.getRegisterSet());
+        return newInstance;
+    }
+
+    public static void main(String[] argv){
+        HyperLogLogPlus element1 = new HyperLogLogPlus(5,6);
+        System.out.println("BEFORE: " + element1.toString());
+        element1.offer(1);
+        element1.offer(2);
+        element1.offer(3);
+        element1.offer(4);
+        element1.offer(5);
+        System.out.println("AFTER:" + element1.toString());
+        HyperLogLogPlus element2 = new HyperLogLogPlus(5,6);
+        System.out.println("BEFORE: " + element2.toString());
+        element2.offer(10);
+        element2.offer(20);
+        element2.offer(30);
+        element2.offer(40);
+        element2.offer(50);
+        System.out.println("AFTER:" + element2.toString());
+        HyperLogLogPlus clone = element2.cloneHyperLogLogPlusObject();
+        System.out.println("BEFORE: " + clone.toString());
+        clone.offer(100);
+        clone.offer(210);
+        clone.offer(450);
+        clone.offer(120);
+        clone.setTmpIndex(1);
+        clone.setSm(6);
+        clone.setSp(1);
+        clone.setSortThreshold(10);
+        clone.setTmpSet(new int[] {10, 20, 1000,40123});
+        System.out.println("AFTER:" + clone.toString());
+        System.out.println("#################################################################################################################################");
+        System.out.println("FINAL RESULTS element1: " + element1.toString());
+        System.out.println("FINAL RESULTS element2: " + element2.toString());
+        System.out.println("FINAL RESULTS CLONE: " + clone.toString());
+
     }
 
 }

@@ -181,14 +181,13 @@ public class ThroughputExperiment {
 
         }
 
-
-
         ExperimentConfiguration.connection.close();
-
+        }
     }
 
 
-    class TimestampsAndWatermarks implements AssignerWithPeriodicWatermarks<Tuple3<Long, String, Double>> {
+
+    public static class TimestampsAndWatermarks implements AssignerWithPeriodicWatermarks<Tuple3<Long, String, Double>> {
         //        private final long maxOutOfOrderness = seconds(20).toMilliseconds(); // 5 seconds
         private long currentMaxTimestamp=-1;
 //        private long startTime = System.currentTimeMillis();
@@ -208,7 +207,7 @@ public class ThroughputExperiment {
 
     }
 
-    class CustomEventTimeTrigger extends Trigger<Object, TimeWindow> {
+    public static class CustomEventTimeTrigger extends Trigger<Object, TimeWindow> {
         private static final long serialVersionUID = 1L;
         private String key;
         private CustomEventTimeTrigger() {
@@ -266,7 +265,7 @@ public class ThroughputExperiment {
         }
     }
 
-    class DemoSource3 extends RichSourceFunction<Tuple3<Long,String,Double>> implements Serializable {
+    public static class DemoSource3 extends RichSourceFunction<Tuple3<Long,String,Double>> implements Serializable {
 
         private Random key;
         private Random value;
@@ -310,11 +309,11 @@ public class ThroughputExperiment {
         }
 
         @Override
-        public void cancel() {
-            canceled = true;
+        public void cancel() { canceled = true; }
         }
-    }
-    }
+
+
+
 
     private static class throughputProcessFunction extends ProcessWindowFunction<Tuple4<Long,String,Double,Long>,Tuple3<Long,String,Double>,Tuple,TimeWindow >{
 

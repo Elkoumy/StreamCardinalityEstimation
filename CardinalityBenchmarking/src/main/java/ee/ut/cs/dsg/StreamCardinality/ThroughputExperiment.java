@@ -332,13 +332,13 @@ public class ThroughputExperiment {
     }
 
 
-    private static class throughputProcessFunctionScotty extends ProcessFunction<AggregateWindow<Tuple4<Long, String, Long, Long>>, Tuple3<Long,String,Double>> {
+    private static class throughputProcessFunctionScotty extends ProcessFunction<AggregateWindow<Tuple4<Long, String, Long, Long>>, Tuple3<Long,String,Long>> {
         @Override
-        public void processElement(AggregateWindow<Tuple4<Long, String, Long, Long>> tuple4AggregateWindow, Context context, Collector<Tuple3<Long, String, Double>> collector) throws Exception {
+        public void processElement(AggregateWindow<Tuple4<Long, String, Long, Long>> tuple4AggregateWindow, Context context, Collector<Tuple3<Long, String, Long>> collector) throws Exception {
             ExperimentConfiguration.async.hset("w"+tuple4AggregateWindow.getStart()+"|"+tuple4AggregateWindow.getAggValues().get(0).f1, "window_count", tuple4AggregateWindow.getAggValues().get(0).f3+"");
             ExperimentConfiguration.async.hset("w"+tuple4AggregateWindow.getStart()+"|"+tuple4AggregateWindow.getAggValues().get(0).f1, "window_end",tuple4AggregateWindow.getEnd()+"");
             ExperimentConfiguration.async.hset("w"+tuple4AggregateWindow.getStart()+"|"+tuple4AggregateWindow.getAggValues().get(0).f1, "out_time",System.nanoTime()+"");
-            collector.collect(new Tuple3<>(tuple4AggregateWindow.getAggValues().get(0).f0,tuple4AggregateWindow.getAggValues().get(0).f1, tuple4AggregateWindow.getAggValues().get(0).f2));
+            collector.collect(new Tuple3<>(tuple4AggregateWindow.getAggValues().get(0).f0,tuple4AggregateWindow.getAggValues().get(0).f1,(long)tuple4AggregateWindow.getAggValues().get(0).f2));
         }
     }
 

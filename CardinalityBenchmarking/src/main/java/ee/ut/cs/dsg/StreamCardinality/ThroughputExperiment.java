@@ -120,7 +120,6 @@ public class ThroughputExperiment {
             stream2
                     .keyBy(1)
                     .timeWindow( Time.of(10000, MILLISECONDS), Time.of(500, MILLISECONDS))
-
                     .trigger(new CustomEventTimeTrigger())
                     .aggregate(fn, new throughputProcessFunction())
                     //                .aggregate(new MedianDoubleHeapAggregationFunction())
@@ -133,7 +132,7 @@ public class ThroughputExperiment {
              * Scotty
              */
 
-            KeyedScottyWindowOperatorWithTrigger<Tuple, Tuple3<Long,String,Long>, Tuple4<Long,String,Double,Long>> windowOperator;
+            KeyedScottyWindowOperatorWithTrigger<Tuple, Tuple3<Long,String,Long>, Tuple4<Long,String,Long, Long>> windowOperator;
 
 
             /**
@@ -189,7 +188,7 @@ public class ThroughputExperiment {
     }
 
 
-    public static class TimestampsAndWatermarks implements AssignerWithPeriodicWatermarks<Tuple3<Long, String, Double>> {
+    class TimestampsAndWatermarks implements AssignerWithPeriodicWatermarks<Tuple3<Long, String, Double>> {
         //        private final long maxOutOfOrderness = seconds(20).toMilliseconds(); // 5 seconds
         private long currentMaxTimestamp=-1;
 //        private long startTime = System.currentTimeMillis();
@@ -209,7 +208,7 @@ public class ThroughputExperiment {
 
     }
 
-    public static  class CustomEventTimeTrigger extends Trigger<Object, TimeWindow> {
+    class CustomEventTimeTrigger extends Trigger<Object, TimeWindow> {
         private static final long serialVersionUID = 1L;
         private String key;
         private CustomEventTimeTrigger() {
@@ -262,12 +261,12 @@ public class ThroughputExperiment {
             return "EventTimeTrigger()";
         }
 
-        public static CustomEventTimeTrigger create() {
+        public CustomEventTimeTrigger create() {
             return new CustomEventTimeTrigger();
         }
     }
 
-    public static class DemoSource3 extends RichSourceFunction<Tuple3<Long,String,Double>> implements Serializable {
+    class DemoSource3 extends RichSourceFunction<Tuple3<Long,String,Double>> implements Serializable {
 
         private Random key;
         private Random value;
@@ -315,7 +314,7 @@ public class ThroughputExperiment {
             canceled = true;
         }
     }
-
+    }
 
     private static class throughputProcessFunction extends ProcessWindowFunction<Tuple4<Long,String,Double,Long>,Tuple3<Long,String,Double>,Tuple,TimeWindow >{
 
@@ -334,17 +333,15 @@ public class ThroughputExperiment {
     }
 
 
-    private static class throughputProcessFunctionScotty extends ProcessFunction<AggregateWindow<Tuple4<Long, String, Double, Long>>, Tuple3<Long,String,Double>> {
-
+    private static class throughputProcessFunctionScotty extends ProcessFunction<AggregateWindow<Tuple4<Long, String, Long, Long>>, Tuple3<Long,String,Double>> {
         @Override
-        public void processElement(AggregateWindow<Tuple4<Long, String, Double, Long>> tuple4AggregateWindow, Context context, Collector<Tuple3<Long, String, Double>> collector) throws Exception {
-
+        public void processElement(AggregateWindow<Tuple4<Long, String, Long, Long>> tuple4AggregateWindow, Context context, Collector<Tuple3<Long, String, Double>> collector) throws Exception {
             ExperimentConfiguration.async.hset("w"+tuple4AggregateWindow.getStart()+"|"+tuple4AggregateWindow.getAggValues().get(0).f1, "window_count", tuple4AggregateWindow.getAggValues().get(0).f3+"");
             ExperimentConfiguration.async.hset("w"+tuple4AggregateWindow.getStart()+"|"+tuple4AggregateWindow.getAggValues().get(0).f1, "window_end",tuple4AggregateWindow.getEnd()+"");
             ExperimentConfiguration.async.hset("w"+tuple4AggregateWindow.getStart()+"|"+tuple4AggregateWindow.getAggValues().get(0).f1, "out_time",System.nanoTime()+"");
-            collector.collect(new Tuple3<>(tuple4AggregateWindow.getAggValues().get(0).f0,tuple4AggregateWindow.getAggValues().get(0).f1,tuple4AggregateWindow.getAggValues().get(0).f2));
+            collector.collect(new Tuple3<>(tuple4AggregateWindow.getAggValues().get(0).f0,tuple4AggregateWindow.getAggValues().get(0).f1, tuple4AggregateWindow.getAggValues().get(0).f2));
         }
     }
 
 }
-}
+

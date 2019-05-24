@@ -18,4 +18,10 @@ public class ExperimentConfiguration {
         Scalability,
         Accuracy
     }
+    public static void initialize(){
+        client = RedisClient.create("redis://redis:6379");
+        connection = client.connect();
+        connection.sync().flushall();
+        async = connection.async();
+    }
 }

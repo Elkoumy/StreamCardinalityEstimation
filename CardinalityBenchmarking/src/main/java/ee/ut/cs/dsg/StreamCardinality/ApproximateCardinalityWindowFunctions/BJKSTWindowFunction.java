@@ -19,12 +19,16 @@ public class BJKSTWindowFunction implements AggregateFunction<Tuple3<Long, Strin
         mh.offer(Math.round(inputTuple.f2));
         return new Tuple3<>(inputTuple.f0, inputTuple.f1, mh);
     }
-
+        /// FOR THROUGHPUT
     @Override
     public Tuple4<Long, String, Long,Long> lower(Tuple3<Long, String, BJKST> aggregate) {
         if(ExperimentConfiguration.experimentType== ExperimentConfiguration.ExperimentType.Latency) {
             return new Tuple4<>(aggregate.f0, aggregate.f1,  aggregate.f2.cardinality(), System.nanoTime()); // In the last part, aggregate.f2.getK() <- THE getK() is probably WRONG!
-        }else{
+        }
+        else if (ExperimentConfiguration.experimentType== ExperimentConfiguration.ExperimentType.Throughput){
+            return new Tuple4<>(aggregate.f0, aggregate.f1, aggregate.f2.cardinality(), System.nanoTime());
+        }
+        else{
             return new Tuple4<>(aggregate.f0, aggregate.f1, aggregate.f2.cardinality(), null);
         }
     }

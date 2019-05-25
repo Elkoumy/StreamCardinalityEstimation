@@ -49,9 +49,13 @@ public class AdaptiveCounting extends LogLog {
      */
     protected final double B_s = 0.051;
 
+
+    private int count;
+
     public AdaptiveCounting(int k) {
         super(k);
         b_e = m;
+        count = 0;
     }
 
     public AdaptiveCounting(byte[] M) {
@@ -62,7 +66,13 @@ public class AdaptiveCounting extends LogLog {
                 b_e++;
             }
         }
+        count = 0;
     }
+
+    public int getCount() { return count; }
+
+    public void setCount(int count) { this.count = count; }
+
 
     public int getB_e() {
         return b_e;
@@ -92,6 +102,9 @@ public class AdaptiveCounting extends LogLog {
 
     @Override
     public boolean offer(Object o) {
+
+        count++;
+
         boolean modified = false;
 
         long x = Lookup3Hash.lookup3ycs64(o.toString());
@@ -211,8 +224,12 @@ public class AdaptiveCounting extends LogLog {
     }
 
     public AdaptiveCounting mergeAdaptiveCountingObjects(AdaptiveCounting object2){
+
         int k3 = this.k + object2.k;
         AdaptiveCounting mergedObject = new AdaptiveCounting(k3);
+
+        mergedObject.count = this.count + object2.count;
+
         mergedObject.m = this.m + object2.m;
         //mergedObject.Ca = mergedObject.mAlpha[mergedObject.k];
         mergedObject.Rsum = this.Rsum + object2.Rsum;
@@ -234,6 +251,9 @@ public class AdaptiveCounting extends LogLog {
     private AdaptiveCounting cloneAdaptiveCountingObject(AdaptiveCounting object){
         int cloneK = object.getK();
         AdaptiveCounting clone = new AdaptiveCounting(cloneK);
+
+        clone.setCount(object.getCount());
+
         clone.setM(object.getM());
         clone.setRsum(object.getRsum());
         clone.setByteM(object.getByteM());

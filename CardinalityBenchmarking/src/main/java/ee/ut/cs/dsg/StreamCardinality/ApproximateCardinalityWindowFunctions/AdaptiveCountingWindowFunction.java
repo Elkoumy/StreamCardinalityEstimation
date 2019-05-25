@@ -29,7 +29,11 @@ public class AdaptiveCountingWindowFunction implements AggregateFunction<Tuple3<
         try {
             if(ExperimentConfiguration.experimentType== ExperimentConfiguration.ExperimentType.Latency) {
                 return new Tuple4<>(aggregate.f0, aggregate.f1,  aggregate.f2.cardinality(), System.nanoTime());  // In the last part, aggregate.f2.getB_e() <- THE getB_e() is probably WRONG!
-            }else{
+            }
+            else if (ExperimentConfiguration.experimentType== ExperimentConfiguration.ExperimentType.Throughput){
+                return new Tuple4<>(aggregate.f0, aggregate.f1,  aggregate.f2.cardinality(), (long) aggregate.f2.getCount());
+            }
+            else{
                 return new Tuple4<>(aggregate.f0, aggregate.f1, aggregate.f2.cardinality(), null);  // In the last part, aggregate.f2.getB_e() <- THE getB_e() is probably WRONG!
             }
 

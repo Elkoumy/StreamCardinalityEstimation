@@ -47,7 +47,7 @@ public class ThroughputExperiment {
 
 
 //        KLL scotty "C:\Gamal Elkoumy\PhD\OneDrive - Tartu Ülikool\Stream Processing\SWAG & Scotty\DataGeneration\data" 100000 normal
-
+//        AC scotty "C:\Users\Anders\Desktop\data" 100000 normal
         /**
          * Reading system parameters from args
          */

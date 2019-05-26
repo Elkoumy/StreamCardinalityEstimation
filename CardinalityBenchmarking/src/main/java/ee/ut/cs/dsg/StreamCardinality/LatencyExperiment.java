@@ -103,7 +103,10 @@ public class LatencyExperiment {
                 fn = new KMinValuesAggregationFunction();
             }else if(algorithm.equals("BJKST")) { //BJKST
                 fn = new BJKSTAggregationFunction();
-            }else{
+            }else if(algorithm.equals("BF")) { //BloomFiltering
+                fn = new BloomFilterAggregationFunction();
+            }
+            else{
                 fn= null;
             }
 
@@ -145,6 +148,8 @@ public class LatencyExperiment {
                 windowOperator = new KeyedScottyWindowOperatorWithTrigger<>(new KMinValuesWindowFunction());
             }else if(algorithm.equals("BJKST")) { //BJKST
                 windowOperator = new KeyedScottyWindowOperatorWithTrigger<>(new BJKSTWindowFunction());
+            }else if(algorithm.equals("BF")) { //BloomFiltering
+                windowOperator = new KeyedScottyWindowOperatorWithTrigger<>(new BloomFilterWindowFunction());
             }
             else{
                 windowOperator= null;

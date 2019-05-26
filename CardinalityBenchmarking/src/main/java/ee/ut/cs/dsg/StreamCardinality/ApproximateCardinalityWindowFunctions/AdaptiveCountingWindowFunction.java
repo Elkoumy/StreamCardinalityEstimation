@@ -62,7 +62,7 @@ public class AdaptiveCountingWindowFunction implements AggregateFunction<Tuple3<
 
     @Override
     public Tuple3<Long, String, AdaptiveCounting> clone(Tuple3<Long, String, AdaptiveCounting> partialAggregate) {
-        return new Tuple3<>(partialAggregate.f0, partialAggregate.f1, (AdaptiveCounting) partialAggregate.f2.cloneLogLogObjects(partialAggregate.f2));
+        return new Tuple3<>(partialAggregate.f0, partialAggregate.f1,  partialAggregate.f2.cloneAdaptiveCountingObject(partialAggregate.f2));
     }
 
 

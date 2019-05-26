@@ -57,8 +57,8 @@ public class HyperLogLogPlusWindowFunction implements AggregateFunction<Tuple3<L
     // NEEDS A CLONING FUNCTION
     @Override
     public Tuple3<Long, String, HyperLogLogPlus> clone(Tuple3<Long, String, HyperLogLogPlus> partialAggregate) {
-        //return new Tuple3<>(partialAggregate.f0, partialAggregate.f1, partialAggregate.f2.clone());
-        return null;
+        return new Tuple3<>(partialAggregate.f0, partialAggregate.f1, partialAggregate.f2.cloneHyperLogLogPlusObject());
+
     }
 }
 

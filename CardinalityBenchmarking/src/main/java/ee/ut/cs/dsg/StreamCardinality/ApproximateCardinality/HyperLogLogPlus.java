@@ -1117,7 +1117,7 @@ public class HyperLogLogPlus implements IRichCardinality {
         }
     }
 
-    private HyperLogLogPlus cloneHyperLogLogPlusObject(){
+    public HyperLogLogPlus cloneHyperLogLogPlusObject(){
         HyperLogLogPlus newInstance = new HyperLogLogPlus(this.getP(), this.getSp(), this.getSparseSet(), this.getRegisterSet());
         return newInstance;
     }

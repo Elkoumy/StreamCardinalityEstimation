@@ -35,7 +35,9 @@ public class BJKST implements IRichCardinality {
     private List<HashFunction<Object>> hHashers;
     private List<HashFunction<Object>> gHashers;
 
-    private int intLength = Integer.toString(Integer.MAX_VALUE).length();
+//    private int intLength = Integer.toString(Integer.MAX_VALUE).length();
+    private int intLength = Long.toString(Long.MAX_VALUE).length();
+
     private String lengthOfIntegerRepresentation = null;
 
     public static void main(String[] args) throws BJKSTException {
@@ -125,6 +127,7 @@ public class BJKST implements IRichCardinality {
                     for (Iterator<String> itr = currentBuffer.iterator(); itr.hasNext();) {
                         String element = itr.next();
                         long zeroesOld = Long.parseLong(element.substring(intLength));
+//                        long zeroesOld = Long.parseLong(element);
                         if (zeroesOld < currentZ) {
                             itr.remove();
                         }

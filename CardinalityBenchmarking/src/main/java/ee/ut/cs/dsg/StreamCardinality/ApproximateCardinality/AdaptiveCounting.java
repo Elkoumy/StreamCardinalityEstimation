@@ -248,7 +248,7 @@ public class AdaptiveCounting extends LogLog {
         return mergedObject;
     }
 
-    private AdaptiveCounting cloneAdaptiveCountingObject(AdaptiveCounting object){
+    public AdaptiveCounting cloneAdaptiveCountingObject(AdaptiveCounting object){
         int cloneK = object.getK();
         AdaptiveCounting clone = new AdaptiveCounting(cloneK);
 

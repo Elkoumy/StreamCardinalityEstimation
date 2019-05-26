@@ -87,13 +87,17 @@ public class LatencyExperiment {
                 fn=new AdaptiveCountingAggregationFunction();
             }else if (algorithm.equals("HLL")){ //HyperLogLog
                 fn=new HyperLogLogAggregationFunction();
-            }else if (algorithm.equals("LC")){//LinearCounting
+            }
+            else if (algorithm.equals("LC")){//LinearCounting
                 fn=new LinearCountingAggregationFunction();
-            }else if (algorithm.equals("FM")){//FlajoletMartin
+            }
+            else if (algorithm.equals("FM")){//FlajoletMartin
                 fn = new FlajoletMartinAggregationFunction();
-            }else if (algorithm.equals("CTE")){//CountThenEstimate
-                fn = new CountThenEstimateAggregationFunction();
-            }else if(algorithm.equals("HLLP")) { //HyperLogLogPlus
+            }
+//            else if (algorithm.equals("CTE")){//CountThenEstimate
+//                fn = new CountThenEstimateAggregationFunction();
+//            }
+            else if(algorithm.equals("HLLP")) { //HyperLogLogPlus
                 fn = new HyperLogLogPlusAggregationFunction();
             }else if(algorithm.equals("KMV")) { //KMinValues
                 fn = new KMinValuesAggregationFunction();
@@ -131,9 +135,11 @@ public class LatencyExperiment {
                 windowOperator=new KeyedScottyWindowOperatorWithTrigger<>(new LinearCountingWindowFunction());
             }else if (algorithm.equals("FM")){//FlajoletMartin
                 windowOperator=new KeyedScottyWindowOperatorWithTrigger<>(new FlajoletMartinWindowFunction());
-            }else if (algorithm.equals("CTE")){//CountThenEstimate
-                windowOperator=new KeyedScottyWindowOperatorWithTrigger<>(new CountThenEstimateWindowFunction());
-            }else if(algorithm.equals("HLLP")) { //HyperLogLogPlus
+            }
+//            else if (algorithm.equals("CTE")){//CountThenEstimate
+//                windowOperator=new KeyedScottyWindowOperatorWithTrigger<>(new CountThenEstimateWindowFunction());
+//            }
+            else if(algorithm.equals("HLLP")) { //HyperLogLogPlus
                 windowOperator = new KeyedScottyWindowOperatorWithTrigger<>(new HyperLogLogPlusWindowFunction());
             }else if(algorithm.equals("KMV")) { //KMinValues
                 windowOperator = new KeyedScottyWindowOperatorWithTrigger<>(new KMinValuesWindowFunction());

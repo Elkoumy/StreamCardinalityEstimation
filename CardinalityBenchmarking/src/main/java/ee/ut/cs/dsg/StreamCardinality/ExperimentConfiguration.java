@@ -10,7 +10,7 @@ public class ExperimentConfiguration {
     public static RedisAsyncCommands<String, String> async = connection.async();
 
 //    public static  ExperimentType experimentType=ExperimentType.UnInitialized;
-    public static  ExperimentType experimentType=ExperimentType.Throughput;
+    public static  ExperimentType experimentType=ExperimentType.Latency;
 
     public  enum ExperimentType{
         UnInitialized,

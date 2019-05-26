@@ -33,11 +33,18 @@ public class FlajoletMartin implements IRichCardinality {
     private int numHashFunctionsInHashGroup;
     private int bitmapSize;
 
+
+
+    private int count;
+
     private HashFunction[][] hashes;
     private boolean[][][] bitmaps;
 
     private long numWords;
 
+    public int getCount() { return count; }
+
+    public void setCount(int count) { this.count = count; }
 
     public static void main(String[] args) throws FMException {
 
@@ -79,7 +86,7 @@ public class FlajoletMartin implements IRichCardinality {
         this.numHashGroups = numHashGroups;
         this.numHashFunctionsInHashGroup = numHashFunctionsInEachGroup;
         this.bitmapSize = bitmapSize;
-
+        this.count=0;
         bitmaps = new boolean[numHashGroups][numHashFunctionsInEachGroup][bitmapSize];
         hashes = new HashFunction[numHashGroups][numHashFunctionsInEachGroup];
 
@@ -127,6 +134,7 @@ public class FlajoletMartin implements IRichCardinality {
     }
 
     public boolean offer(Object o) {
+        this.count++;
         boolean affected = false;
 
         for (int i=0; i<numHashGroups; i++) {

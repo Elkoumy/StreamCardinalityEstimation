@@ -50,7 +50,11 @@ public class CountThenEstimateAggregationFunction implements AggregateFunction<T
         }
         if(ExperimentConfiguration.experimentType== ExperimentConfiguration.ExperimentType.Latency) {
             res.f3=System.nanoTime();
-        }else{
+        }
+        else  if(ExperimentConfiguration.experimentType== ExperimentConfiguration.ExperimentType.Throughput) {
+            res.f3=(long)acc.acc.getCount();
+        }
+        else{
             res.f3=null;
         }
         return res;

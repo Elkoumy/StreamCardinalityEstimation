@@ -27,7 +27,11 @@ public class BloomFilterWindowFunction implements AggregateFunction<Tuple3<Long,
     public Tuple4<Long, String, Long, Long> lower(Tuple3<Long, String, BloomFilter> aggregate) {
         if (ExperimentConfiguration.experimentType == ExperimentConfiguration.ExperimentType.Latency) {
             return new Tuple4<>(aggregate.f0, aggregate.f1, aggregate.f2.cardinality(), System.nanoTime());
-        } else {
+        }
+        else if (ExperimentConfiguration.experimentType== ExperimentConfiguration.ExperimentType.Throughput){
+            return new Tuple4<>(aggregate.f0, aggregate.f1,  aggregate.f2.cardinality(), (long) aggregate.f2.getCount());
+        }
+        else {
             return new Tuple4<>(aggregate.f0, aggregate.f1, aggregate.f2.cardinality(), null);
         }
     }

@@ -17,6 +17,12 @@ public class KMinValues implements IRichCardinality {
     private int k;
     private Hash hasher;
 
+    public int getCount() { return count; }
+
+    public void setCount(int count) { this.count = count; }
+
+    private int count = 0;
+
     static int PowerOf2(final int intnum) {
         int b = 1;
         while (b < intnum) {
@@ -69,15 +75,18 @@ public class KMinValues implements IRichCardinality {
 
     public KMinValues(int k) {
         this(k, Hash.getInstance(Hash.MURMUR_HASH3));
+        this.count=0;
     }
 
     public KMinValues(int k, Hash hasher) {
         this.kMin = new TreeSet<Integer>();
         this.k = k;
         this.hasher = hasher;
+        this.count=0;
     }
 
     public boolean offer(Object key) {
+        this.count++;
         int idx = index(key);
 
         if (kMin.size() < k) {
@@ -278,6 +287,7 @@ public class KMinValues implements IRichCardinality {
             int tmp = (int)ob[i];
             newInstance.addOffer(tmp);
         }
+        newInstance.setCount(this.getCount());
         return newInstance;
     }
 

@@ -27,7 +27,11 @@ public class KMinValuesWindowFunction implements AggregateFunction<Tuple3<Long, 
     public Tuple4<Long, String, Long,Long> lower(Tuple3<Long, String, KMinValues> aggregate) {
         if(ExperimentConfiguration.experimentType== ExperimentConfiguration.ExperimentType.Latency) {
             return new Tuple4<>(aggregate.f0, aggregate.f1,  aggregate.f2.cardinality(), System.nanoTime()); // In the last part, aggregate.f2.getK() <- THE getK() is probably WRONG!
-        }else{
+        }
+        else if (ExperimentConfiguration.experimentType== ExperimentConfiguration.ExperimentType.Throughput){
+            return new Tuple4<>(aggregate.f0, aggregate.f1,  aggregate.f2.cardinality(), (long) aggregate.f2.getCount());
+        }
+        else{
             return new Tuple4<>(aggregate.f0, aggregate.f1, aggregate.f2.cardinality(), null);
         }
 

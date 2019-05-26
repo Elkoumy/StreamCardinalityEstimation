@@ -9,7 +9,8 @@ public class ExperimentConfiguration {
     public static StatefulRedisConnection<String, String> connection = client.connect();
     public static RedisAsyncCommands<String, String> async = connection.async();
 
-    public static  ExperimentType experimentType=ExperimentType.UnInitialized;
+//    public static  ExperimentType experimentType=ExperimentType.UnInitialized;
+    public static  ExperimentType experimentType=ExperimentType.Throughput;
 
     public  enum ExperimentType{
         UnInitialized,

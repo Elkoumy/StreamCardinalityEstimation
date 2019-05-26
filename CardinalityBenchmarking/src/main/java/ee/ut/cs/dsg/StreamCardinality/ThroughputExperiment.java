@@ -40,6 +40,7 @@ public class ThroughputExperiment {
     public static void main(String[] args) throws Exception {
 
         /**
+         *
          * Setting experiment configurations
          */
         ExperimentConfiguration.initialize();
@@ -47,7 +48,7 @@ public class ThroughputExperiment {
 
 
 //        KLL scotty "C:\Gamal Elkoumy\PhD\OneDrive - Tartu Ülikool\Stream Processing\SWAG & Scotty\DataGeneration\data" 100000 normal
-
+//        AC scotty "C:\Users\Anders\Desktop\data" 100000 normal
         /**
          * Reading system parameters from args
          */
@@ -187,13 +188,13 @@ public class ThroughputExperiment {
 
 
 
-    public static class TimestampsAndWatermarks implements AssignerWithPeriodicWatermarks<Tuple3<Long, String, Double>> {
+    public static class TimestampsAndWatermarks implements AssignerWithPeriodicWatermarks<Tuple3<Long, String, Long>> {
         //        private final long maxOutOfOrderness = seconds(20).toMilliseconds(); // 5 seconds
         private long currentMaxTimestamp=-1;
 //        private long startTime = System.currentTimeMillis();
 
         @Override
-        public long extractTimestamp(final Tuple3<Long, String, Double> element, final long previousElementTimestamp) {
+        public long extractTimestamp(final Tuple3<Long, String, Long> element, final long previousElementTimestamp) {
             long timestamp = element.f0;
             currentMaxTimestamp = Math.max(timestamp, currentMaxTimestamp);
             return timestamp;
@@ -215,7 +216,7 @@ public class ThroughputExperiment {
 
         public TriggerResult onElement(Object element, long timestamp, TimeWindow window, TriggerContext ctx) throws Exception {
             if (window.maxTimestamp() <= ctx.getCurrentWatermark()) {
-                key=((Tuple3<Long,String,Double>)element).f1;
+                key=((Tuple3<Long,String,Long>)element).f1;
                 return TriggerResult.FIRE;
             } else {
                 ctx.registerEventTimeTimer(window.maxTimestamp());
@@ -265,7 +266,7 @@ public class ThroughputExperiment {
         }
     }
 
-    public static class DemoSource3 extends RichSourceFunction<Tuple3<Long,String,Double>> implements Serializable {
+    public static class DemoSource3 extends RichSourceFunction<Tuple3<Long,String,Long>> implements Serializable {
 
         private Random key;
         private Random value;
@@ -281,7 +282,7 @@ public class ThroughputExperiment {
         public long lastWatermark = 0;
 
         @Override
-        public void run(SourceContext<Tuple3<Long,String,Double>> ctx) throws Exception {
+        public void run(SourceContext<Tuple3<Long,String,Long>> ctx) throws Exception {
             long start_time = System.currentTimeMillis();
 //            long duration = 60000*3; //3 minutes
             long duration = 3000;
@@ -291,7 +292,7 @@ public class ThroughputExperiment {
                 long cur = System.currentTimeMillis();
 
                 for(int i=0; i<5; i++) {
-                    ctx.collectWithTimestamp(new Tuple3<>(System.currentTimeMillis(), "h1", value.nextDouble()),cur);
+                    ctx.collectWithTimestamp(new Tuple3<>(System.currentTimeMillis(), "h1", value.nextLong()),cur);
 //                    ctx.collect(new Tuple3<>(System.currentTimeMillis(), "h"+i%10, value.nextDouble()));
                 }
                 if (lastWatermark + 1000 < System.currentTimeMillis()) {
@@ -315,18 +316,18 @@ public class ThroughputExperiment {
 
 
 
-    private static class throughputProcessFunction extends ProcessWindowFunction<Tuple4<Long,String,Double,Long>,Tuple3<Long,String,Double>,Tuple,TimeWindow >{
+    private static class throughputProcessFunction extends ProcessWindowFunction<Tuple4<Long,String,Long,Long>,Tuple3<Long,String,Long>,Tuple,TimeWindow >{
 
 
         @Override
-        public void process(Tuple s, Context context, Iterable<Tuple4<Long, String, Double,Long>> iterable, Collector<Tuple3<Long, String, Double>> collector) throws Exception {
+        public void process(Tuple s, Context context, Iterable<Tuple4<Long, String, Long,Long>> iterable, Collector<Tuple3<Long, String, Long>> collector) throws Exception {
 
             ExperimentConfiguration.async.hset("w"+context.window().getStart()+"|"+s.getField(0), "window_count", iterable.iterator().next().f3.toString());
             ExperimentConfiguration.async.hset("w"+context.window().getStart()+"|"+s.getField(0), "window_end",context.window().getEnd()+"");
             ExperimentConfiguration.async.hset("w"+context.window().getStart()+"|"+s.getField(0), "out_time",System.nanoTime()+"");
             if (iterable.iterator().hasNext()) {
-                Tuple4<Long, String, Double, Long> res = iterable.iterator().next();
-                collector.collect(new Tuple3<Long,String,Double>(res.f0,res.f1,res.f2));
+                Tuple4<Long, String, Long, Long> res = iterable.iterator().next();
+                collector.collect(new Tuple3<Long,String,Long>(res.f0,res.f1,res.f2));
             }
         }
     }

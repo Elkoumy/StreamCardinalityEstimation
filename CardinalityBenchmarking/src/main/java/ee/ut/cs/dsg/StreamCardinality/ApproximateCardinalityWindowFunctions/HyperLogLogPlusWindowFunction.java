@@ -17,7 +17,7 @@ public class HyperLogLogPlusWindowFunction implements AggregateFunction<Tuple3<L
 
     @Override
     public Tuple3<Long, String, HyperLogLogPlus> lift(Tuple3<Long, String, Long> inputTuple) {
-        HyperLogLogPlus mh = new HyperLogLogPlus(0);
+        HyperLogLogPlus mh = new HyperLogLogPlus(4,5);
         mh.offer(Math.round(inputTuple.f2));
         return new Tuple3<>(inputTuple.f0, inputTuple.f1, mh);
     }

@@ -158,6 +158,12 @@ public class HyperLogLogPlus implements IRichCardinality {
     private int tmpIndex = 0;
     private int[] sparseSet;
 
+    public int getCount() { return count; }
+
+    public void setCount(int count) { this.count = count; }
+
+    private int count;
+
 
     public static int getVERSION() {
         return VERSION;
@@ -279,6 +285,7 @@ public class HyperLogLogPlus implements IRichCardinality {
      */
     public HyperLogLogPlus(int p) {
         this(p, 0);
+        this.count=0;
     }
 
     /**
@@ -292,7 +299,9 @@ public class HyperLogLogPlus implements IRichCardinality {
      * @param sp The precision value for the sparse set
      */
     public HyperLogLogPlus(int p, int sp) {
+
         this(p, sp, null, null);
+        this.count= 0;
     }
 
     /**
@@ -307,6 +316,7 @@ public class HyperLogLogPlus implements IRichCardinality {
         this(p, sp);
         sparseSet = new int[deltaByteSet.size()];
         int previousValue = 0;
+        this.count = 0;
         for (int i = 0; i < deltaByteSet.size(); i++) {
             int nextValue = Varint.readUnsignedVarInt(deltaByteSet.get(i));
             sparseSet[i] = nextValue + previousValue;
@@ -424,6 +434,7 @@ public class HyperLogLogPlus implements IRichCardinality {
      */
     @Override
     public boolean offer(Object o) {
+        this.count++;
         long x = MurmurHash.getInstance().hash64(o);
         return offerHashed(x);
     }
@@ -1119,6 +1130,7 @@ public class HyperLogLogPlus implements IRichCardinality {
 
     public HyperLogLogPlus cloneHyperLogLogPlusObject(){
         HyperLogLogPlus newInstance = new HyperLogLogPlus(this.getP(), this.getSp(), this.getSparseSet(), this.getRegisterSet());
+        newInstance.setCount(this.getCount());
         return newInstance;
     }
 

@@ -21,6 +21,8 @@ package ee.ut.cs.dsg.StreamCardinality.ApproximateCardinality;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.ListIterator;
+
+
 import org.streaminer.util.hash.Lookup3Hash;
 import org.streaminer.util.IBuilder;
 
@@ -103,7 +105,7 @@ public class AdaptiveCounting extends LogLog {
     @Override
     public boolean offer(Object o) {
 
-        count++;
+        this.count++;
 
         boolean modified = false;
 

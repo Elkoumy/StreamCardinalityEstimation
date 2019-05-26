@@ -68,12 +68,16 @@ public class CountThenEstimate implements IRichCardinality, Externalizable {
      */
     protected Set<Object> counter;
 
+    private int count;
+
+
     /**
      * Default constructor
      * Exact counts up to 1000, estimation done with default Builder
      */
     public CountThenEstimate() {
         this(1000, AdaptiveCounting.Builder.obyCount(1000000000));
+        this.count = 0;
     }
 
     /**
@@ -84,6 +88,7 @@ public class CountThenEstimate implements IRichCardinality, Externalizable {
         this.tippingPoint = tippingPoint;
         this.builder = builder;
         this.counter = new HashSet<Object>();
+        this.count = 0;
     }
 
     /**
@@ -95,7 +100,7 @@ public class CountThenEstimate implements IRichCardinality, Externalizable {
      */
     public CountThenEstimate(byte[] bytes) throws IOException, ClassNotFoundException {
         readExternal(new ObjectInputStream(new ByteArrayInputStream(bytes)));
-
+        count= 0;
         if (!tipped && builder.sizeof() <= bytes.length) {
             tip();
         }
@@ -121,6 +126,7 @@ public class CountThenEstimate implements IRichCardinality, Externalizable {
 
     @Override
     public boolean offer(Object o) {
+        this.count++;
         boolean modified = false;
 
         if (tipped) {
@@ -304,6 +310,10 @@ public class CountThenEstimate implements IRichCardinality, Externalizable {
         }
         return merged;
     }
+
+    public int getCount() { return count; }
+
+    public void setCount(int count) { this.count = count; }
 
     @SuppressWarnings("serial")
     protected static class CountThenEstimateMergeException extends CardinalityMergeException {

@@ -264,6 +264,7 @@ under the License.
                     <artifactId>streaminer</artifactId>
                     <version>1.1.1</version>
                 </dependency>
+
             </dependencies>
         </profile>
     </profiles>

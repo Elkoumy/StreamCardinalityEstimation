@@ -74,6 +74,12 @@ public class LogLog implements IRichCardinality
     protected byte[] M;
     protected int Rsum = 0;
 
+    public int getCount() { return count; }
+
+    public void setCount(int count) { this.count = count; }
+
+    private int count;
+
     @Override
     public String toString() {
         return "LogLog{" +
@@ -116,6 +122,7 @@ public class LogLog implements IRichCardinality
         this.m = 1 << k;
         this.Ca = mAlpha[k];
         this.M = new byte[m];
+        this.count=0;
     }
 
     public LogLog(byte[] M)
@@ -125,6 +132,7 @@ public class LogLog implements IRichCardinality
         this.k = Integer.numberOfTrailingZeros(m);
         assert (m == (1 << k)) : "Invalid array size: M.length must be a power of 2";
         this.Ca = mAlpha[k];
+        this.count = 0;
         for (byte b : M)
         {
             Rsum += b;
@@ -180,6 +188,7 @@ public class LogLog implements IRichCardinality
     @Override
     public boolean offer(Object o)
     {
+        this.count++;
         int x = MurmurHash.getInstance().hash(o);
         return offerHashed(x);
     }
@@ -287,8 +296,8 @@ public class LogLog implements IRichCardinality
         //mergedObject.Ca = mergedObject.mAlpha[mergedObject.k];
         mergedObject.Rsum = this.Rsum + object2.Rsum;
         //mergedObject.M = new byte[mergedObject.k];
-        // Mida teeb this.m = 1 << k; et siis saab aru saada, mida m teeb, kui suur see on
 
+        mergedObject.count = this.getCount() + object2.getCount();
         for (int i = 0; i < this.M.length; i++) {
             mergedObject.M[i] = this.M[i];
         }
@@ -306,6 +315,7 @@ public class LogLog implements IRichCardinality
         clone.setRsum(objectToClone.getRsum());
         clone.setByteM(objectToClone.getByteM());
         clone.setCa(objectToClone.getCa());
+        clone.setCount(objectToClone.getCount());
         return clone;
     }
 

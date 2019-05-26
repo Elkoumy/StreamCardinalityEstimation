@@ -40,6 +40,14 @@ public class BJKST implements IRichCardinality {
 
     private String lengthOfIntegerRepresentation = null;
 
+
+
+    private int count;
+
+    public int getCount() { return count; }
+
+    public void setCount(int count) { this.count = count; }
+
     public static void main(String[] args) throws BJKSTException {
         System.out.println("BJKST test:");
         BJKST bjkst = new BJKST(100, 10, 0.1);
@@ -78,6 +86,7 @@ public class BJKST implements IRichCardinality {
     public BJKST(int numberOfMedianAttempts, int sizeOfEachMedianSet) {
         this.numMedians = numberOfMedianAttempts;
         this.sizeOfMedianSet = sizeOfEachMedianSet;
+        this.count=0;
         init();
     }
 
@@ -85,7 +94,7 @@ public class BJKST implements IRichCardinality {
         if (allowedError < 0 || allowedError > 1) {
             throw new IllegalArgumentException("Permitted error should be < 1 and in float format");
         }
-
+        this.count=0;
         this.numMedians = numberOfMedianAttempts;
         this.sizeOfMedianSet = sizeOfEachMedianSet;
         this.error = allowedError;
@@ -110,6 +119,9 @@ public class BJKST implements IRichCardinality {
     }
 
     public boolean offer(Object o) {
+
+        this.count++;
+
         for ( int i =0 ; i < numMedians; i++) {
             String binaryRepr = Long.toBinaryString(hHashers.get(i).hash(o));
 

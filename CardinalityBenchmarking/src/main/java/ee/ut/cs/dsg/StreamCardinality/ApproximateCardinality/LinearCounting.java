@@ -45,6 +45,7 @@ public class LinearCounting implements IRichCardinality {
      */
     protected final int length;
 
+
     /**
      * Number of bits left unset in the map
      */
@@ -73,11 +74,13 @@ public class LinearCounting implements IRichCardinality {
     public LinearCounting(int size) {
         this.length = 8 * size;
         this.count = this.length;
+        this.count = 0;
         map = new byte[size];
     }
 
     public LinearCounting(byte[] map) {
         this.map = map;
+        this.count = 0;
         this.length = 8 * map.length;
         this.count = computeCount();
     }
@@ -104,6 +107,7 @@ public class LinearCounting implements IRichCardinality {
 
     @Override
     public boolean offer(Object o) {
+        this.count++;
         boolean modified = false;
 
         long hash = (long) MurmurHash.getInstance().hash(o);
@@ -368,6 +372,7 @@ public class LinearCounting implements IRichCardinality {
         mergedObject.setCount(this.getCount() + object.getCount());
         //mergedObject.setMap(this.getMap().length+object.getMap().length);
         mergedObject.map = new byte[this.getMap().length + object.getMap().length];
+        mergedObject.count = this.getCount() + object.getCount();
         for (int i = 0; i < this.getMap().length; i++) {
             mergedObject.map[i] = this.map[i];
         }
@@ -380,6 +385,7 @@ public class LinearCounting implements IRichCardinality {
     public LinearCounting cloneLinearCountingObjects(LinearCounting object){
         LinearCounting clone = new LinearCounting(object.getMap());
         clone.setMap(object.getMap());
+        clone.setCount(object.getCount());
         clone.setCount(object.getCount());
         return clone;
     }

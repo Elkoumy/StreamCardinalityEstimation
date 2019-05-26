@@ -77,7 +77,11 @@ public class BloomFilter implements IRichCardinality {
 
     }
 
+    public int getCount() { return count; }
 
+    public void setCount(int count) { this.count = count; }
+
+    private int count;
     private BitSet filter_; //the bitmap
     int hashCount; //number of hash functions
 
@@ -89,6 +93,7 @@ public class BloomFilter implements IRichCardinality {
         this.numElements = numElements;
         this.bucketsPerElement = bucketsPerElement;
         int nbits=numElements * bucketsPerElement + 20;
+        this.count = 0;
         if(nbits<0)
         {nbits=Integer.MAX_VALUE;}
         hashCount=BloomCalculations.computeBestK(bucketsPerElement);
@@ -142,6 +147,7 @@ public class BloomFilter implements IRichCardinality {
      * @param key -- value whose hash is used to fill the filter_. This is a general purpose API.
      */
     public boolean offer(Object key) {
+        this.count++;
         String k = key.toString();
         if(key!=null)
             for (int bucketIndex : getHashBuckets(k)) {

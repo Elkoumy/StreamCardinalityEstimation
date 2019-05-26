@@ -113,6 +113,8 @@ public class ThroughputExperiment {
                 fn = new HyperLogLogPlusAggregationFunction();
             }else if(algorithm.equals("KMV")) { //KMinValues
                 fn = new KMinValuesAggregationFunction();
+            }else if(algorithm.equals("BF")) { //KMinValues
+                fn = new BloomFilterAggregationFunction(); //BloomFiler
             }else if(algorithm.equals("BJKST")) { //BJKST
                 fn = new BJKSTAggregationFunction();
             }else{
@@ -166,6 +168,9 @@ public class ThroughputExperiment {
             }else if(algorithm.equals("BJKST")) { //BJKST
                 //fn = new BJKSTAggregationFunction();
                 windowOperator=new KeyedScottyWindowOperatorWithTrigger<>(new BJKSTWindowFunction());
+            }else if(algorithm.equals("BF")) { //BJKST
+                //fn = new BJKSTAggregationFunction();
+                windowOperator=new KeyedScottyWindowOperatorWithTrigger<>(new BloomFilterWindowFunction());
             }else{
                 windowOperator= null;
 

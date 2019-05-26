@@ -26,7 +26,7 @@ public class BJKSTWindowFunction implements AggregateFunction<Tuple3<Long, Strin
             return new Tuple4<>(aggregate.f0, aggregate.f1,  aggregate.f2.cardinality(), System.nanoTime()); // In the last part, aggregate.f2.getK() <- THE getK() is probably WRONG!
         }
         else if (ExperimentConfiguration.experimentType== ExperimentConfiguration.ExperimentType.Throughput){
-            return new Tuple4<>(aggregate.f0, aggregate.f1, aggregate.f2.cardinality(), System.nanoTime());
+            return new Tuple4<>(aggregate.f0, aggregate.f1, aggregate.f2.cardinality(), (long) aggregate.f2.getCount());
         }
         else{
             return new Tuple4<>(aggregate.f0, aggregate.f1, aggregate.f2.cardinality(), null);

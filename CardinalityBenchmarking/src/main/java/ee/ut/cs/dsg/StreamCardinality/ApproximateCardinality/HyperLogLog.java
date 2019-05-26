@@ -85,6 +85,12 @@ public class HyperLogLog implements IRichCardinality {
 
     private final double alphaMM;
 
+    public int getCount() { return count; }
+
+    public void setCount(int count) { this.count = count; }
+
+    private int count;
+
     @Override
     public String toString() {
         return "HyperLogLog{" +
@@ -109,6 +115,7 @@ public class HyperLogLog implements IRichCardinality {
 
     public HyperLogLog(double rsd) {
         this(log2m(rsd));
+        this.count=0;
     }
 
     private static int log2m(double rsd) {
@@ -125,6 +132,7 @@ public class HyperLogLog implements IRichCardinality {
      */
     public HyperLogLog(int log2m) {
         this(log2m, new RegisterSet(1 << log2m));
+        this.count = 0;
     }
 
     /**
@@ -144,6 +152,7 @@ public class HyperLogLog implements IRichCardinality {
         this.registerSet = registerSet;
         this.log2m = log2m;
         int m = 1 << this.log2m;
+        this.count = 0;
 
         // See the paper.
         switch (log2m) {
@@ -182,6 +191,7 @@ public class HyperLogLog implements IRichCardinality {
 
     @Override
     public boolean offer(Object o) {
+        this.count++;
         final int x = MurmurHash.getInstance().hash(o);
         return offerHashed(x);
     }

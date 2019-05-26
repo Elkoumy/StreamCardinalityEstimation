@@ -11,7 +11,7 @@ public static RedisClient client = RedisClient.create("redis://172.17.64.205:637
     public static RedisAsyncCommands<String, String> async = connection.async();
 
 //    public static  ExperimentType experimentType=ExperimentType.UnInitialized;
-    public static  ExperimentType experimentType=ExperimentType.Throughput;
+    public static  ExperimentType experimentType=ExperimentType.Latency;
 
     public  enum ExperimentType{
         UnInitialized,

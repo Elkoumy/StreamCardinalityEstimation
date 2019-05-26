@@ -57,7 +57,7 @@ public class ThroughputExperiment {
         String inDir= args[2];
         String tps=args[3];
         String dist=args[4];
-        System.out.println("****** Starting Latency experiment with the following settings *******");
+        System.out.println("****** Starting Throughput experiment with the following settings *******");
         System.out.println("algorithm: "+algorithm+" , appraoch: "+approach+", input dir: "+inDir+", tps: "+tps+", distribution: "+dist);
         double epsilon=0.1;
         double quantile=0.5;
@@ -135,45 +135,45 @@ public class ThroughputExperiment {
              * Scotty
              */
 
-            KeyedScottyWindowOperatorWithTrigger<Tuple, Tuple3<Long,String,Long>, Tuple4<Long,String,Long, Long>> windowOperator;
+            KeyedScottyWindowOperatorWithTrigger<Tuple, Tuple3<Long, String, Long>, Tuple4<Long, String, Long, Long>> windowOperator;
 
 
             /**
              * Approximate algorithms
              */
-            if (algorithm.equals("LL")){ //LogLog
+            if (algorithm.equals("LL")) { //LogLog
                 //fn= new LogLogAggregationFunction();
-                windowOperator=new KeyedScottyWindowOperatorWithTrigger<>(new LogLogWindowFunction());
-            }else if(algorithm.equals("AC")){ //AdaptiveCounting
+                windowOperator = new KeyedScottyWindowOperatorWithTrigger<>(new LogLogWindowFunction());
+            } else if (algorithm.equals("AC")) { //AdaptiveCounting
                 //fn=new AdaptiveCountingAggregationFunction();
-                windowOperator=new KeyedScottyWindowOperatorWithTrigger<>(new AdaptiveCountingWindowFunction());
-            }else if (algorithm.equals("HLL")){ //HyperLogLog
+                windowOperator = new KeyedScottyWindowOperatorWithTrigger<>(new AdaptiveCountingWindowFunction());
+            } else if (algorithm.equals("HLL")) { //HyperLogLog
                 //fn=new HyperLogLogAggregationFunction();
-                windowOperator=new KeyedScottyWindowOperatorWithTrigger<>(new HyperLogLogWindowFunction());
-            }else if (algorithm.equals("LC")){//LinearCounting
+                windowOperator = new KeyedScottyWindowOperatorWithTrigger<>(new HyperLogLogWindowFunction());
+            } else if (algorithm.equals("LC")) {//LinearCounting
                 //fn=new LinearCountingAggregationFunction();
-                windowOperator=new KeyedScottyWindowOperatorWithTrigger<>(new LinearCountingWindowFunction());
-            }else if (algorithm.equals("FM")){//FlajoletMartin
+                windowOperator = new KeyedScottyWindowOperatorWithTrigger<>(new LinearCountingWindowFunction());
+            } else if (algorithm.equals("FM")) {//FlajoletMartin
                 //fn = new FlajoletMartinAggregationFunction();
-                windowOperator=new KeyedScottyWindowOperatorWithTrigger<>(new FlajoletMartinWindowFunction());
-            }else if (algorithm.equals("CTE")){//CountThenEstimate
+                windowOperator = new KeyedScottyWindowOperatorWithTrigger<>(new FlajoletMartinWindowFunction());
+            } else if (algorithm.equals("CTE")) {//CountThenEstimate
                 //fn = new CountThenEstimateAggregationFunction();
-                windowOperator=new KeyedScottyWindowOperatorWithTrigger<>(new CountThenEstimateWindowFunction());
-            }else if(algorithm.equals("HLLP")) { //HyperLogLogPlus
+                windowOperator = new KeyedScottyWindowOperatorWithTrigger<>(new CountThenEstimateWindowFunction());
+            } else if (algorithm.equals("HLLP")) { //HyperLogLogPlus
                 //fn = new HyperLogLogPlusAggregationFunction();
-                windowOperator=new KeyedScottyWindowOperatorWithTrigger<>(new HyperLogLogPlusWindowFunction());
-            }else if(algorithm.equals("KMV")) { //KMinValues
+                windowOperator = new KeyedScottyWindowOperatorWithTrigger<>(new HyperLogLogPlusWindowFunction());
+            } else if (algorithm.equals("KMV")) { //KMinValues
                 //fn = new KMinValuesAggregationFunction();
-                windowOperator=new KeyedScottyWindowOperatorWithTrigger<>(new KMinValuesWindowFunction());
-            }else if(algorithm.equals("BJKST")) { //BJKST
+                windowOperator = new KeyedScottyWindowOperatorWithTrigger<>(new KMinValuesWindowFunction());
+            } else if (algorithm.equals("BJKST")) { //BJKST
                 //fn = new BJKSTAggregationFunction();
-                windowOperator=new KeyedScottyWindowOperatorWithTrigger<>(new BJKSTWindowFunction());
-            }else if(algorithm.equals("BF")) { //BJKST
+                windowOperator = new KeyedScottyWindowOperatorWithTrigger<>(new BJKSTWindowFunction());
+            } else if (algorithm.equals("BF")) { //BJKST
                 //fn = new BJKSTAggregationFunction();
-                windowOperator=new KeyedScottyWindowOperatorWithTrigger<>(new BloomFilterWindowFunction());
-            }else{
-                windowOperator= null;
-
+                windowOperator = new KeyedScottyWindowOperatorWithTrigger<>(new BloomFilterWindowFunction());
+            } else {
+                windowOperator = null;
+            }
             windowOperator.addWindow(new SlidingWindow(WindowMeasure.Time, 10000, 500));
 
             stream2
@@ -183,12 +183,12 @@ public class ThroughputExperiment {
                     //                .map(x -> x.getAggValues().get(0).f2)
                     .print();
 
-            env.execute(algorithm+":"+approach+":"+dist+":"+tps);
-
+            env.execute(algorithm + ":" + approach + ":" + dist + ":" + tps);
         }
+
 
         ExperimentConfiguration.connection.close();
-        }
+
     }
 
 

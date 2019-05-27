@@ -35,8 +35,9 @@ public class LatencyExperiment {
         /**
          * Setting the experiment type
          */
+        ExperimentConfiguration.initialize();
         ExperimentConfiguration.experimentType= ExperimentConfiguration.ExperimentType.Latency;
-
+        ExperimentConfiguration.connection.sync().flushall();
         /**
          * System Arguments
          */

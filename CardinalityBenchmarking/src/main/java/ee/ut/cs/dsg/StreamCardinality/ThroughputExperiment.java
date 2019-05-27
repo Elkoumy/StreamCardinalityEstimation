@@ -45,7 +45,7 @@ public class ThroughputExperiment {
          */
         ExperimentConfiguration.initialize();
         ExperimentConfiguration.experimentType= ExperimentConfiguration.ExperimentType.Throughput;
-
+        ExperimentConfiguration.connection.sync().flushall();
 
 //        KLL scotty "C:\Gamal Elkoumy\PhD\OneDrive - Tartu Ülikool\Stream Processing\SWAG & Scotty\DataGeneration\data" 100000 normal
 //        AC scotty "C:\Users\Anders\Desktop\data" 100000 normal

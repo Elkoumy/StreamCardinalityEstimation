@@ -69,7 +69,7 @@ public class LatencyExperiment {
          * Reading input data
          */
 
-        DataStream<Tuple3<Long,String,Long>> stream2 = env.addSource(new YetAnotherSource(inputDir, 60*1000*2,10,tps_long));
+        DataStream<Tuple3<Long,String,Long>> stream2 = env.addSource(new YetAnotherSource(inputDir, 60*1000*5,10,tps_long));
 
 
         /**

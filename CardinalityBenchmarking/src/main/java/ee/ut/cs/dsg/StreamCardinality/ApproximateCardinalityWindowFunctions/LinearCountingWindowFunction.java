@@ -12,9 +12,10 @@ import javax.sound.sampled.Line;
 public class LinearCountingWindowFunction implements AggregateFunction<Tuple3<Long, String, Long>,
         Tuple3<Long, String, LinearCounting>,
         Tuple4<Long, String, Long,Long>>,
-        CloneablePartialStateFunction<Tuple3<Long, String, LinearCounting>>{
+        CloneablePartialStateFunction<Tuple3<Long, String, LinearCounting>> {
 
-    public LinearCountingWindowFunction() {}
+    public LinearCountingWindowFunction() {
+    }
 
     @Override
     public Tuple3<Long, String, LinearCounting> lift(Tuple3<Long, String, Long> inputTuple) {
@@ -24,14 +25,12 @@ public class LinearCountingWindowFunction implements AggregateFunction<Tuple3<Lo
     }
 
     @Override
-    public Tuple4<Long, String, Long,Long> lower(Tuple3<Long, String, LinearCounting> aggregate) {
-        if(ExperimentConfiguration.experimentType== ExperimentConfiguration.ExperimentType.Latency) {
-            return new Tuple4<>(aggregate.f0, aggregate.f1,  aggregate.f2.cardinality(), System.nanoTime()); // In the last part, aggregate.f2.getK() <- THE getK() is probably WRONG!
-        }
-        else if (ExperimentConfiguration.experimentType== ExperimentConfiguration.ExperimentType.Throughput){
-            return new Tuple4<>(aggregate.f0, aggregate.f1,  aggregate.f2.cardinality(), (long) aggregate.f2.getCount());
-        }
-        else{
+    public Tuple4<Long, String, Long, Long> lower(Tuple3<Long, String, LinearCounting> aggregate) {
+        if (ExperimentConfiguration.experimentType == ExperimentConfiguration.ExperimentType.Latency) {
+            return new Tuple4<>(aggregate.f0, aggregate.f1, aggregate.f2.cardinality(), System.nanoTime()); // In the last part, aggregate.f2.getK() <- THE getK() is probably WRONG!
+        } else if (ExperimentConfiguration.experimentType == ExperimentConfiguration.ExperimentType.Throughput) {
+            return new Tuple4<>(aggregate.f0, aggregate.f1, aggregate.f2.cardinality(), (long) aggregate.f2.getCount());
+        } else {
             return new Tuple4<>(aggregate.f0, aggregate.f1, aggregate.f2.cardinality(), null);
         }
 
@@ -39,8 +38,12 @@ public class LinearCountingWindowFunction implements AggregateFunction<Tuple3<Lo
 
     @Override
     public Tuple3<Long, String, LinearCounting> combine(Tuple3<Long, String, LinearCounting> partialAggregate1, Tuple3<Long, String, LinearCounting> partialAggregate2) {
-        return new Tuple3<>(partialAggregate1.f0, partialAggregate1.f1, partialAggregate2.f2.mergeLinearCountingObjects(partialAggregate2.f2));
-
+        try {
+            return new Tuple3<>(partialAggregate1.f0, partialAggregate1.f1, (LinearCounting) partialAggregate2.f2.merge(partialAggregate2.f2));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    return null;
     }
 
     @Override

@@ -5,7 +5,7 @@ library(dplyr)
 library(ggplot2)
 
 query_time =read.csv("C:\\Gamal Elkoumy\\PhD\\OneDrive - Tartu Ülikool\\University of Tartu Courses\\Big Data\\CourseProject\\StreamCardinality\\Results\\query_time_result.csv")
-insertion_time =read.csv("C:\\Gamal Elkoumy\\PhD\\OneDrive - Tartu Ülikool\\University of Tartu Courses\\Big Data\\CourseProject\\StreamCardinality\\Results\\insertion_time_result.csv")
+insertion_time =read.csv("C:\\Gamal Elkoumy\\PhD\\OneDrive - Tartu Ülikool\\University of Tartu Courses\\Big Data\\CourseProject\\StreamCardinality\\Results\\insertion_time_result3_edited.csv")
 
 query_time=na.omit(query_time)
 insertion_time=na.omit(insertion_time)
@@ -56,9 +56,9 @@ insertion_aggregate_approximate=insertion_time %>%
 
 ggplot(insertion_aggregate_approximate, aes(x=algorithm , y=insertion_time_mean, fill=approach)) +
   geom_bar(stat="identity", position = "dodge")+
-  scale_y_continuous(labels = scales::comma,trans='log10')+
+  # scale_y_continuous(labels = scales::comma,trans='log10')+
   ggtitle("Approximate Algorithms insertion Time")+
-  labs(x="Algorithm", y="Mean of insertion Time log(n sec)")+
+  labs(x="Algorithm", y="Mean of insertion Time (n sec)")+
   facet_grid(data_distribution~ tps, switch = "y")+
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(),strip.background = element_blank(),
@@ -67,9 +67,9 @@ ggsave("C:\\Gamal Elkoumy\\PhD\\OneDrive - Tartu Ülikool\\University of Tartu Co
 
 ggplot(insertion_aggregate_approximate, aes(x=algorithm , y=insertion_time_median, fill=approach)) +
   geom_bar(stat="identity", position = "dodge")+
-  scale_y_continuous(labels = scales::comma,trans='log10')+
+  # scale_y_continuous(labels = scales::comma,trans='log10')+
   ggtitle("Approximate Algorithms insertion Time")+
-  labs(x="Algorithm", y="Median of insertion Time log(n sec)")+
+  labs(x="Algorithm", y="Median of insertion Time (n sec)")+
   facet_grid(data_distribution~ tps, switch = "y")+
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(),strip.background = element_blank(),

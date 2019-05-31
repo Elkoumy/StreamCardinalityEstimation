@@ -41,9 +41,9 @@ public class FlajoletMartin implements IRichCardinality {
     private boolean[][][] bitmaps;
 
     private long numWords;
-
+@Override
     public int getCount() { return count; }
-
+@Override
     public void setCount(int count) { this.count = count; }
 
     public static void main(String[] args) throws FMException {
@@ -277,9 +277,10 @@ public class FlajoletMartin implements IRichCardinality {
     public IRichCardinality merge(IRichCardinality... estimators) throws FMException {
         FlajoletMartin newInstance = new FlajoletMartin(bitmapSize, numHashGroups, numHashFunctionsInHashGroup);
         newInstance.setAll(this.bitmaps);
-
+        int total_size=this.getCount();
         for (IRichCardinality estimator : estimators)
         {
+            total_size+=estimator.getCount();
             if (!(this.getClass().isInstance(estimator)))
             {
                 throw new FMException("Cannot merge estimators of different class");
@@ -290,6 +291,7 @@ public class FlajoletMartin implements IRichCardinality {
             }
             newInstance.setAll(((FlajoletMartin)estimator).getBitmaps());
         }
+        newInstance.setCount(total_size);
         return newInstance;
     }
 

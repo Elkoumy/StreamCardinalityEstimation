@@ -157,9 +157,9 @@ public class HyperLogLogPlus implements IRichCardinality {
     private int[] tmpSet;
     private int tmpIndex = 0;
     private int[] sparseSet;
-
+@Override
     public int getCount() { return count; }
-
+@Override
     public void setCount(int count) { this.count = count; }
 
     private int count;
@@ -998,12 +998,14 @@ public class HyperLogLogPlus implements IRichCardinality {
     public IRichCardinality merge(IRichCardinality... estimators) throws CardinalityMergeException {
         HyperLogLogPlus merged = new HyperLogLogPlus(p, sp);
         merged.addAll(this);
-
+        merged.setCount(this.getCount());
         if (estimators == null) {
             return merged;
         }
 
+        int total_size=this.getCount();
         for (IRichCardinality estimator : estimators) {
+            total_size+=estimator.getCount();
             if (!(estimator instanceof HyperLogLogPlus)) {
                 throw new HyperLogLogPlusMergeException("Cannot merge estimators of different class");
             }
@@ -1011,6 +1013,7 @@ public class HyperLogLogPlus implements IRichCardinality {
             merged.addAll(hll);
         }
 
+        merged.setCount(total_size);
         return merged;
     }
 

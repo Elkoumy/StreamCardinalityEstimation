@@ -49,7 +49,11 @@ public class NLogLog implements IRichCardinality{
         return new byte[0];
     }
 
-
+    private int count=0;
+    @Override
+    public int getCount() { return count; }
+    @Override
+    public void setCount(int count) { this.count = count; }
 
     public IRichCardinality merge(IRichCardinality... estimators) throws LogLogMergeException
     {

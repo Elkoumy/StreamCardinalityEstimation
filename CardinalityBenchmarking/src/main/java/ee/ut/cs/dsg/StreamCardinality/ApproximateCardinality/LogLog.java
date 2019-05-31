@@ -73,9 +73,9 @@ public class LogLog implements IRichCardinality
     protected double Ca;
     protected byte[] M;
     protected int Rsum = 0;
-
+@Override
     public int getCount() { return count; }
-
+@Override
     public void setCount(int count) { this.count = count; }
 
     private int count;
@@ -212,12 +212,18 @@ public class LogLog implements IRichCardinality
     {
         if (estimators == null)
         {
-            return new LogLog(M);
+            LogLog result = new LogLog(M);
+            result.setCount(this.getCount());
+            return result;
         }
 
         byte[] mergedBytes = Arrays.copyOf(this.M, this.M.length);
+
+
+        int total_count=this.getCount();
         for (IRichCardinality estimator : estimators)
         {
+            total_count+=estimator.getCount();
             if (!(this.getClass().isInstance(estimator)))
             {
                 throw new LogLogMergeException("Cannot merge estimators of different class");
@@ -226,14 +232,19 @@ public class LogLog implements IRichCardinality
             {
                 throw new LogLogMergeException("Cannot merge estimators of different sizes");
             }
+
             LogLog ll = (LogLog) estimator;
+
             for (int i = 0; i < mergedBytes.length; ++i)
             {
+
                 mergedBytes[i] = (byte) Math.max(mergedBytes[i], ll.M[i]);
             }
         }
 
-        return new LogLog(mergedBytes);
+        LogLog result = new LogLog(mergedBytes);
+        result.setCount(total_count);
+        return result;
     }
 
     /**

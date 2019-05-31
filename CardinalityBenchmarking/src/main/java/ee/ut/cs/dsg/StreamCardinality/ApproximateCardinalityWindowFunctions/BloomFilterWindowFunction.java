@@ -50,7 +50,14 @@ public class BloomFilterWindowFunction implements AggregateFunction<Tuple3<Long,
 
     @Override
     public Tuple3<Long, String, BloomFilter> liftAndCombine(Tuple3<Long, String, BloomFilter> partialAggregate, Tuple3<Long, String, Long> inputTuple) {
-        partialAggregate.f2.offer(Math.round(inputTuple.f2));
+        if (ExperimentConfiguration.experimentType== ExperimentConfiguration.ExperimentType.Latency) {
+            String curr = Long.toString(System.nanoTime());
+            ExperimentConfiguration.async.hset(inputTuple.f0 + "|" + inputTuple.f1 + "|" + curr, "insertion_start", Long.toString(System.nanoTime()));
+            partialAggregate.f2.offer(Math.round(inputTuple.f2));
+            ExperimentConfiguration.async.hset(inputTuple.f0 + "|" + inputTuple.f1 + "|" + curr, "insertion_end", Long.toString(System.nanoTime()));
+        }else{
+            partialAggregate.f2.offer(Math.round(inputTuple.f2));
+        }
         return partialAggregate;
     }
 

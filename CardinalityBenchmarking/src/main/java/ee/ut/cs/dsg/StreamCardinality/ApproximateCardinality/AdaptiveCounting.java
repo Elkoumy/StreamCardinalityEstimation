@@ -70,9 +70,9 @@ public class AdaptiveCounting extends LogLog {
         }
         count = 0;
     }
-
+    @Override
     public int getCount() { return count; }
-
+    @Override
     public void setCount(int count) { this.count = count; }
 
 
@@ -154,7 +154,9 @@ public class AdaptiveCounting extends LogLog {
     @Override
     public IRichCardinality merge(IRichCardinality... estimators) throws LogLogMergeException {
         LogLog res = (LogLog) super.merge(estimators);
-        return new AdaptiveCounting(res.M);
+        AdaptiveCounting result = new AdaptiveCounting(res.M);
+        result.setCount(res.getCount());
+        return result;
     }
 
     /**

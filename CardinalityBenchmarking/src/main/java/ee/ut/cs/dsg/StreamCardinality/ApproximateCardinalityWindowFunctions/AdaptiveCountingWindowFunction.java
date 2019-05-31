@@ -47,8 +47,8 @@ public class AdaptiveCountingWindowFunction implements AggregateFunction<Tuple3<
     public Tuple3<Long, String, AdaptiveCounting> combine(Tuple3<Long, String, AdaptiveCounting> partialAggregate1, Tuple3<Long, String, AdaptiveCounting> partialAggregate2) {
 
         try {
-            return new Tuple3<>(partialAggregate1.f0, partialAggregate1.f1, (AdaptiveCounting) partialAggregate2.f2.merge(partialAggregate2.f2));
-        } catch (LogLog.LogLogMergeException e) {
+            return new Tuple3<>(partialAggregate1.f0, partialAggregate1.f1, partialAggregate2.f2.mergeAdaptiveCountingObjects(partialAggregate2.f2));
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -56,7 +56,15 @@ public class AdaptiveCountingWindowFunction implements AggregateFunction<Tuple3<
 
     @Override
     public Tuple3<Long, String, AdaptiveCounting> liftAndCombine(Tuple3<Long, String, AdaptiveCounting> partialAggregate, Tuple3<Long, String, Long> inputTuple) {
-        partialAggregate.f2.offer(Math.round(inputTuple.f2));
+
+        if (ExperimentConfiguration.experimentType== ExperimentConfiguration.ExperimentType.Latency) {
+            String curr = Long.toString(System.nanoTime());
+            ExperimentConfiguration.async.hset(inputTuple.f0 + "|" + inputTuple.f1 + "|" + curr, "insertion_start", Long.toString(System.nanoTime()));
+            partialAggregate.f2.offer(Math.round(inputTuple.f2));
+            ExperimentConfiguration.async.hset(inputTuple.f0 + "|" + inputTuple.f1 + "|" + curr, "insertion_end", Long.toString(System.nanoTime()));
+        }else{
+            partialAggregate.f2.offer(Math.round(inputTuple.f2));
+        }
         return partialAggregate;
     }
 

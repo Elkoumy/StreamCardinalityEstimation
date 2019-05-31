@@ -15,6 +15,11 @@ public class NKMinValues implements IRichCardinality{
     private int k=4096;//for eps=0.01
     private double eps = 0.1;
 
+    private int count=0;
+    @Override
+    public int getCount() { return count; }
+    @Override
+    public void setCount(int count) { this.count = count; }
     /**
      * @param
      * eps theoretical standard error

@@ -42,6 +42,12 @@ public class NFlajoletMartin implements IRichCardinality{
      */
     private BitSet[] bitmaps;
 
+    private int count=0;
+    @Override
+    public int getCount() { return count; }
+    @Override
+    public void setCount(int count) { this.count = count; }
+
 
     public NFlajoletMartin(double error) {
         // standard error= 1/sqrt(m) => m=(1/error)^2

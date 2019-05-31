@@ -80,7 +80,7 @@ public class ThroughputExperiment {
         }catch(Exception e){
             tps_long=1000l;
         }
-        DataStream<Tuple3<Long, String, Long>> stream2 = env.addSource(new YetAnotherSource(inputDir, 60*1000*2,10,tps_long));
+        DataStream<Tuple3<Long, String, Long>> stream2 = env.addSource(new YetAnotherSource(inputDir, 60*1000*59,10,tps_long));
 
 
         /**

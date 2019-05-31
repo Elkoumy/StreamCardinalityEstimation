@@ -30,6 +30,12 @@ public interface IRichCardinality extends IBaseCardinality {
      * @param hashedLong - the hash of the item to offer to the estimator
      * @return false if the value returned by cardinality() is unaffected by the appearance of hashedLong in the stream
      */
+
+
+     int count=0;
+     void setCount(int count);
+     int getCount();
+
     boolean offerHashed(long hashedLong);
 
     /**

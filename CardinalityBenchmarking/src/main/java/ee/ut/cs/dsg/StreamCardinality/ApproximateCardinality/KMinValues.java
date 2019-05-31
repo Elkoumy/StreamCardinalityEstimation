@@ -16,9 +16,9 @@ public class KMinValues implements IRichCardinality {
     private TreeSet<Integer> kMin;
     private int k;
     private Hash hasher;
-
+@Override
     public int getCount() { return count; }
-
+@Override
     public void setCount(int count) { this.count = count; }
 
     private int count = 0;
@@ -236,11 +236,14 @@ public class KMinValues implements IRichCardinality {
     public IRichCardinality merge(IRichCardinality... estimators) throws KMinValuesException {
         if (estimators == null)
         {
-            return new KMinValues(k, hasher);
+            KMinValues result = new KMinValues(k, hasher);
+            result.setCount(this.getCount());
+            return result;
         }
 
 
         KMinValues newKMV = new KMinValues(k, hasher);
+        newKMV.setCount(this.getCount());
 
         Object[] ob = kMin.toArray();
         for ( int i=0; i<ob.length; i++)
@@ -249,8 +252,10 @@ public class KMinValues implements IRichCardinality {
             newKMV.addOffer(tmp);
         }
 
+        int total_size=this.getCount();
         for (IRichCardinality estimator : estimators)
         {
+            total_size+=estimator.getCount();
             if (!(this.getClass().isInstance(estimator)))
             {
                 throw new KMinValuesException("Cannot merge estimators of different class");
@@ -267,6 +272,7 @@ public class KMinValues implements IRichCardinality {
                 newKMV.addOffer(tmp);
             }
         }
+        newKMV.setCount(total_size);
         return newKMV;
     }
 

@@ -80,6 +80,10 @@ public class NLinearCounting implements IRichCardinality {
      */
     protected int count;
 
+    @Override
+    public int getCount() { return count; }
+    @Override
+    public void setCount(int count) { this.count = count; }
     /**
      * Taken from Table II of Whang et al.
      */
@@ -216,9 +220,7 @@ public class NLinearCounting implements IRichCardinality {
         return (length - count) / (double) length;
     }
 
-    public int getCount() {
-        return count;
-    }
+
 
     public boolean isSaturated() {
         return (count == 0);

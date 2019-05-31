@@ -56,8 +56,9 @@ public class LinearCounting implements IRichCardinality {
     public void setMap(byte[] map) { this.map = map; }
 
     public int getLength() { return length; }
-
+@Override
     public void setCount(int count) { this.count = count; }
+
 
     @Override
     public String toString() {
@@ -144,7 +145,7 @@ public class LinearCounting implements IRichCardinality {
     public double getUtilization() {
         return (length - count) / (double) length;
     }
-
+@Override
     public int getCount() {
         return count;
     }
@@ -177,7 +178,9 @@ public class LinearCounting implements IRichCardinality {
     @Override
     public IRichCardinality merge(IRichCardinality... estimators) throws LinearCountingMergeException {
         if (estimators == null) {
-            return new LinearCounting(map);
+            LinearCounting result = new LinearCounting(map);
+            result.setCount(this.getCount());
+            return result;
         }
         LinearCounting[] lcs = Arrays.copyOf(estimators, estimators.length + 1, LinearCounting[].class);
         lcs[lcs.length - 1] = this;
@@ -193,11 +196,14 @@ public class LinearCounting implements IRichCardinality {
      */
     public static LinearCounting mergeEstimators(LinearCounting... estimators) throws LinearCountingMergeException {
         LinearCounting merged = null;
+        int total_count =0;
         if (estimators != null && estimators.length > 0) {
             int size = estimators[0].map.length;
             byte[] mergedBytes = new byte[size];
 
+
             for (LinearCounting estimator : estimators) {
+                total_count+=estimator.getCount();
                 if (estimator.map.length != size) {
                     throw new LinearCountingMergeException("Cannot merge estimators of different sizes");
                 }
@@ -209,6 +215,7 @@ public class LinearCounting implements IRichCardinality {
 
             merged = new LinearCounting(mergedBytes);
         }
+        merged.setCount(total_count);
         return merged;
     }
 

@@ -29,7 +29,11 @@ public class NHyperLogLog implements IRichCardinality{
 
     }
 
-
+    private int count=0;
+    @Override
+    public int getCount() { return count; }
+    @Override
+    public void setCount(int count) { this.count = count; }
     private static void validateLog2m(int log2m) {
         if (log2m < 4 || log2m > 32) {
             throw new IllegalArgumentException("log2m argument is "

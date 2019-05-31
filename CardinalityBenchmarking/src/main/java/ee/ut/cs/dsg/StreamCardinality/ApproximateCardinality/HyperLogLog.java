@@ -84,9 +84,9 @@ public class HyperLogLog implements IRichCardinality {
     private final int log2m;
 
     private final double alphaMM;
-
+@Override
     public int getCount() { return count; }
-
+@Override
     public void setCount(int count) { this.count = count; }
 
     private int count;
@@ -256,19 +256,23 @@ public class HyperLogLog implements IRichCardinality {
     @Override
     public IRichCardinality merge(IRichCardinality... estimators) throws CardinalityMergeException {
         HyperLogLog merged = new HyperLogLog(log2m);
-        merged.addAll(this);
 
+        merged.addAll(this);
+        merged.setCount(this.getCount());
         if (estimators == null) {
             return merged;
         }
 
+        int total_size=this.getCount();
         for (IRichCardinality estimator : estimators) {
+            total_size+=estimator.getCount();
             if (!(estimator instanceof HyperLogLog)) {
                 throw new HyperLogLogMergeException("Cannot merge estimators of different class");
             }
             HyperLogLog hll = (HyperLogLog) estimator;
             merged.addAll(hll);
         }
+        merged.setCount(total_size);
 
         return merged;
     }

@@ -44,8 +44,9 @@ public class BJKST implements IRichCardinality {
 
     private int count;
 
+    @Override
     public int getCount() { return count; }
-
+@Override
     public void setCount(int count) { this.count = count; }
 
     public static void main(String[] args) throws BJKSTException {
@@ -225,9 +226,11 @@ public class BJKST implements IRichCardinality {
 
         BJKST newInstance = new BJKST(numMedians, sizeOfMedianSet, error);
         newInstance.putAll((ArrayList<Integer>)this.limits, (ArrayList<HashSet<String>>)this.buffers);
-
+        newInstance.setCount(this.getCount());
+        int total_count =this.getCount();
         for (IRichCardinality estimator : estimators)
         {
+            total_count+=estimator.getCount();
             if (!(this.getClass().isInstance(estimator)))
             {
                 throw new BJKSTException("Cannot merge estimators of different class");
@@ -280,6 +283,7 @@ public class BJKST implements IRichCardinality {
             newInstance.putAll(tmpLimits, tmpBuffers);
 
         }
+        newInstance.setCount(total_count);
         return newInstance;
     }
 

@@ -77,8 +77,9 @@ public class BloomFilter implements IRichCardinality {
 
     }
 
+    @Override
     public int getCount() { return count; }
-
+@Override
     public void setCount(int count) { this.count = count; }
 
     private int count;
@@ -268,9 +269,11 @@ public class BloomFilter implements IRichCardinality {
 
         BloomFilter newInstance = new BloomFilter(numElements, bucketsPerElement);
         newInstance.setAll(this);
-
+        newInstance.setCount(this.getCount());
+        int total_size=this.getCount();
         for (IRichCardinality estimator : estimators)
         {
+            total_size+=estimator.getCount();
             if (!(this.getClass().isInstance(estimator)))
             {
                 throw new BloomFilterException("Cannot merge estimators of different class");
@@ -281,6 +284,7 @@ public class BloomFilter implements IRichCardinality {
             }
             newInstance.mergeAll( (BloomFilter)estimator );
         }
+        newInstance.setCount(total_size);
         return newInstance;
     }
 
